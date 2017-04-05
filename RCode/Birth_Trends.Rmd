@@ -24,6 +24,7 @@ library(tidyverse)
 ```
 
 ## Downloading Data
+### 1968 - 2002
 
 All of the data needed for this project can be found from the US Center for Disease Control and Prevention and National Center for Health Statistics' National Vital Statistics System (available [here](https://www.cdc.gov/nchs/data_access/vitalstatsonline.htm#Births)). However, the .zip folders for some of the older files download in a strange .PUB format that I couldn't open. Luckily, the National Bureau of Economic Research has made the microdata files available in several formats for download (available [here](http://www.nber.org/data/vital-statistics-natality-data.html)). 
 
@@ -81,3 +82,12 @@ For safe-keeping, I'm going to write the data into a csv file.
 ```{r}
 write.csv(nchsData, "../Raw_Data/birthData.csv")
 ```
+
+
+### 2003 - 2015
+
+For privacy reasons, NCHC doesn't release geolocation information for individual babies born after 2005. They do, however, have an interactive tool called [WONDER](https://wonder.cdc.gov/natality.html) which allows you to download specific aggregate data. I'm going to group data from this database the same way I grouped data from the raw microdata files above. For both the 2003 - 2006 database and the 2007 - 2015 database, I selected data by Year, Month, State, and County, further selecting for each individual year. I then exported the data as a text file. 
+
+*Note: In the exported text file, there is metadata at the bottom of the file, I removed this before importing the file into R, and I changed the column named "Births" to "countyBirths" to match the 1968 - 2002 data*
+
+
