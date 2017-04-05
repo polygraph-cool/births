@@ -90,4 +90,51 @@ For privacy reasons, NCHC doesn't release geolocation information for individual
 
 *Note: In the exported text file, there is metadata at the bottom of the file, I removed this before importing the file into R, and I changed the column named "Births" to "countyBirths" to match the 1968 - 2002 data*
 
+Now the resulting text file can be imported into R. 
 
+```{r}
+wonderData <- read.table("WONDER_Data/Natality_2003_2015.txt", fill = TRUE, header = TRUE)
+```
+
+To match the WONDER data with the NCHS data, the columns can be reduced to just include the Year, Month_Code, County_Code, State_Code, and countyBirths. Then I'll calculate stateBirths the same way I did for the NCHS data. 
+
+```{r}
+wonderData2 <- wonderData %>% 
+  select(Year_Code, Month_Code, County_Code, State_Code, countyBirths) %>% 
+  group_by(State_Code, Year_Code, Month_Code) %>% 
+    mutate(stateBirths = sum(countyBirths)) %>% 
+    ungroup()
+```
+
+Now the columns in the two files need to be renamed to match. For ease, I'll use the following column names:
+
+  * **State** : The state (including District of Columbia) where the mother lives (states are listed as numbers in alphabetical order such that Alabama is 1 and Wyoming is 51)
+  * **County** : The county where the mother lives
+  * **Month** : The month that the birth took place (1 is January and 12 is December)
+  * **Year** : Year of the birth, obtained from the year of the data file itself
+  * **countyBirths** : The calculated sum of births that occurred to mothers living in a county for a given month (if the sum was less than 9, the sum is listed as NA as per NCHS reporting guidelines)
+  * **stateBirths** : The calculated sum of births that occurred to mothers living in a state for a given month
+  
+```{r}
+nchsCol <- c("Year", "birmon", "cntyres", "stateres", "countyBirths", "stateBirths")
+wonderCol <- c("Year_Code", "Month_Code", "County_Code", "State_Code", "countyBirths", "stateBirths" )
+newColnames <- c("Year", "Month", "County", "State", "countyBirths", "stateBirths")
+
+# Copying data frame in case of errors
+nchsData2 <- nchsData
+
+setnames(nchsData2, old = nchsCol, new = newColnames)
+setnames(wonderData2, old = wonderCol, new = newColnames)
+```
+
+Last thing to do is bind the 1968 - 2002 data to the 2003 - 2015 data. 
+
+```{r}
+allBirthData <- rbind(nchsData2, wonderData2)
+```
+
+And export to CSV. 
+
+```{r}
+write.csv(allBirthData, "../Raw_Data/allBirthData.csv")
+```
