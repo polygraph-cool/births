@@ -1,4 +1,4 @@
-#Birth Trends
+# Birth Trends
 
 This repo exists for an on-going project investigating the seasonality and trends visible in births in the United States.
 
