@@ -1,0 +1,83 @@
+---
+title: "Birth Trends"
+author: "Amber Thomas"
+date: "April 5, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+This is the script used to generate data for a story on Birth Trends in the US. 
+
+### Loading Necessary Packages
+
+```{r}
+# For data sourcing and parsing
+library(data.table)
+
+# For data cleaning
+library(tidyverse)
+```
+
+## Downloading Data
+
+All of the data needed for this project can be found from the US Center for Disease Control and Prevention and National Center for Health Statistics' National Vital Statistics System (available [here](https://www.cdc.gov/nchs/data_access/vitalstatsonline.htm#Births)). However, the .zip folders for some of the older files download in a strange .PUB format that I couldn't open. Luckily, the National Bureau of Economic Research has made the microdata files available in several formats for download (available [here](http://www.nber.org/data/vital-statistics-natality-data.html)). 
+
+I'll need the csv files. Since the files are listed as .csv.zip files, they'll also need to be unzipped on download. I'm going to create a function to download and unzip the csv files and turn each one into a data frame so I can loop through all 47 files automatically. Similarly, to cut down on file size, I'm only going to import the columns that I need: County, State, and Birth Month. These variables are all available on the individual-birth basis until 2006, but the column names change in 2003. For that purpose, I'll only download files from 1968 - 2002 using this loop.  I'll also consolidate the number of births per county per month. 
+
+```{r}
+# Function to download and unzip
+dlUnzip <- function(year){
+  URL <- "http://www.nber.org/natality/"
+  
+  # Columns to keep: County, State, 
+  columns <- c("cntyres", "stateres", "birmon", "restatus")
+  
+  YearURL <- paste(URL, year, "/natl", year, ".csv.zip", sep = "")
+  
+  download <- fread(paste("curl", YearURL, "| funzip"), select = columns)
+  
+  # Keep US Residents
+  
+  download2 <- download %>% 
+    # Remove any non-US residents
+    filter(!restatus == 4) %>% 
+    group_by(stateres, cntyres, birmon) %>% 
+    summarise(Births = n()) %>% 
+    # Adding a "Year" column to reflect the year variable fed into the function
+    mutate(Year = year,
+    # NCHS prohibits reporting geographic information of less than 9 births
+    # values <= 9 are turned to NA for county level data       
+      countyBirths = ifelse(Births <= 9, NA, Births)) %>% 
+    # Monthly state-level births are then calculated
+    group_by(stateres, birmon) %>% 
+    mutate(stateBirths = sum(Births)) %>% 
+    ungroup() %>% 
+    # Remove column of raw birth numbers to prevent reporting values < 9
+    select(-Births)
+}
+```
+
+This function outputs a dataframe with 6 columns:
+  * **stateres** : The state (including District of Columbia) where the mother lives (states are listed as numbers in alphabetical order such that Alabama is 1 and Wyoming is 51)
+  * **cntyres** : The county where the mother lives
+  * **birmon** : The month that the birth took place (1 is January and 12 is December)
+  * **Year** : Year of the birth, obtained from the year of the data file itself
+  * **countyBirths** : The calculated sum of births that occurred to mothers living in a county for a given month (if the sum was less than 9, the sum is listed as NA as per NCHS reporting guidelines)
+  * **stateBirths** : The calculated sum of births that occurred to mothers living in a state for a given month
+  
+I'm going to run through this function for each year between 1968 and 2002, binding each year's data together.
+
+```{r}
+dataList <- c(1968:2002)
+nchsData <- do.call(rbind, (lapply(dataList, (dlUnzip))))
+```
+
+For safe-keeping, I'm going to write the data into a csv file. 
+```{r}
+write.csv(nchsData, "../Raw_Data/birthData.csv")
+```
