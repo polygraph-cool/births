@@ -138,3 +138,21 @@ And export to CSV.
 ```{r}
 write.csv(allBirthData, "../Raw_Data/allBirthData.csv")
 ```
+
+## Preparing for d3
+
+If I were going to continue to use this data only in R, I'd leave it organized as is, however, since I am planning to feed the data into [d3](https://d3js.org/), I'm going to make a month-year column (%m-%Y). This will hopefully make the d3 run a little smoother. 
+
+Also, unlike R, Javascript months are 0 indexed, meaning that they run from January (0) to December (11). I'll convert that as well. 
+
+```{r}
+allBirthData2 <- allBirthData %>% 
+  mutate(monthYear = paste((Month-1), Year, sep = "-")) %>% 
+  select(-Month, -Year)
+```
+
+Again, I'll write a 3rd raw data file, specifically used for javascript-things.
+
+```{r}
+write.csv(allBirthData2, "../Raw_Data/jsBirthData.csv")
+```
