@@ -106,7 +106,7 @@ nchsData2$FIPSCounty <- walk2[match(nchsData2$County, walk2$nchs_county_code), "
 
 For safe-keeping, I'm going to write the data into a csv file with both the NCHS and FIPS county codes. 
 ```{r}
-write.csv(nchsData, "../Raw_Data/birthData.csv")
+write.csv(nchsData2, "../Raw_Data/birthData.csv")
 ```
 
 
@@ -135,28 +135,30 @@ wonderData2 <- wonderData %>%
 Now the columns in the two files need to be renamed to match. For ease, I'll use the following column names:
 
   * **State** : The state (including District of Columbia) where the mother lives (states are listed as numbers in alphabetical order such that Alabama is 1 and Wyoming is 51)
-  * **County** : The county where the mother lives
+  * **County** : The county where the mother lives (FIPS county code)
   * **Month** : The month that the birth took place (1 is January and 12 is December)
   * **Year** : Year of the birth, obtained from the year of the data file itself
   * **countyBirths** : The calculated sum of births that occurred to mothers living in a county for a given month (if the sum was less than 9, the sum is listed as NA as per NCHS reporting guidelines)
   * **stateBirths** : The calculated sum of births that occurred to mothers living in a state for a given month
   
+  
 ```{r}
-nchsCol <- c("Year", "birmon", "cntyres", "stateres", "countyBirths", "stateBirths")
+# Removing the NCHS county code 
+nchsData3 <- nchsData2 %>% 
+  select(-County)
+
+nchsCol <- c("Year", "Month", "FIPSCounty", "State", "countyBirths", "stateBirths")
 wonderCol <- c("Year_Code", "Month_Code", "County_Code", "State_Code", "countyBirths", "stateBirths" )
 newColnames <- c("Year", "Month", "County", "State", "countyBirths", "stateBirths")
 
-# Copying data frame in case of errors
-nchsData3 <- nchsData2
-
-setnames(nchsData2, old = nchsCol, new = newColnames)
+setnames(nchsData3, old = nchsCol, new = newColnames)
 setnames(wonderData2, old = wonderCol, new = newColnames)
 ```
 
 Last thing to do is bind the 1968 - 2002 data to the 2003 - 2015 data. 
 
 ```{r}
-allBirthData <- rbind(nchsData2, wonderData2)
+allBirthData <- rbind(nchsData3, wonderData2)
 ```
 
 And export to CSV. 
