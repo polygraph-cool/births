@@ -57,9 +57,9 @@ dlUnzip <- function(year){
     # Monthly state-level births are then calculated
     group_by(stateres, birmon) %>% 
     mutate(stateBirths = sum(Births)) %>% 
-    ungroup() %>% 
+    ungroup() #%>% 
     # Remove column of raw birth numbers to prevent reporting values < 9
-    select(-Births)
+    #select(-Births)
 }
 ```
 
@@ -78,7 +78,33 @@ dataList <- c(1968:2002)
 nchsData <- do.call(rbind, (lapply(dataList, (dlUnzip))))
 ```
 
-For safe-keeping, I'm going to write the data into a csv file. 
+The county codes listed in these files are the NCHS county codes. However, the codes used in the CDC WONDER tool (needed for the 2003 - 2015 data) are the FIPS (Federal Information Processing Standards) county codes. Luckily, the FBER provides a file to walk users between the two county codes. For ease, I'm going to convert the NCHS codes used in the newly acquired nchsData file to FIPS codes. 
+
+```{r}
+# Downloading walk file
+walk <- read.csv("http://www.nber.org/mortality/nchs2fips_county1990.csv", header = TRUE)
+```
+
+The NCHS county codes in the nchsData file are made up of a 2 digit state code and 3 digit county code. I'll add some zeros for padding to the walk data frame and paste the two values together. 
+
+```{r}
+walk2 <- walk %>% 
+  mutate(nchs_state = sprintf("%02d", nchs_state),
+         nchs_county = sprintf("%03d", nchs_county),
+         nchs_county_code = paste(nchs_state, nchs_county, sep = ""))
+```
+
+Now it's just a matter of matching the county codes that are already in the nchsData file with the matching FIPS county code. 
+
+```{r}
+#Make a copy of the dataset
+nchsData2 <- nchsData
+
+# Match the NCHS County Codes
+nchsData2$FIPSCounty <- walk2[match(nchsData2$County, walk2$nchs_county_code), "fipsco"]
+```
+
+For safe-keeping, I'm going to write the data into a csv file with both the NCHS and FIPS county codes. 
 ```{r}
 write.csv(nchsData, "../Raw_Data/birthData.csv")
 ```
@@ -121,7 +147,7 @@ wonderCol <- c("Year_Code", "Month_Code", "County_Code", "State_Code", "countyBi
 newColnames <- c("Year", "Month", "County", "State", "countyBirths", "stateBirths")
 
 # Copying data frame in case of errors
-nchsData2 <- nchsData
+nchsData3 <- nchsData2
 
 setnames(nchsData2, old = nchsCol, new = newColnames)
 setnames(wonderData2, old = wonderCol, new = newColnames)
@@ -156,3 +182,4 @@ Again, I'll write a 3rd raw data file, specifically used for javascript-things.
 ```{r}
 write.csv(allBirthData2, "../Raw_Data/jsBirthData.csv")
 ```
+
