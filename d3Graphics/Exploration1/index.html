@@ -47,6 +47,8 @@ var svg = d3.select("body").append("svg")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
+
+
 // Get the data
 d3.csv("test.csv", function(error, data) {
   	if (error) throw error;
@@ -59,7 +61,6 @@ d3.csv("test.csv", function(error, data) {
       	d.State = d.State;
   	});
 
-  
 
   	// Scale the range of the data
   	x.domain(d3.extent(data, function(d) { return d.monthYear; }));
@@ -70,6 +71,8 @@ d3.csv("test.csv", function(error, data) {
   	var nested = d3.nest()
         .key(function(d) { return d.County; })
         .entries(data);
+
+    var mapData = data;    
 
     // Create dropdown 1
     var list = d3.select("#counties")
@@ -87,66 +90,70 @@ d3.csv("test.csv", function(error, data) {
     // Create Menu
     list.on('change', function(){
     	var selected = d3.select(this).select("select").property("value")
+   
 
     	var cd = nested.filter(function (d) {
-    		return (selected == d.key)
+    		return (selected == d.key),
+        console.log(selected)
     	});
-    	console.log(cd.value)
-    	updateNested(cd.pop())
+
+
+    // Draw line
+    var lines = svg.selectAll("path")
+      .data(nested.filter(function(d){
+        return d.key === selected
+      }))
+
+       lines.exit().remove(); 
+
+
+      lines.enter().append("path")
+        .attr("class", "line")
+        .attr("d", function(d) { return valueline(d.values); });
+
+
+      //.filter(function(d){ return d.County == selected 
+
+
+
+    // Add the X Axis
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+    // Add the Y Axis
+    svg.append("g")
+        .call(d3.axisLeft(y));
+
+
+    //lines.exit().remove();    
+
     });
 
-    // config
-    var canvas = d3.select("#testing")
-    	.data(nested)
 
-    // Function to Update chart
-    function updateNested(cd){
-    	var county = canvas.selectAll(".county")
-    		.data(cd.values)
-
-    	var countyEnter = county
-    		.enter().append("div")
-    		.attr("class", "county")
-    		//.attr("cd", function(cd){ return valueline(cd.values)})
-
-    	countyEnter
-    		.append("path")
-    		.attr("class", "line")
-    		.text(function(d){
-    			return d.key;
-    		})	
-    		.attr("d", function(d){
-    			return valueline(d.values);
-    		});	
-
-    	county.exit().remove();	
-    }
-
-    // Filter data
-    var filter = nested.filter(function(d){
-    	return ("1001" == d.key)
-    });
 	
-
-	svg.selectAll("path").data(nested).enter()
-   		.append("path")
-   		.attr("class", "line")
-   		.attr("d", function(d) { return valueline(d.values); });
-
-
-
-  	// Add the X Axis
-  	svg.append("g")
-      	.attr("transform", "translate(0," + height + ")")
-      	.call(d3.axisBottom(x));
-
-  	// Add the Y Axis
-  	svg.append("g")
-      	.call(d3.axisLeft(y));
-
-    updateNested(filter.pop())
-
 });
+
+/*function updateNested(data) {
+  svg.selectAll("path").data(nested).enter()
+      .append("path")
+      .attr("class", "line")
+      .attr("d", function(d) { return valueline(d.values); });
+
+
+
+    // Add the X Axis
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+    // Add the Y Axis
+    svg.append("g")
+        .call(d3.axisLeft(y));
+
+}*/
+
+//updateNested(mapData)
 	</script>
 
 
