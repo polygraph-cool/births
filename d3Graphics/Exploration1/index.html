@@ -16,7 +16,7 @@
 
   <div id = "counties"></div>
   <div id = "testing"></div>
-  
+
   <script src="https://d3js.org/d3.v4.js"></script>
   <!--<script src="birthTrends1.js"></script>-->
   <script>
@@ -25,7 +25,7 @@
 
       //////////////////////////////////////////////////////////////////////
       /////////////////////////  GLOBAL VARIABLES  /////////////////////////
-      //////////////////////////////////////////////////////////////////////  
+      //////////////////////////////////////////////////////////////////////
 
       // set the dimensions and margins of the graph
       var margin = {top: 20, right: 20, bottom: 30, left: 50},
@@ -66,13 +66,13 @@
 
       //////////////////////////////////////////////////////////////////////
       ////////////////////////////  DATA IMPORT ////////////////////////////
-      ////////////////////////////////////////////////////////////////////// 
+      //////////////////////////////////////////////////////////////////////
 
 
       // Get the data
       d3.csv("test.csv", function(error, data) {
           if (error) throw error;
-          
+
           // format the data
           data.forEach(function(d) {
               d.monthYear = parseTime(d.monthYear);
@@ -80,14 +80,14 @@
               d.County = d.County;
               d.State = d.State;
           });
-    
-  
+
+
           // Nest the data to create a line for each county
           var nested = d3.nest()
               .key(function(d) { return d.County; })
               .entries(data);
 
-   
+
           // Create dropdown 1
           var list = d3.select("#counties")
           list.append("select").selectAll("option")
@@ -98,7 +98,7 @@
               })
               .text(function(d){
                   return d.key;
-              })   
+              })
 
 
           // Create line based on selection
@@ -108,60 +108,62 @@
                   .property("value")
 
               var selectCounty = nested.filter(function(d){
-                return d.key === selected;
-              }) ;
+                return +d.key === +selected;
+              });
 
-              // Quick fix to destroy DOM elements and re-draw  
-              svg.selectAll("path").remove() 
-
+              // Quick fix to destroy DOM elements and re-draw
+              //svg.selectAll("path").remove()
               // Draw line
               var lines = svg.selectAll("path")
-                  .data(selectCounty);
+                  .data(selectCounty, function(d){
+                    return d ? d.key : this.key;
+                  });
 
-                  console.log(selectCounty)
-
-              lines.exit().remove();      
+              lines.exit().remove();    
 
               // Scale the range of the data
-              x.domain(d3.extent(data, function(d) { return d.monthYear; }));
-              y.domain([0, d3.max(selectCounty.values, function(d) { return +d.countyBirths; })]);   
-
-              
+              x.domain(d3.extent(selectCounty[0].values, function(d) { return d.monthYear; }));
+              y.domain([0, d3.max(selectCounty[0].values, function(d) { return +d.countyBirths; })]);
 
               var linesEnter = lines.enter().append("path")
                   .attr("class", "line")
-                  .attr("d", function(d) { 
-                      return valueline(d.values); 
+                  .attr("d", function(d) {
+                      return valueline(d.values);
                   });
 
-              lines = lines.merge(linesEnter)  
+              lines = lines.merge(linesEnter)
 
-              
-              
-              
 
+
+
+
+
+            svg.selectAll(".axis").remove();  
+              
 
              // Add the X Axis
-              svg.append("g")
+              var xaxis = svg.append("g")
                   .attr("transform", "translate(0," + height + ")")
+                  .attr("class", "axis")
                   //.call(xAxis)
                   .call(d3.axisBottom(x));
-    
+
 
               // Add the Y Axis
-              svg.append("g")
+              var yaxis = svg.append("g")
+                  .attr("class", "axis")
                   .call(d3.axisLeft(y)); 
 
-    
-          
+
+
 
           });
-  
+
       });
 
   </script>
 
 
-  
+
 </body>
-</html> 
+</html>
