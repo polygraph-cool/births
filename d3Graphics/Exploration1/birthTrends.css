@@ -22,4 +22,12 @@ body {
   fill: none;
   stroke: blue;
   stroke-width: 2px;
+  clip-path: url(#clip);
+}
+
+
+.zoom {
+  cursor: move;
+  fill: none;
+  pointer-events: all;
 }
