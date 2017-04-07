@@ -39,11 +39,11 @@
       var x = d3.scaleTime().range([0, width]);
       var y = d3.scaleLinear().range([height, 0]);
 
-      // Define the axes
+      /*// Define the axes
       var xAxis = d3.axisBottom()
           .scale(x)
 
-      var yAxis = d3.axisLeft(y)
+      var yAxis = d3.axisLeft(y)*/
 
       // define the line
       var valueline = d3.line()
@@ -106,45 +106,51 @@
               var selected = d3.select(this)
                   .select("select")
                   .property("value")
-   
-              var cd = nested.filter(function (d) {
-                  return (selected == d.key),
-                  console.log(selected)
-              });
 
+              var selectCounty = nested.filter(function(d){
+                return d.key === selected;
+              }) ;
 
-
-
-              // Scale the range of the data
-              x.domain(d3.extent(data, function(d) { return d.monthYear; }));
-              y.domain([0, d3.max(data, function(d) { return +d.countyBirths; })]);    
-
+              // Quick fix to destroy DOM elements and re-draw  
+              svg.selectAll("path").remove() 
 
               // Draw line
               var lines = svg.selectAll("path")
-                  .data(nested.filter(function(d){
-                      return d.key === selected
-                  }));
+                  .data(selectCounty);
 
-              lines.exit().remove(); 
+                  console.log(selectCounty)
 
-              lines.enter().append("path")
+              lines.exit().remove();      
+
+              // Scale the range of the data
+              x.domain(d3.extent(data, function(d) { return d.monthYear; }));
+              y.domain([0, d3.max(selectCounty.values, function(d) { return +d.countyBirths; })]);   
+
+              
+
+              var linesEnter = lines.enter().append("path")
                   .attr("class", "line")
                   .attr("d", function(d) { 
                       return valueline(d.values); 
                   });
 
+              lines = lines.merge(linesEnter)  
+
+              
+              
+              
+
 
              // Add the X Axis
               svg.append("g")
                   .attr("transform", "translate(0," + height + ")")
-                  .call(xAxis)
-                  //.call(d3.axisBottom(x));
+                  //.call(xAxis)
+                  .call(d3.axisBottom(x));
     
 
               // Add the Y Axis
               svg.append("g")
-                  .call(yAxis); 
+                  .call(d3.axisLeft(y)); 
 
     
           
