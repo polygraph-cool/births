@@ -15,7 +15,7 @@
 <body>
 
   <div id = "counties"></div>
-  <div id = "testing"></div>
+  <div id = "startDate"></div>
 
   <script src="https://d3js.org/d3.v4.js"></script>
   <!--<script src="birthTrends1.js"></script>-->
@@ -100,6 +100,8 @@
                   return d.key;
               })
 
+            var countyOnly
+
 
           // Create line based on selection
           list.on('change', function(){
@@ -110,6 +112,31 @@
               var selectCounty = nested.filter(function(d){
                 return +d.key === +selected;
               });
+
+              var countyOnly = selectCounty
+
+
+          var formatMY = d3.timeFormat("%B %Y") 
+
+          
+
+          svg.selectAll(".startDate").remove();
+
+          // Create dropdown 2
+          var list2 = d3.select("#startDate")
+          list2.append("select").selectAll("option")
+              .data(selectCounty[0].values)
+              .enter().append("option")
+              .attr("value", function(d){
+                  return d.monthYear;
+              })
+              .text(function(d){
+                  return formatMY(d.monthYear);
+              })   
+              .attr("class", "startDate")
+
+              console.log(nested) 
+
 
 
               // Draw line
