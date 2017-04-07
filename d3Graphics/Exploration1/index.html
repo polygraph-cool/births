@@ -108,6 +108,7 @@
                   .property("value")
 
               var selectCounty = nested.filter(function(d){
+<<<<<<< HEAD
                 return +d.key === +selected;
               });
 
@@ -120,6 +121,16 @@
                   });
 
               lines.exit().remove();    
+=======
+                return d.key === selected;
+              });
+
+              // Quick fix to destroy DOM elements and re-draw
+              svg.selectAll("path").remove()
+              // Draw line
+              var lines = svg.selectAll("path")
+                  .data(selectCounty);
+>>>>>>> origin/master
 
               // Scale the range of the data
               x.domain(d3.extent(selectCounty[0].values, function(d) { return d.monthYear; }));
@@ -133,6 +144,11 @@
 
               lines = lines.merge(linesEnter)
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> origin/master
 
 
 
@@ -150,12 +166,20 @@
 
 
               // Add the Y Axis
+<<<<<<< HEAD
               var yaxis = svg.append("g")
                   .attr("class", "axis")
                   .call(d3.axisLeft(y)); 
 
 
 
+=======
+              svg.append("g")
+                  .call(d3.axisLeft(y));
+
+
+
+>>>>>>> origin/master
 
           });
 
