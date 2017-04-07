@@ -111,8 +111,7 @@
                 return +d.key === +selected;
               });
 
-              // Quick fix to destroy DOM elements and re-draw
-              //svg.selectAll("path").remove()
+
               // Draw line
               var lines = svg.selectAll("path")
                   .data(selectCounty, function(d){
@@ -120,14 +119,7 @@
                   });
 
               lines.exit().remove();    
-                return d.key === selected;
-              });
 
-              // Quick fix to destroy DOM elements and re-draw
-              svg.selectAll("path").remove()
-              // Draw line
-              var lines = svg.selectAll("path")
-                  .data(selectCounty);
 
 
               // Scale the range of the data
@@ -161,9 +153,6 @@
                   .call(d3.axisLeft(y)); 
 
 
-
-              svg.append("g")
-                  .call(d3.axisLeft(y));
 
 
 
