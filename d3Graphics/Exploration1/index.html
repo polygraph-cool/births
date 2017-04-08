@@ -192,6 +192,9 @@
                   .call(d3.axisLeft(y)); 
 
 
+              // Quick method for deleting and replacing brush
+              svg.selectAll(".selection").remove();
+
 
               var brush = d3.brushX()
                   .extent([[0, 0], [width, height2]])
