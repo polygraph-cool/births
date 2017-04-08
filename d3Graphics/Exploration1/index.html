@@ -62,6 +62,13 @@
           .y(function(d) { return y(+d.countyBirths); });
 
 
+      // define the brush line
+      var valueBline = d3.line()
+          .defined(function(d) { return +d.y != NaN ; })
+          .x(function(d) { return x2(d.monthYear); })
+          .y(function(d) { return y2(+d.countyBirths); });    
+
+
       // append the svg object to the body of the page
       // appends a 'group' element to 'svg'
       // moves the 'group' element to the top left margin
@@ -231,7 +238,7 @@
               var brushLinesEnter = brushLines.enter().append("path")
                   .attr("class", "line")
                   .attr("d", function(d) {
-                      return valueline(d.values);
+                      return valueBline(d.values);
                   });
 
               /*context.append("path")
@@ -270,11 +277,14 @@
 
                 var s = d3.event.selection || x2.range();
                 x.domain(s.map(x2.invert, x2));
-                focus.selectAll(".line")
-                focus.select(".axis--x").call(xAxis);
+                focus.selectAll("path.line")
+                    .attr("d", function(d){return valueline(d.values);});
+                focus.select("xAxis").call(xAxis);
                 svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
                     .scale(width / (s[1] - s[0]))
                     .translate(-s[0], 0));
+
+
               }  
 
 
