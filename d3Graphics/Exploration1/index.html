@@ -32,7 +32,7 @@
         margin2 = {top: 430, right: 20, bottom: 30, left: 40}
         width = 960 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom,
-        height2 = 500 - margin2.top - margin2.bottom;
+        height2 = 490 - margin2.top - margin2.bottom;
 
       // parse the date / time
       var parseTime = d3.timeParse("%m-%Y");
@@ -57,7 +57,7 @@
 
       // define the line
       var valueline = d3.line()
-          .defined(function(d) { return d ; })
+          .defined(function(d) { return +d.y != NaN ; })
           .x(function(d) { return x(d.monthYear); })
           .y(function(d) { return y(+d.countyBirths); });
 
@@ -124,15 +124,26 @@
               });
 
 
-      
+
+              // Create area for full line chart
+              var focus = svg.append("g")
+                  .attr("class", "focus")
+                  .attr("transform", "translate(" + margin.left + "," + margin.top +")");
+              
+
+
+
+
               // Draw line
-              var lines = svg.selectAll("path")
+              var lines = focus.selectAll("path")
                   .data(selectCounty, function(d){
                     return d ? d.key : this.key;
                   });
 
-              lines.exit().remove();    
-
+                 
+                 //lines.exit().remove();
+              // Quick fix to destroy lines and re-draw
+              svg.selectAll("path").remove()
 
 
               // Scale the range of the data
@@ -148,6 +159,7 @@
                   });
 
               lines = lines.merge(linesEnter)
+
 
 
 
@@ -168,7 +180,7 @@
 
 
               // Add the Y Axis
-              var yAxis = svg.append("g")
+              var yAxis = focus.append("g")
                   .attr("class", "axis axis--y")
                   .call(d3.axisLeft(y)); 
 
@@ -190,27 +202,46 @@
                   .attr("width", width)
                   .attr("height", height);
 
-              svg.append("g")
+              /*svg.append("g")
                 .attr("class", "axis axis--x")
                 .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
+                .call(xAxis);*/
 
               /*var focus = svg.append("g")
                   .attr("class", "focus")
                   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");*/
 
+                  focus.append("g")
+                    .attr("class", "axis axis--x")
+                    .attr("transform", "translate(0," + height + ")")
+
+
+
+              
               var context = svg.append("g")
                   .attr("class", "context") 
                   .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")")   
 
-              context.append("path")
+              var brushLines = context.selectAll("path")
+                  .data(selectCounty, function(d){
+                    return d ? d.key : this.key;
+                  });    
+
+
+              var brushLinesEnter = brushLines.enter().append("path")
+                  .attr("class", "line")
+                  .attr("d", function(d) {
+                      return valueline(d.values);
+                  });
+
+              /*context.append("path")
                 .data(selectCounty, function(d){
                     return d ? d.key : this.key;
                   })
                 .attr("class", "line")
                 .attr("d", function(d) {
                       return valueline(d.values);
-                  });
+                  });*/
 
 
                   
@@ -230,7 +261,7 @@
                 .attr("class", "zoom")
                 .attr("width", width)
                 .attr("height", height)
-                .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
                 .call(zoom);
 
               function brushed() {
@@ -239,8 +270,8 @@
 
                 var s = d3.event.selection || x2.range();
                 x.domain(s.map(x2.invert, x2));
-                svg.select("lines")
-                svg.select(".axis--x").call(xAxis);
+                focus.selectAll(".line")
+                focus.select(".axis--x").call(xAxis);
                 svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
                     .scale(width / (s[1] - s[0]))
                     .translate(-s[0], 0));
