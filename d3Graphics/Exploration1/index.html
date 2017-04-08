@@ -43,17 +43,8 @@
       var y = d3.scaleLinear().range([height, 0]),
         y2 = d3.scaleLinear().range([height2, 0]);
 
-      //var xAxis2 = d3.axisBottom(x2);  
-
-      /*// Define the axes
-      var xAxis = d3.axisBottom()
-          .scale(x)    
-
-      var yAxis = d3.axisLeft(y)*/
-
-
-              var xAxis = d3.axisBottom(x);
-              var xAxis2 = d3.axisBottom(x2);  
+      var xAxis = d3.axisBottom(x);
+      var xAxis2 = d3.axisBottom(x2);  
 
       // define the line
       var valueline = d3.line()
@@ -106,7 +97,7 @@
               .entries(data);
 
 
-          // Create dropdown 1
+          // Create dropdown for county selection
           var list = d3.select("#counties")
           list.append("select").selectAll("option")
               .data(nested)
@@ -148,7 +139,8 @@
                   });
 
                  
-                 //lines.exit().remove();
+              //lines.exit().remove();
+
               // Quick fix to destroy lines and re-draw
               svg.selectAll("path").remove()
 
@@ -174,15 +166,6 @@
               // Quick fix to destroy axes and re-draw
               svg.selectAll(".axis").remove();  
               
-
-             // Add the X Axis
-              /*var xAxis = svg.append("g")
-                  .attr("transform", "translate(0," + height + ")")
-                  .attr("class", "axis axis--x")
-                  //.call(xAxis)
-                  .call(d3.axisBottom(x));*/
-
-              // Define the x axis
   
 
 
@@ -212,18 +195,10 @@
                   .attr("width", width)
                   .attr("height", height);
 
-              /*svg.append("g")
-                .attr("class", "axis axis--x")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);*/
 
-              /*var focus = svg.append("g")
-                  .attr("class", "focus")
-                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");*/
-
-                  focus.append("g")
-                    .attr("class", "axis axis--x")
-                    .attr("transform", "translate(0," + height + ")")
+              focus.append("g")
+                  .attr("class", "axis axis--x")
+                  .attr("transform", "translate(0," + height + ")")
 
 
 
@@ -244,18 +219,6 @@
                       return valueBline(d.values);
                   });
 
-              /*context.append("path")
-                .data(selectCounty, function(d){
-                    return d ? d.key : this.key;
-                  })
-                .attr("class", "line")
-                .attr("d", function(d) {
-                      return valueline(d.values);
-                  });*/
-
-
-                  
-
 
               context.append("g")
                 .attr("class", "axis axis--x")
@@ -275,35 +238,28 @@
                 .call(zoom);
 
               function brushed() {
-                // ignore brush-by-zoom
-                //if (d3.event.sourceEvent && d3.event.sourceEvent.type == "zoom") return; 
-
-                var s = d3.event.selection || x2.range();
-                x.domain(s.map(x2.invert, x2));
-                focus.selectAll("path.line")
-                    .attr("d", function(d){return valueline(d.values);});
-                focus.select("xAxis").call(xAxis);
-                svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
-                    .scale(width / (s[1] - s[0]))
-                    .translate(-s[0], 0));
-
-
+                  var s = d3.event.selection || x2.range();
+                  x.domain(s.map(x2.invert, x2));
+                  focus.selectAll("path.line")
+                      .attr("d", function(d){return valueline(d.values);});
+                  focus.select("xAxis").call(xAxis);
+                  svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
+                      .scale(width / (s[1] - s[0]))
+                      .translate(-s[0], 0));
               }  
 
 
               function zoomed(){
-                //if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return;
-
-                var t = d3.event.transform;
-                x.domain(t.rescaleX(x2).domain());
-                svg.select(".line")
-                    .attr("d", function(d){
+                  var t = d3.event.transform;
+                  x.domain(t.rescaleX(x2).domain());
+                  svg.select(".line")
+                      .attr("d", function(d){
                         return valueline(d.values);
-                    });
+                      });
 
-                svg.select(".axis--x").call(xAxis);
-                context.select(".brush")
-                    .call(brush.move, x.range().map(t.invertX, t));
+                  svg.select(".axis--x").call(xAxis);
+                  context.select(".brush")
+                      .call(brush.move, x.range().map(t.invertX, t));
 
               }
 
