@@ -14,8 +14,9 @@
 
 <body>
 
+   <div id = "states"></div>
   <div id = "counties"></div>
-  <div id = "startDate"></div>
+ 
 
   <script src="https://d3js.org/d3.v4.js"></script>
   <!--<script src="birthTrends1.js"></script>-->
@@ -28,8 +29,8 @@
       //////////////////////////////////////////////////////////////////////
 
       // set the dimensions and margins of the graph
-      var margin = {top: 20, right: 20, bottom: 110, left: 40},
-        margin2 = {top: 430, right: 20, bottom: 30, left: 40}
+      var margin = {top: 20, right: 40, bottom: 110, left: 40},
+        margin2 = {top: 430, right: 40, bottom: 30, left: 40}
         width = 960 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom,
         height2 = 490 - margin2.top - margin2.bottom;
@@ -48,7 +49,7 @@
 
       // define the line
       var valueline = d3.line()
-          .defined(function(d) { return +d.y != NaN ; })
+          .defined(function(d) { return d; })
           .x(function(d) { return x(d.monthYear); })
           .y(function(d) { return y(+d.countyBirths); });
 
@@ -90,14 +91,53 @@
               d.State = d.State;
           });
 
+          var statenested = d3.nest()
+              .key(function(d){ return d.State;})
+              .key(function(d){ return d.County;})
+              .entries(data);
+
+ 
+          
 
           // Nest the data to create a line for each county
           var nested = d3.nest()
+              //.key(function(d){ return d.State; })
               .key(function(d) { return d.County; })
               .entries(data);
 
 
+
+
+          // Create dropdown for state selection
+          var stateList = d3.select("#states")
+          stateList.append("select").selectAll("option")
+              .data(statenested)
+              .enter().append("option")
+              .attr("value", function(d){
+                  return d.key;
+              })
+              .text(function(d){
+                  return d.key;
+              })
+
+          stateList.on('change', function(){
+            var selected = d3.select(this)
+                .select("select")
+                .property("value")
+
+            var testData = statenested.filter(function(d){
+              return +d.key == +selected;
+            })
+
+
+          console.log(testData)
+
+
+          })    
+
           // Create dropdown for county selection
+
+
           var list = d3.select("#counties")
           list.append("select").selectAll("option")
               .data(nested)
@@ -109,6 +149,7 @@
                   return d.key;
               })
 
+              console.log(nested[0].values)
 
 
           // Create line based on selection
@@ -159,6 +200,8 @@
 
               lines = lines.merge(linesEnter)
 
+
+              console.log(selectCounty)
 
 
 
