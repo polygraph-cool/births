@@ -40,7 +40,7 @@
 
       // set the ranges
       var x = d3.scaleTime().domain([parseTimeMonth("january"),parseTimeMonth("december")]).range([0, width]);
-      var y = d3.scaleLinear().domain([0,500]).range([height, 0]).clamp(true);
+      var y = d3.scaleLinear().domain([0, 500]).range([height, 0]).clamp(true);
 
       /*// Define the axes
       var xAxis = d3.axisBottom()
@@ -113,10 +113,14 @@
 
               console.log(selectCounty);
 
+              svg.selectAll(".line").remove();
+
+              
+
               // Group the county-level data
              var Counties = svg.selectAll("g")
                   .data(selectCounty, function(d){
-                    return d.key;
+                    return d ? d.key : this.key;;
                   })
                   .enter()
                   .append("g")
@@ -130,45 +134,31 @@
                   .attr("d",function(d){
                     return valueLine(d.values);
                   })
+                  .attr("class", "line")
                   ;
 
+                  console.log(Counties)
 
-              // Draw line
-              // var lines = svg.selectAll("path")
-              //     .data(Counties2, function(d){
-              //       return d.values;
-              //     });
-              //
-              //     console.log(lines)
-              //
+                //x.domain(d3.extent(Counties, function(d) { return d.month; }));
+              //y.domain([0, d3.max(Counties, function(d) { return d.values; })]);
 
-              //lines.exit().remove();
 
-              // Scale the range of the data
-              // x.domain(d3.extent((Counties2), function(d) { return d.month; }));
-              // y.domain([0, d3.max((Counties2), function(d) { return +d.countyBirths; })]);
-             //
-            //   var linesEnter = Counties.enter().append("path")
-            //       .attr("class", "line")
-            //       .attr("d", function(d) {
-            //           return valueline((Counties));
-            //       });
-            //   lines = lines.merge(linesEnter)
-             //
-            //   // Quick fix to destroy axes and re-draw
-            //   svg.selectAll(".axis").remove();
-             //
-            //  // Add the X Axis
-            //   var xaxis = svg.append("g")
-            //       .attr("transform", "translate(0," + height + ")")
-            //       .attr("class", "axis")
-            //       //.call(xAxis)
-            //       .call(d3.axisBottom(x));
+                
+             
+               // Quick fix to destroy axes and re-draw
+            svg.selectAll(".axis").remove();
+             
+              // Add the X Axis
+               var xaxis = svg.append("g")
+                   .attr("transform", "translate(0," + height + ")")
+                   .attr("class", "axis")
+                   //.call(xAxis)
+                   .call(d3.axisBottom(x));
              //
             //   // Add the Y Axis
-            //   var yaxis = svg.append("g")
-            //       .attr("class", "axis")
-            //       .call(d3.axisLeft(y));
+               var yaxis = svg.append("g")
+                   .attr("class", "axis")
+                   .call(d3.axisLeft(y));
           });
       });
   </script>
