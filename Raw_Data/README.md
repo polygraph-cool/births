@@ -46,6 +46,6 @@ jsBirthData.csv
  	-	 **County** : The county where the mother lives (FIPS County Code)
     -    **countyBirths** : The calculated sum of births that occurred to mothers living in a county for a given month (if the sum was less than 9, the sum is listed as NA as per NCHS reporting guidelines)
   	-	 **stateBirths** : The calculated sum of births that occurred to mothers living in a state for a given month (includes all birth counts, including those from counties with fewer than 9 births in a month)
-  	-	 **monthYear** : The month and year of birth (written as %m-%Y, and 0-indexed for JavaScript use such that January = 0 and December = 11)
+  	-	 **monthYear** : The month and year of birth (written as %m-%Y, and 1-indexed such that January = 1 and December = 12)
 -   **Other Notes**: Since this story is focused on events that may impact births within the US, any non-US residents have been removed from the sample. 
 

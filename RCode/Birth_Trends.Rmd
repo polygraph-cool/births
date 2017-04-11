@@ -176,7 +176,8 @@ Also, unlike R, Javascript months are 0 indexed, meaning that they run from Janu
 ```{r}
 allBirthData2 <- allBirthData %>% 
   mutate(monthYear = paste((Month-1), Year, sep = "-")) %>% 
-  select(-Month, -Year)
+  select(-Month, -Year) %>% 
+  filter(!is.na(countyBirths))
 ```
 
 Again, I'll write a 3rd raw data file, specifically used for javascript-things.
