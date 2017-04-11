@@ -25,31 +25,34 @@
       //////////////////////////////////////////////////////////////////////
       /////////////////////////  GLOBAL VARIABLES  /////////////////////////
       //////////////////////////////////////////////////////////////////////
-      
+
       // set the dimensions and margins of the graph
       var margin = {top: 20, right: 20, bottom: 30, left: 50},
         width = 960 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
-      
+
       // parse the date / time
       var parseTime = d3.timeParse("%m-%Y");
       var parseYear = d3.timeFormat("%Y"),
         parseMonth = d3.timeFormat("%B");
-      
+      var parseTimeMonth = d3.timeParse("%B");
+
+
       // set the ranges
-      var x = d3.scaleTime().range([0, width]);
-      var y = d3.scaleLinear().range([height, 0]);
-      
+      var x = d3.scaleTime().domain([parseTimeMonth("january"),parseTimeMonth("december")]).range([0, width]);
+      var y = d3.scaleLinear().domain([0,500]).range([height, 0]).clamp(true);
+
       /*// Define the axes
       var xAxis = d3.axisBottom()
           .scale(x)
       var yAxis = d3.axisLeft(y)*/
-      
+
       // define the line
-      var valueline = d3.line()
-          .x(function(d) { return x(d.monthYear); })
-          .y(function(d) { return y(+d.countyBirths); });
-      
+      var valueLine = d3.line()
+          .x(function(d) { return x(parseTimeMonth(d.month)); })
+          .y(function(d) { return y(+d.countyBirths); })
+          ;
+
       // append the svg object to the body of the page
       // appends a 'group' element to 'svg'
       // moves the 'group' element to the top left margin
@@ -64,7 +67,7 @@
       //////////////////////////////////////////////////////////////////////
       ////////////////////////////  DATA IMPORT ////////////////////////////
       //////////////////////////////////////////////////////////////////////
-      
+
       // Get the data
       d3.csv("../Exploration1/test.csv", function(error, data) {
           if (error) throw error;
@@ -72,19 +75,19 @@
           data.forEach(function(d) {
               d.monthYear = parseTime(d.monthYear);
               d.month = parseMonth(d.monthYear);
-              d.year = parseYear(d.monthYear); 
+              d.year = parseYear(d.monthYear);
               d.countyBirths = +d.countyBirths;
               d.County = d.County;
               d.State = d.State;
           });
-          
+
           // Nest the data to create a line for each county and each year
           var nested = d3.nest()
               .key(function(d) { return d.County; })
               .key(function(d){ return d.year; })
               .entries(data);
 
-          
+
           // Create dropdown 1
           var list = d3.select("#counties")
           list.append("select").selectAll("option")
@@ -96,88 +99,76 @@
               .text(function(d){
                   return d.key;
               })
-          
+
           // Create line based on selection
           list.on('change', function(){
               var selected = d3.select(this)
                   .select("select")
                   .property("value")
 
-
-
               // Filter data to only include selected county
               var selectCounty = nested.filter(function(d){
                 return +d.key === +selected;
               });
 
+              console.log(selectCounty);
+
               // Group the county-level data
-             var Counties = svg.selectAll("counties")
+             var Counties = svg.selectAll("g")
                   .data(selectCounty, function(d){
-                    return d.values;
+                    return d.key;
                   })
-                .enter().append("g")
+                  .enter()
+                  .append("g")
                   .attr("class", "counties")
-                .selectAll("path")
+                  .selectAll("path")
                   .data(function(d) {
                     return d.values;
                   })
-                .enter().append("path") ;
+                  .enter()
+                  .append("path")
+                  .attr("d",function(d){
+                    return valueLine(d.values);
+                  })
+                  ;
 
 
-            var Counties2 = d3.select(Counties.nodes())
-
-  
-
-
-              console.log(Counties2.datum)
-
-              console.log(svg.selectAll("path"))
-   
-  
-          
               // Draw line
-              var lines = svg.selectAll("path")
-                  .data(Counties2, function(d){
-                    return d.values;
-                  });
+              // var lines = svg.selectAll("path")
+              //     .data(Counties2, function(d){
+              //       return d.values;
+              //     });
+              //
+              //     console.log(lines)
+              //
 
-                  console.log(lines)
+              //lines.exit().remove();
 
-                 
-                
-
-
-
-
-
-
-              //lines.exit().remove();    
-          
               // Scale the range of the data
-              x.domain(d3.extent((Counties2), function(d) { return d.month; }));
-              y.domain([0, d3.max((Counties2), function(d) { return +d.countyBirths; })]);
-
-              var linesEnter = Counties.enter().append("path")
-                  .attr("class", "line")
-                  .attr("d", function(d) {
-                      return valueline((Counties));
-                  });
-              lines = lines.merge(linesEnter)
-          
-              // Quick fix to destroy axes and re-draw
-              svg.selectAll(".axis").remove();  
-              
-             // Add the X Axis
-              var xaxis = svg.append("g")
-                  .attr("transform", "translate(0," + height + ")")
-                  .attr("class", "axis")
-                  //.call(xAxis)
-                  .call(d3.axisBottom(x));
-          
-              // Add the Y Axis
-              var yaxis = svg.append("g")
-                  .attr("class", "axis")
-                  .call(d3.axisLeft(y)); 
+              // x.domain(d3.extent((Counties2), function(d) { return d.month; }));
+              // y.domain([0, d3.max((Counties2), function(d) { return +d.countyBirths; })]);
+             //
+            //   var linesEnter = Counties.enter().append("path")
+            //       .attr("class", "line")
+            //       .attr("d", function(d) {
+            //           return valueline((Counties));
+            //       });
+            //   lines = lines.merge(linesEnter)
+             //
+            //   // Quick fix to destroy axes and re-draw
+            //   svg.selectAll(".axis").remove();
+             //
+            //  // Add the X Axis
+            //   var xaxis = svg.append("g")
+            //       .attr("transform", "translate(0," + height + ")")
+            //       .attr("class", "axis")
+            //       //.call(xAxis)
+            //       .call(d3.axisBottom(x));
+             //
+            //   // Add the Y Axis
+            //   var yaxis = svg.append("g")
+            //       .attr("class", "axis")
+            //       .call(d3.axisLeft(y));
           });
       });
   </script>
