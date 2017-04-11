@@ -84,7 +84,6 @@
               .key(function(d){ return d.year; })
               .entries(data);
 
-             
           
           // Create dropdown 1
           var list = d3.select("#counties")
@@ -118,33 +117,33 @@
                   })
                 .enter().append("g")
                   .attr("class", "counties")
-                /*.selectAll("path")
+                .selectAll("path")
                   .data(function(d) {
                     return d.values;
                   })
-                .enter().append("path")*/ ;
+                .enter().append("path") ;
 
 
-            var Counties2 = d3.select("svg")
-                .append("g")
-                .selectAll("g")
-                .data(selectCounty)
-                .enter()
-                .append("g")
-                    .attr("class", "lines")
+            var Counties2 = d3.select(Counties.nodes())
+
+  
 
 
-              console.log(Counties)
-              console.log(Counties2)
-              console.log(svg.selectAll(".counties"))
+              console.log(Counties2.datum)
+
+              console.log(svg.selectAll("path"))
+   
+  
           
               // Draw line
               var lines = svg.selectAll("path")
-                  .data([Counties])/*, function(d){
-                    return d ? d.key : this.key;
-                  })*/;
+                  .data(Counties2, function(d){
+                    return d.values;
+                  });
 
                   console.log(lines)
+
+                 
                 
 
 
@@ -155,8 +154,8 @@
               //lines.exit().remove();    
           
               // Scale the range of the data
-              x.domain(d3.extent((Counties), function(d) { return d.month; }));
-              y.domain([0, d3.max((Counties), function(d) { return +d.countyBirths; })]);
+              x.domain(d3.extent((Counties2), function(d) { return d.month; }));
+              y.domain([0, d3.max((Counties2), function(d) { return +d.countyBirths; })]);
 
               var linesEnter = Counties.enter().append("path")
                   .attr("class", "line")
