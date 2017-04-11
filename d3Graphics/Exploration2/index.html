@@ -40,7 +40,7 @@
 
       // set the ranges
       var x = d3.scaleTime().domain([parseTimeMonth("january"),parseTimeMonth("december")]).range([0, width]);
-      var y = d3.scaleLinear().domain([0, 500]).range([height, 0]).clamp(true);
+      var y = d3.scaleLinear().range([height, 0]);
 
       /*// Define the axes
       var xAxis = d3.axisBottom()
@@ -84,8 +84,18 @@
           // Nest the data to create a line for each county and each year
           var nested = d3.nest()
               .key(function(d) { return d.County; })
-              .key(function(d){ return d.year; })
+              .rollup(function(leaves){
+                var extent = d3.extent(leaves, function(d){
+                  return d.countyBirths
+                })
+                var nest = d3.nest().key(function(d){
+                  return d.year
+                })
+                .entries(leaves);
+                return {extent:extent, years:nest};
+              })
               .entries(data);
+              
 
 
           // Create dropdown 1
@@ -120,29 +130,26 @@
               // Group the county-level data
              var Counties = svg.selectAll("g")
                   .data(selectCounty, function(d){
-                    return d ? d.key : this.key;;
+                    return d ? d.key : this.key;
                   })
                   .enter()
                   .append("g")
                   .attr("class", "counties")
+                  .each(function(d){
+                    y.domain(d.value.extent)
+                  })
                   .selectAll("path")
                   .data(function(d) {
-                    return d.values;
+                    return (d.value.years);
                   })
                   .enter()
                   .append("path")
                   .attr("d",function(d){
                     return valueLine(d.values);
                   })
-                  .attr("class", "line")
-                  ;
+                  .attr("class", "line");
 
-                  console.log(Counties)
-
-                //x.domain(d3.extent(Counties, function(d) { return d.month; }));
-              //y.domain([0, d3.max(Counties, function(d) { return d.values; })]);
-
-
+      
                 
              
                // Quick fix to destroy axes and re-draw
