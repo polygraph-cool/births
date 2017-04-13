@@ -1,0 +1,40 @@
+/* minimal css reset */
+html, body, div, h1, h2, h3, a, p, img, dl, dt, dd, ul, li {
+	padding: 0; margin: 0; border: 0; outline: 0;
+	color: #fff;
+}
+
+body {
+	background-size: 100% 100%;
+  font-family: "Whitney SSm A", "Whitney SSm B" ;
+}
+
+#vis {
+  width: 700px;
+  height: 700px;
+  clear: both;
+  margin-bottom: 10px;
+  position: relative;
+  text-align: center;
+}
+
+.line {
+  fill: none;
+  stroke: blue;
+  stroke-width: 2px;
+  clip-path: url(#clip);
+}
+
+.line2 {
+  fill: none;
+  stroke: red;
+  stroke-width: 2px;
+  clip-path: url(#clip);
+}
+
+
+.zoom {
+  cursor: move;
+  fill: none;
+ /* pointer-events: all;*/
+}

@@ -14,23 +14,19 @@
 
 <body>
 
-   <div id = "states"></div>
-  <div id = "counties"></div>
- 
+  <div id = "State"></div>
+
 
   <script src="https://d3js.org/d3.v4.js"></script>
   <!--<script src="birthTrends1.js"></script>-->
   <script>
-
-
-
       //////////////////////////////////////////////////////////////////////
       /////////////////////////  GLOBAL VARIABLES  /////////////////////////
       //////////////////////////////////////////////////////////////////////
 
       // set the dimensions and margins of the graph
-      var margin = {top: 20, right: 40, bottom: 110, left: 40},
-        margin2 = {top: 430, right: 40, bottom: 30, left: 40}
+      var margin = {top: 20, right: 20, bottom: 110, left: 40},
+        margin2 = {top: 430, right: 20, bottom: 30, left: 40}
         width = 960 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom,
         height2 = 490 - margin2.top - margin2.bottom;
@@ -43,23 +39,20 @@
         x2 = d3.scaleTime().range([0, width]);
       var y = d3.scaleLinear().range([height, 0]),
         y2 = d3.scaleLinear().range([height2, 0]);
-
       var xAxis = d3.axisBottom(x);
-      var xAxis2 = d3.axisBottom(x2);  
+      var xAxis2 = d3.axisBottom(x2);
 
       // define the line
       var valueline = d3.line()
-          .defined(function(d) { return d; })
+          .defined(function(d) { return +d.y != NaN ; })
           .x(function(d) { return x(d.monthYear); })
           .y(function(d) { return y(+d.countyBirths); });
-
 
       // define the brush line
       var valueBline = d3.line()
           .defined(function(d) { return +d.y != NaN ; })
           .x(function(d) { return x2(d.monthYear); })
-          .y(function(d) { return y2(+d.countyBirths); });    
-
+          .y(function(d) { return y2(+d.countyBirths); });
 
       // append the svg object to the body of the page
       // appends a 'group' element to 'svg'
@@ -72,73 +65,31 @@
                 "translate(" + margin.left + "," + margin.top + ")");
 
 
-
-
       //////////////////////////////////////////////////////////////////////
       ////////////////////////////  DATA IMPORT ////////////////////////////
       //////////////////////////////////////////////////////////////////////
 
-
       // Get the data
-      d3.csv("test.csv", function(error, data) {
+      d3.csv("stateData.csv", function(error, data) {
           if (error) throw error;
-
           // format the data
           data.forEach(function(d) {
               d.monthYear = parseTime(d.monthYear);
-              d.countyBirths = +d.countyBirths;
-              d.County = d.County;
-              d.State = d.State;
+              d.stateBirths = +d.stateBirths;
+              d.div = d.div;
+              d.states = d.states;
+              value = +d.stateBirths;
           });
-
-          var statenested = d3.nest()
-              .key(function(d){ return d.State;})
-              .key(function(d){ return d.County;})
-              .entries(data);
-
- 
-          
 
           // Nest the data to create a line for each county
           var nested = d3.nest()
-              //.key(function(d){ return d.State; })
-              .key(function(d) { return d.County; })
+              .key(function(d) { return d.states; })
               .entries(data);
 
-
-
-
-          // Create dropdown for state selection
-          var stateList = d3.select("#states")
-          stateList.append("select").selectAll("option")
-              .data(statenested)
-              .enter().append("option")
-              .attr("value", function(d){
-                  return d.key;
-              })
-              .text(function(d){
-                  return d.key;
-              })
-
-          stateList.on('change', function(){
-            var selected = d3.select(this)
-                .select("select")
-                .property("value")
-
-            var testData = statenested.filter(function(d){
-              return +d.key == +selected;
-            })
-
-
-          console.log(testData)
-
-
-          })    
+console.log(nested)
 
           // Create dropdown for county selection
-
-
-          var list = d3.select("#counties")
+          var list = d3.select("#State")
           list.append("select").selectAll("option")
               .data(nested)
               .enter().append("option")
@@ -149,7 +100,7 @@
                   return d.key;
               })
 
-              console.log(nested[0].values)
+      
 
 
           // Create line based on selection
@@ -158,8 +109,9 @@
                   .select("select")
                   .property("value")
 
-              var selectCounty = nested.filter(function(d){
-                return +d.key === +selected;
+
+              var selectState = nested.filter(function(d){
+                return d.key === selected;
               });
 
 
@@ -169,28 +121,24 @@
                   .attr("class", "focus")
                   .attr("transform", "translate(" + margin.left + "," + margin.top +")");
               
-
-
-
-
               // Draw line
               var lines = focus.selectAll("path")
-                  .data(selectCounty, function(d){
+                  .data(selectState, function(d){
                     return d ? d.key : this.key;
                   });
 
+                  console.log(lines)
                  
               //lines.exit().remove();
-
               // Quick fix to destroy lines and re-draw
               svg.selectAll("path").remove()
 
-
               // Scale the range of the data
-              x.domain(d3.extent(selectCounty[0].values, function(d) { return d.monthYear; }));
+              x.domain(d3.extent(selectState[0].values, function(d) { return d.monthYear; }));
               x2.domain(x.domain());
-              y.domain([0, d3.max(selectCounty[0].values, function(d) { return +d.countyBirths; })]);
+              y.domain([0, d3.max(selectState[0].values, function(d) { return +d.stateBirths; })]);
               y2.domain(y.domain());
+
 
               var linesEnter = lines.enter().append("path")
                   .attr("class", "line")
@@ -201,85 +149,59 @@
               lines = lines.merge(linesEnter)
 
 
-              console.log(selectCounty)
-
-
-
-
               // Quick fix to destroy axes and re-draw
               svg.selectAll(".axis").remove();  
               
   
-
-
               // Add the Y Axis
               var yAxis = focus.append("g")
                   .attr("class", "axis axis--y")
                   .call(d3.axisLeft(y)); 
-
-
               // Quick method for deleting and replacing brush
               svg.selectAll(".selection").remove();
-
-
               var brush = d3.brushX()
                   .extent([[0, 0], [width, height2]])
                   .on("brush end", brushed);
-
               var zoom = d3.zoom()
                   .scaleExtent([1, Infinity])
                   .translateExtent([[0, 0], [width, height]])
                   .extent([[0, 0], [width, height]])
                   .on("zoom", zoomed);
-
               svg.append("defs").append("clipPath")
                   .attr("id", "clip")
                 .append("rect")
                   .attr("width", width)
                   .attr("height", height);
-
-
               focus.append("g")
                   .attr("class", "axis axis--x")
                   .attr("transform", "translate(0," + height + ")")
-
-
-
               
               var context = svg.append("g")
                   .attr("class", "context") 
                   .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")")   
-
               var brushLines = context.selectAll("path")
-                  .data(selectCounty, function(d){
+                  .data(selectState, function(d){
                     return d ? d.key : this.key;
                   });    
-
-
               var brushLinesEnter = brushLines.enter().append("path")
                   .attr("class", "line")
                   .attr("d", function(d) {
                       return valueBline(d.values);
                   });
-
-
               context.append("g")
                 .attr("class", "axis axis--x")
                 .attr("transform", "translate(0," + height2 + ")")
                 .call(xAxis2);  
-
               context.append("g")
                 .attr("class", "brush")
                 .call(brush)
                 .call(brush.move, x.range());
-
               svg.append("rect")
                 .attr("class", "zoom")
                 .attr("width", width)
                 .attr("height", height)
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
                 .call(zoom);
-
               function brushed() {
                   var s = d3.event.selection || x2.range();
                   x.domain(s.map(x2.invert, x2));
@@ -290,8 +212,6 @@
                       .scale(width / (s[1] - s[0]))
                       .translate(-s[0], 0));
               }  
-
-
               function zoomed(){
                   var t = d3.event.transform;
                   x.domain(t.rescaleX(x2).domain());
@@ -299,21 +219,12 @@
                       .attr("d", function(d){
                         return valueline(d.values);
                       });
-
                   svg.select(".axis--x").call(xAxis);
                   context.select(".brush")
                       .call(brush.move, x.range().map(t.invertX, t));
-
               }
-
-
-
-
-
           });
-
       });
-
   </script>
 
 

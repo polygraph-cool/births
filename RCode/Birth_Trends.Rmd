@@ -171,11 +171,10 @@ write.csv(allBirthData, "../Raw_Data/allBirthData.csv")
 
 If I were going to continue to use this data only in R, I'd leave it organized as is, however, since I am planning to feed the data into [d3](https://d3js.org/), I'm going to make a month-year column (%m-%Y). This will hopefully make the d3 run a little smoother. 
 
-Also, unlike R, Javascript months are 0 indexed, meaning that they run from January (0) to December (11). I'll convert that as well. 
 
 ```{r}
 allBirthData2 <- allBirthData %>% 
-  mutate(monthYear = paste((Month-1), Year, sep = "-")) %>% 
+  mutate(monthYear = paste((Month), Year, sep = "-")) %>% 
   select(-Month, -Year) %>% 
   filter(!is.na(countyBirths))
 ```
@@ -184,5 +183,39 @@ Again, I'll write a 3rd raw data file, specifically used for javascript-things.
 
 ```{r}
 write.csv(allBirthData2, "../Raw_Data/jsBirthData.csv")
+```
+
+
+For ease of prototyping, I'm also going to make a state/region data file. 
+
+```{r}
+states <- state.name
+div <- state.division
+DC <- c("District of Columbia", "5")
+
+states2 <- as.data.frame(cbind(states, div), stringsAsFactors = FALSE)
+states2 <- rbind(states2, DC)
+
+states2 <- states2 %>% arrange(states) %>% mutate(number = c(1:51), number = sprintf("%02d", number))
+
+stateData <- allBirthData2 %>% 
+  mutate(number = State, number = sprintf("%02s", number)) %>%  
+  group_by(number, monthYear) %>% 
+  summarize(stateBirths = mean(stateBirths)) 
+
+stateData2 <- left_join(stateData, states2, by = "number")
+
+write.csv(stateData2, "../d3Graphics/Exploration3/stateData.csv")
+```
+
+```{r}
+divs = stateData2 %>% 
+  separate(monthYear, into = c("month", "year"), sep = "-") %>% 
+  mutate(month = as.numeric(month)) %>% 
+  group_by(year, month, div) %>% 
+  summarize(sum = sum(stateBirths)) 
+  
+
+ggplot(divs, aes(x = month, y = sum, group = div)) + geom_smooth() + facet_wrap(~div)
 ```
 
