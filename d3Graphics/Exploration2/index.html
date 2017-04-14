@@ -15,7 +15,7 @@
 <body>
 
   <div id = "counties"></div>
-  <div id = "testing"></div>
+  <div id = "year"></div>
 
   <script src="https://d3js.org/d3.v4.js"></script>
   <!--<script src="birthTrends1.js"></script>-->
@@ -32,14 +32,14 @@
         height = 500 - margin.top - margin.bottom;
 
       // parse the date / time
-      var parseTime = d3.timeParse("%m-%Y");
+      var parseTime = d3.timeParse("%y%m");
       var parseYear = d3.timeFormat("%Y"),
-        parseMonth = d3.timeFormat("%B");
-      var parseTimeMonth = d3.timeParse("%B");
+        parseMonth = d3.timeFormat("%b");
+      var parseTimeMonth = d3.timeParse("%b");
 
 
       // set the ranges
-      var x = d3.scaleTime().domain([parseTimeMonth("january"),parseTimeMonth("december")]).range([0, width]);
+      var x = d3.scaleTime().domain([parseTimeMonth("jan"),parseTimeMonth("dec")]).range([0, width]);
       var y = d3.scaleLinear().range([height, 0]);
 
       /*// Define the axes
@@ -50,7 +50,7 @@
       // define the line
       var valueLine = d3.line()
           .x(function(d) { return x(parseTimeMonth(d.month)); })
-          .y(function(d) { return y(+d.countyBirths); })
+          .y(function(d) { return y(+d.Births); })
           ;
 
       // append the svg object to the body of the page
@@ -69,16 +69,15 @@
       //////////////////////////////////////////////////////////////////////
 
       // Get the data
-      d3.csv("../Exploration1/test.csv", function(error, data) {
+      d3.csv("CondensedBirth2.csv", function(error, data) {
           if (error) throw error;
           // format the data
           data.forEach(function(d) {
-              d.monthYear = parseTime(d.monthYear);
-              d.month = parseMonth(d.monthYear);
-              d.year = parseYear(d.monthYear);
-              d.countyBirths = +d.countyBirths;
+              d.Date = parseTime(d.Date);
+              d.month = parseMonth(d.Date);
+              d.year = parseYear(d.Date);
+              d.Births = +d.Births * 10;
               d.County = d.County;
-              d.State = d.State;
           });
 
           // Nest the data to create a line for each county and each year
@@ -86,7 +85,7 @@
               .key(function(d) { return d.County; })
               .rollup(function(leaves){
                 var extent = d3.extent(leaves, function(d){
-                  return d.countyBirths
+                  return d.Births
                 })
                 var nest = d3.nest().key(function(d){
                   return d.year
@@ -95,8 +94,12 @@
                 return {extent:extent, years:nest};
               })
               .entries(data);
-              
 
+          // Nest data by year
+          var nested2 = d3.nest()
+              .key(function(d){ return d.year; })
+              .entries(data);
+              
 
           // Create dropdown 1
           var list = d3.select("#counties")
@@ -110,7 +113,33 @@
                   return d.key;
               })
 
-          // Create line based on selection
+              console.log(list)
+
+         /* // Create dropdown 2 (year)
+          var yList = d3.select("#year")
+          yList.append("select").selectAll("option")
+              .data(nested2)
+              .enter().append("option")
+              .attr("value", function(d){
+                return d.key;
+              })    
+              .text(function(d){
+                return d.key;
+              })
+ 
+
+          // Select year (colored)
+          yList.on('change', function(){
+            var selectedYear = d3.select(this)
+                .select("select")
+                .property("value")
+              
+            // select all paths and select one that the year matches
+
+          }) */
+
+
+          // Create line based on selection from dropdown 1
           list.on('change', function(){
               var selected = d3.select(this)
                   .select("select")
@@ -125,7 +154,7 @@
 
               svg.selectAll(".line").remove();
 
-              
+
 
               // Group the county-level data
              var Counties = svg.selectAll("g")
@@ -150,7 +179,7 @@
                   .attr("class", "line");
 
       
-                
+                console.log(Counties)
              
                // Quick fix to destroy axes and re-draw
             svg.selectAll(".axis").remove();
@@ -167,6 +196,37 @@
                    .attr("class", "axis")
                    .call(d3.axisLeft(y));
           });
+
+          // Create dropdown 2 (year)
+          var yList = d3.select("#year")
+          yList.append("select").selectAll("option")
+              .data(nested2)
+              .enter().append("option")
+              .attr("value", function(d){
+                return d.key;
+              })    
+              .text(function(d){
+                return d.key;
+              })
+ 
+
+          // Select year (colored)
+          yList.on('change', function(){
+            var selectedYear = d3.select(this)
+                .select("select")
+                .property("value")
+
+              
+            // select all paths and select one that the year matches
+            var selLine = svg.selectAll(".line")
+
+            var element = d3.select(selLine.nodes()[0])
+                .classed("selected", true)
+
+              console.log(element)
+
+          })
+
       });
   </script>
 

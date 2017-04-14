@@ -20,8 +20,17 @@ body {
 
 .line {
   fill: none;
-  stroke: blue;
+  stroke: gray;
   stroke-width: 2px;
+  opacity: 0.5;
+  clip-path: url(#clip);
+}
+
+.selected {
+  fill: none;
+  stroke: red;
+  stroke-width: 4px;
+  opacity: 1;
   clip-path: url(#clip);
 }
 
