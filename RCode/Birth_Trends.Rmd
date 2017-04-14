@@ -213,9 +213,57 @@ divs = stateData2 %>%
   separate(monthYear, into = c("month", "year"), sep = "-") %>% 
   mutate(month = as.numeric(month)) %>% 
   group_by(year, month, div) %>% 
-  summarize(sum = sum(stateBirths)) 
+  summarize(sum = sum(stateBirths)) %>% 
+  filter(!is.na(div))
   
 
-ggplot(divs, aes(x = month, y = sum, group = div)) + geom_smooth() + facet_wrap(~div)
+ggplot(divs, aes(x = month, y = sum, group = year, col = year)) + geom_line() + facet_wrap(~div)
 ```
 
+```{r}
+divs2 = stateData2 %>% 
+  separate(monthYear, into = c("month", "year"), sep = "-") %>% 
+  mutate(month = as.numeric(month),
+         State = as.factor(states)) %>% 
+  group_by(year, month, div, State) %>% 
+  summarize(sum = sum(stateBirths)) %>% 
+  filter(!is.na(State)) %>% 
+  ungroup
+  
+
+ggplot(divs2, aes(x = month, y = sum, group = year, color = div)) + geom_line() + facet_wrap(~State)
+
+
+##+ facet_grid(~states)
+```
+
+## Reducing CSV Size
+
+The CSV file I was loading into d3 was 28 MB which was really slow to load in d3. I decided to cut down the file size by doing the following:
+
+* Limit the file to only counties that have data all the way to 2015 (this limits to big cities with full data sets)
+* Cut the data file to data collected after 1985 (when all states were reporting 100% of births)
+* Limit the date format to yymm (or %y%m) to save space
+* Round the county births to the nearest 10 and divide the number by 10 (it can be multiplied by 10 in d3, bu this saves characters with little impact on precision)
+* Eliminate information about the state and births within the state. These can be dealt with in another file
+
+```{r}
+fifteenonly <- allBirthData %>% 
+  filter(Year == 2015) %>% 
+  select(6) 
+
+condensed2 <- allBirthData %>% 
+  mutate(complete = County %in% fifteenonly$County) %>% 
+  filter(complete == TRUE,
+         Year >= 1985) %>% 
+  mutate(Yr = str_sub(Year, start= -2),
+         M = sprintf("%02d", Month)) %>% 
+  mutate(Date = paste0(Yr, M),
+         ## round to nearest 5 and eliminate last 0 for space
+         Births = (round(countyBirths, -1))/10) %>% 
+  select(c(6, 10, 11)) 
+
+write.csv(condensed2, "../Raw_Data/CondensedBirth2.csv")
+```
+
+After all of that, the file size is reduced to 4.6 MB or an 84% reduction in file size. Not bad! 
