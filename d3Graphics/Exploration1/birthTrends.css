@@ -25,9 +25,16 @@ body {
   clip-path: url(#clip);
 }
 
+.line2 {
+  fill: none;
+  stroke: red;
+  stroke-width: 2px;
+  clip-path: url(#clip);
+}
+
 
 .zoom {
   cursor: move;
   fill: none;
-  pointer-events: all;
+ /* pointer-events: all;*/
 }
