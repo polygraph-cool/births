@@ -7,18 +7,33 @@
   <meta name="author" content="Amber Thomas">
 
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/7124072/7681372/css/fonts.css">
   <link rel="stylesheet" href="birthTrends.css">
 
 </head>
 
 <body>
 
-  <div id = "counties"></div>
-  <div id = "year"></div>
+  <div id = "dropdowns">
+    <div id = "countyleft">
+      <p class = "dd-title county">County</p>
+      <div id = "counties", class = "dd">
+          <div class="select__arrow"></div>
+      </div>
 
+    </div>
+
+    <div id = "yearright">
+      <p class = "dd-title year">Year</p>
+      <div id = "year", class = "dd">
+          <div class="select__arrow"></div>
+      </div>
+    </div>
+  </div>
+
+  
   <script src="https://d3js.org/d3.v4.js"></script>
   <!--<script src="birthTrends1.js"></script>-->
+  <div id = "chart">
   <script>
 
 
@@ -61,7 +76,8 @@
           .attr("height", height + margin.top + margin.bottom)
         .append("g")
           .attr("transform",
-                "translate(" + margin.left + "," + margin.top + ")");
+                "translate(" + margin.left + "," + margin.top + ")")
+          .attr("class", "svg");
 
 
       //////////////////////////////////////////////////////////////////////
@@ -115,29 +131,6 @@
 
               console.log(list)
 
-         /* // Create dropdown 2 (year)
-          var yList = d3.select("#year")
-          yList.append("select").selectAll("option")
-              .data(nested2)
-              .enter().append("option")
-              .attr("value", function(d){
-                return d.key;
-              })    
-              .text(function(d){
-                return d.key;
-              })
- 
-
-          // Select year (colored)
-          yList.on('change', function(){
-            var selectedYear = d3.select(this)
-                .select("select")
-                .property("value")
-              
-            // select all paths and select one that the year matches
-
-          }) */
-
 
           // Create line based on selection from dropdown 1
           list.on('change', function(){
@@ -178,8 +171,6 @@
                   })
                   .attr("class", "line");
 
-      
-                console.log(Counties)
              
                // Quick fix to destroy axes and re-draw
             svg.selectAll(".axis").remove();
@@ -187,14 +178,22 @@
               // Add the X Axis
                var xaxis = svg.append("g")
                    .attr("transform", "translate(0," + height + ")")
-                   .attr("class", "axis")
-                   //.call(xAxis)
-                   .call(d3.axisBottom(x));
+                   .attr("class", "x axis")
+                   .call(d3.axisBottom(x)
+                      .ticks(d3.timeMonth)
+                      .tickSize(0, 0)
+                      .tickFormat(d3.timeFormat("%b"))
+                      .tickSizeInner(0)
+                      .tickPadding(10));
              //
             //   // Add the Y Axis
                var yaxis = svg.append("g")
-                   .attr("class", "axis")
-                   .call(d3.axisLeft(y));
+                   .attr("class", "y axis")
+                   .call(d3.axisLeft(y)
+                      .ticks(5)
+                      .tickSizeInner(0)
+                      .tickPadding(6)
+                      .tickSize(0, 0));
           });
 
           // Create dropdown 2 (year)
@@ -219,17 +218,18 @@
               
             // select all paths and select one that the year matches
             var selLine = svg.selectAll(".line")
+              .classed("selected", false)
+              .filter(function(d) {
+                  return +d.key === +selectedYear
+              })
+              .classed("selected", true)
 
-            var element = d3.select(selLine.nodes()[0])
-                .classed("selected", true)
-
-              console.log(element)
 
           })
 
       });
   </script>
-
+</div>
 
 
 </body>
