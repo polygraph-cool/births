@@ -96,6 +96,7 @@
               d.County = d.County;
           });
 
+
           // Nest the data to create a line for each county and each year
           var nested = d3.nest()
               .key(function(d) { return d.County; })
@@ -181,6 +182,12 @@
 
           // Create line based on selection from dropdown 1
           list.on('change', function(){
+              
+              // Detecting whether a single year has already been selected
+              var blueLine = d3.selectAll(".selected")
+                  .data()
+
+              var blueLineY = blueLine[0].key
 
 
               var selected = d3.select(this)
@@ -209,11 +216,24 @@
                     y.domain(d.value.extent)
                   });
 
+                  console.log(CountiesEnter)
+
 
               var Paths = CountiesEnter.selectAll("path")
                   .data(function(d) {
                     return (d.value.years);
                   })
+
+                  // Attempts to classify path status by key
+                  // for maintaining blue line later
+                  /*.classed("selected", function(d){
+                    return +d[key] > 1995 ? true : false;
+                  })
+              
+              var PathsData = svg.select("path")
+
+              console.log(Paths)
+              console.log(Paths._enter)*/
 
               var PathsEnter = Paths.enter()
                   .append("path")
@@ -224,13 +244,10 @@
                           return valueLine(d.values);
                       });
 
-
+                      console.log(PathsEnter)
 
                Counties = CountiesEnter
                   .merge(Counties);
-
-              
-
 
 
                 // Update Y Axis
