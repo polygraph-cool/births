@@ -186,9 +186,9 @@ div#yearright {
 
 .line {
   fill: none;
-  stroke: #999999;
-  stroke-width: 2px;
-  opacity: 0.2;
+  stroke: #D9D9D9;
+  stroke-width: 1px;
+  opacity: 0.7;
   clip-path: url(#clip);
 }
 

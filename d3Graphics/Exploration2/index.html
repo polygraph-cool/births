@@ -115,43 +115,16 @@
           var nested2 = d3.nest()
               .key(function(d){ return d.year; })
               .entries(data);
-              
 
-          // Create dropdown 1
-          var list = d3.select("#counties")
-          list.append("select").selectAll("option")
-              .data(nested)
-              .enter().append("option")
-              .attr("value", function(d){
-                  return d.key;
-              })
-              .text(function(d){
-                  return d.key;
-              })
+              console.log(nested)
 
-              console.log(list)
+          var LA = nested.filter(function(d){
+            return +d.key == "6037";
+          })
 
-
-          // Create line based on selection from dropdown 1
-          list.on('change', function(){
-              var selected = d3.select(this)
-                  .select("select")
-                  .property("value")
-
-              // Filter data to only include selected county
-              var selectCounty = nested.filter(function(d){
-                return +d.key === +selected;
-              });
-
-              console.log(selectCounty);
-
-              svg.selectAll(".line").remove();
-
-
-
-              // Group the county-level data
-             var Counties = svg.selectAll("g")
-                  .data(selectCounty, function(d){
+          // Draw initial view (LA County)
+          var LACounty = svg.selectAll("g")
+                  .data(LA, function(d){
                     return d ? d.key : this.key;
                   })
                   .enter()
@@ -171,12 +144,7 @@
                   })
                   .attr("class", "line");
 
-             
-               // Quick fix to destroy axes and re-draw
-            svg.selectAll(".axis").remove();
-             
-              // Add the X Axis
-               var xaxis = svg.append("g")
+            var xaxis = svg.append("g")
                    .attr("transform", "translate(0," + height + ")")
                    .attr("class", "x axis")
                    .call(d3.axisBottom(x)
@@ -185,8 +153,8 @@
                       .tickFormat(d3.timeFormat("%b"))
                       .tickSizeInner(0)
                       .tickPadding(10));
-             //
-            //   // Add the Y Axis
+
+              // Add the Y Axis
                var yaxis = svg.append("g")
                    .attr("class", "y axis")
                    .call(d3.axisLeft(y)
@@ -194,7 +162,89 @@
                       .tickSizeInner(0)
                       .tickPadding(6)
                       .tickSize(0, 0));
+
+              
+
+          // Create dropdown 1
+          var list = d3.select("#counties")
+          list.append("select").selectAll("option")
+              .data(nested)
+              .enter().append("option")
+              .attr("value", function(d){
+                  return d.key;
+              })
+              .text(function(d){
+                  return d.key;
+              })
+
+
+
+          // Create line based on selection from dropdown 1
+          list.on('change', function(){
+
+
+              var selected = d3.select(this)
+                  .select("select")
+                  .property("value")
+
+              // Filter data to only include selected county
+              var selectCounty = nested.filter(function(d){
+                return +d.key === +selected;
+              });
+
+              console.log(selectCounty)
+
+              // Group the county-level data
+             var Counties = svg.selectAll(".counties")
+                  .data(selectCounty, function(d){
+                    return d ? d.key : this.key;
+                  });
+
+              Counties.exit().remove();
+
+              var CountiesEnter = Counties.enter()
+                  .append("g")
+                  .attr("class", "counties")
+                  .each(function(d){
+                    y.domain(d.value.extent)
+                  });
+
+
+              var Paths = CountiesEnter.selectAll("path")
+                  .data(function(d) {
+                    return (d.value.years);
+                  })
+
+              var PathsEnter = Paths.enter()
+                  .append("path")
+                  .attr("class", "line")
+                  .transition()
+                      .duration(5000)
+                      .attr("d",function(d){
+                          return valueLine(d.values);
+                      });
+
+
+
+               Counties = CountiesEnter
+                  .merge(Counties);
+
+              
+
+
+
+                // Update Y Axis
+                d3.select(".y")
+                  .transition()
+                  .duration(750)
+                  .call(d3.axisLeft(y)
+                      .ticks(5)
+                      .tickSizeInner(0)
+                      .tickPadding(6)
+                      .tickSize(0, 0));
           });
+
+         
 
           // Create dropdown 2 (year)
           var yList = d3.select("#year")
