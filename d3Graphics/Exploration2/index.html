@@ -41,6 +41,9 @@
       /////////////////////////  GLOBAL VARIABLES  /////////////////////////
       //////////////////////////////////////////////////////////////////////
 
+      // App holder for keeping global scope clean
+      DS = {}
+
       // set the dimensions and margins of the graph
       var margin = {top: 20, right: 20, bottom: 30, left: 50},
         width = 960 - margin.left - margin.right,
@@ -119,6 +122,8 @@
 
               console.log(nested)
 
+          var makeInitGraph = function(data){
+
           var LA = nested.filter(function(d){
             return +d.key == "6037";
           })
@@ -151,6 +156,9 @@
                   return +d.key === 2015;
                 })
                 .classed("selected", true)
+            };
+
+            makeInitGraph();
 
 
             var xaxis = svg.append("g")
@@ -253,7 +261,13 @@
                           return valueLine(d.values);
                       });
 
-                      console.log(PathsEnter)
+              var selLineU = svg.selectAll(".line")
+                  .filter(function(d) {
+                    return +d.key === +blueLineY
+                  })
+                  .classed("selected", true)
+
+                      console.log(selLineU)
 
                Counties = CountiesEnter
                   .merge(Counties);
