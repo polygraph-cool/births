@@ -124,6 +124,7 @@
           })
 
           // Draw initial view (LA County)
+          // For lazy loading
           var LACounty = svg.selectAll("g")
                   .data(LA, function(d){
                     return d ? d.key : this.key;
@@ -144,6 +145,13 @@
                     return valueLine(d.values);
                   })
                   .attr("class", "line");
+
+            var initialLine = svg.selectAll(".line")
+                .filter(function(d){
+                  return +d.key === 2015;
+                })
+                .classed("selected", true)
+
 
             var xaxis = svg.append("g")
                    .attr("transform", "translate(0," + height + ")")
@@ -177,6 +185,7 @@
               .text(function(d){
                   return d.key;
               })
+              .property("selected", function(d){ return d.key === "6037"; })
 
 
 
@@ -274,6 +283,9 @@
               .text(function(d){
                 return d.key;
               })
+              .property("selected", function(d){ return d.key === "2015"; })
+
+
  
 
           // Select year (colored)
