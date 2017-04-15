@@ -267,3 +267,25 @@ write.csv(condensed2, "../Raw_Data/CondensedBirth2.csv")
 ```
 
 After all of that, the file size is reduced to 4.6 MB or an 84% reduction in file size. Not bad! 
+
+One option to limit the dataset a little further is to only include counties for which we have all 30 years (1985 - 2015) of data. 
+
+```{r}
+
+all30 <- allBirthData %>% 
+  mutate(complete = County %in% fifteenonly$County) %>% 
+  filter(complete == TRUE,
+         Year >= 1985) %>%
+  select(c(3, 6)) %>% 
+  group_by(County) %>% 
+  summarize(years = n_distinct(Year)) %>% 
+  filter(years >= 30)
+
+condensed3 <- condensed2 %>% 
+  mutate(complete = County %in% all30$County) %>% 
+  filter(complete == TRUE) %>% 
+  select(-4)
+
+  
+  write.csv(condensed3, "../Raw_Data/CondensedBirth3.csv")
+```  

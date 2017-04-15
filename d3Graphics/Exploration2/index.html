@@ -88,7 +88,7 @@
       //////////////////////////////////////////////////////////////////////
 
       // Get the data
-      d3.csv("CondensedBirth2.csv", function(error, data) {
+      d3.csv("CondensedBirth3.csv", function(error, data) {
           if (error) throw error;
           // format the data
           data.forEach(function(d) {
@@ -241,16 +241,6 @@
                     return (d.value.years);
                   })
 
-                  // Attempts to classify path status by key
-                  // for maintaining blue line later
-                  /*.classed("selected", function(d){
-                    return +d[key] > 1995 ? true : false;
-                  })
-              
-              var PathsData = svg.select("path")
-
-              console.log(Paths)
-              console.log(Paths._enter)*/
 
               var PathsEnter = Paths.enter()
                   .append("path")
@@ -308,7 +298,7 @@
                 .select("select")
                 .property("value")
 
-              
+              console.log(selectedYear)
             // select all paths and select one that the year matches
             var selLine = svg.selectAll(".line")
               .classed("selected", false)
