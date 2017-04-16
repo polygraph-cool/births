@@ -13,27 +13,87 @@
 
 <body>
 
+
+<div id = "container">
+
   <div id = "dropdowns">
-    <div id = "countyleft">
+
+    <!--Eventual State Dropdown-->
+    <div id = "dropdown-a">
+      <p class = "dd-title state">State</p>
+        <div id = "states", class = "dd">
+          <div class="select__arrow long"></div>
+        </div>
+    </div><!--
+
+
+   --><div id = "dropdown-b">
       <p class = "dd-title county">County</p>
-      <div id = "counties", class = "dd">
-          <div class="select__arrow"></div>
-      </div>
+        <div id = "counties", class = "dd">
+          <div class="select__arrow long"></div>
+        </div>
+    </div><!--
 
-    </div>
 
-    <div id = "yearright">
+   --><div id = "dropdown-c">
       <p class = "dd-title year">Year</p>
-      <div id = "year", class = "dd">
-          <div class="select__arrow"></div>
-      </div>
+        <div id = "year", class = "dd">
+          <div class="select__arrow short"></div>
+        </div>
     </div>
+
   </div>
 
-  
+
+<!--Adding event icons-->
+<div id="icons">
+    <p class = "dd-title events">Events</p>
+    <div id="icon-a">
+      <svg width="36" height="36" viewBox="0 0 36 36">
+        <g id="icon-storms">
+          <path d="M12.5,22C6.8,24.3,4,19.8,4,17c0-2.8,2.3-5.1,5.1-5.1c0.4,0,0.7,0,1,0.1c0-0.1,0-0.2,0-0.3
+            c0-4.2,3.4-7.6,7.6-7.6c3.3,0,6.1,2.1,7.2,5C25.3,9.1,25.6,9,26,9c3.3,0,5.9,2.7,5.9,5.9c0,3.3-3.2,8.3-9.3,5.9"/>
+          <polygon points="19,15.9 15.2,23.8 19,23.9 17.1,31.9 20.7,22 17.3,22.4"/>
+        </g>
+      </svg>
+    </div><!--
+
+   --><div id="icon-b">
+        <svg width="36" height="36" viewBox="0 0 36 36">
+          <g id="icon-sports">
+              <path d="M29.9,6c2.4,2.4,1.7,12.8-4.7,19.2c-6.3,6.4-16.7,7.3-19.1,4.9c-2.4-2.4-1.8-12.6,4.7-19.2
+                C17.3,4.3,27.5,3.6,29.9,6z"/>
+              <line x1="5.5" y1="20.4" x2="15.8" y2="30.5"/>
+              <line x1="20.3" y1="5.4" x2="30.6" y2="15.5"/>
+              <line x1="14.4" y1="21.6" x2="22.2" y2="13.7"/>
+              <line x1="14.4" y1="18.7" x2="17.6" y2="21.9"/>
+              <line x1="16.9" y1="16.2" x2="20.1" y2="19.4"/>
+              <line x1="19.5" y1="13.6" x2="22.7" y2="16.8"/>
+          </g>
+        </svg>
+    </div><!--
+
+   --><div id="icon-c">
+        <svg width="36" height="36" viewBox="0 0 36 36">
+          <g id="icon-terrorism">
+            <polyline points="1.9,31.8 5.9,28.9 0,24.6 7.8,22.9 5.8,12.7 13.2,16.8 19.5,4.2 21.5,18 26.9,14.8 26.9,21.4 
+              36,22.4 28.6,28.5 30.6,31.8"/>
+            <polyline points="10.4,31.8 12.4,29.8 10.4,26.1 12.4,26.1 11.4,21.2 16.1,23.1 18,18 18.7,24.9 22.3,22.9 22.3,26.1 
+              24.5,26.3 22.6,28.5 25.6,31.8"/>
+          </g>
+        </svg>
+    </div>
+
+    <div id="icon-dropdown">
+    </div>
+
+  </div>
+
+
+
   <script src="https://d3js.org/d3.v4.js"></script>
   <!--<script src="birthTrends1.js"></script>-->
-  <div id = "chart">
+  <div id = "graph">
   <script>
 
 
@@ -46,8 +106,8 @@
 
       // set the dimensions and margins of the graph
       var margin = {top: 20, right: 20, bottom: 30, left: 50},
-        width = 960 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
+        width = 1280 - margin.left - margin.right,
+        height = 640 - margin.top - margin.bottom;
 
       // parse the date / time
       var parseTime = d3.timeParse("%y%m");
@@ -74,7 +134,7 @@
       // append the svg object to the body of the page
       // appends a 'group' element to 'svg'
       // moves the 'group' element to the top left margin
-      var svg = d3.select("body").append("svg")
+      var svg = d3.select("#graph").append("svg")
           .attr("width", width + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -312,6 +372,7 @@
 
       });
   </script>
+</div>
 </div>
 
 
