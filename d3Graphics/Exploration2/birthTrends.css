@@ -21,8 +21,25 @@ body {
 #graph {
   width: 1280px;
   height: 640px;
-  position: absolute;
+  clear: both;
+  position: relative;
   top: 100px;
+}
+
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
+}
+
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
 }
 
 /*//////////////////////////////////////////*/
@@ -35,14 +52,14 @@ body {
   height: 100px;
   position: absolute;
   top: 0;
-  left: 80px;
+  left: 50px;
 }
 
 #dropdown-a, #dropdown-b {
   display: inline-block;
   width: 300px;
   height: 100px;
-  margin-right: 50px;
+  margin-right: 20px;
 }
 
 #dropdown-c {
@@ -72,7 +89,7 @@ body {
   -moz-appearance: none;
   display: block;
   padding: 0.5em 3em 0.5em 0;
-  margin: 0;
+  margin: 0 0 0 20px;
   font-family: 'Publico Text Web';
   font-size: 1.4rem;
   font-weight: 600;
@@ -81,12 +98,21 @@ body {
   border: none;
 }
 
-#year.dd .select__arrow.short{
+#counties {
+  position: relative;
+}
+
+#year {
+  position: relative;
+}
+
+.select__arrow.short{
   position: absolute;
-  top: 40px;
-  right: 80px;
+  top: 50%;
+  left: 0;
   width: 0;
   height: 0;
+  margin: -4px 0 0 0;
   pointer-events: none;
   border-width: 8px 5px 0 5px;
   border-style: solid;
@@ -95,10 +121,11 @@ body {
 
 .select__arrow.long{
   position: absolute;
-  top: 40px;
-  right: 350px;
+  top: 50%;
+  left: 0;
   width: 0;
   height: 0;
+  margin: -4px 0 0 0;
   pointer-events: none;
   border-width: 8px 5px 0 5px;
   border-style: solid;
@@ -110,7 +137,7 @@ body {
   height: 100px;
   position: absolute;
   top: 0;
-  right: 0;
+  right: 20px;
 }
 
 #icon-a,
@@ -121,6 +148,15 @@ body {
   width: 48px;
   height: 48px;
   margin: 0 48px 4px 0px;
+}
+
+#icon-a svg,
+#icon-b svg,
+#icon-c svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -18px 0 0 -18px;
 }
 
 #icon-c {
@@ -135,6 +171,7 @@ body {
   stroke: #676767;
   stroke-width: 1;
   stroke-miterlimit: 10;
+  stroke-linecap: round;
 }
 
 #icon-a.current,
@@ -149,7 +186,7 @@ body {
 #icons .current #icon-terrorism {
   fill: none;
   stroke: #7D93CA;
-  stroke-width: 3;
+  stroke-width: 2;
   stroke-miterlimit: 10;
 }
 
