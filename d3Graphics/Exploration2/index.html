@@ -327,6 +327,9 @@
                       .tickPadding(6)
                       .tickSize(0, 0));
 
+
+
+
       //////////////////////////////////////////////////////////////////////
       /////////////////////////  STATE DROPDOWN  //////////////////////////
       //////////////////////////////////////////////////////////////////////     
@@ -347,8 +350,8 @@
 
       ///////////////////////////  STATE CHANGE  //////////////////////////
 
-      // variable for defining which state is selected
-      var selectedStateG;
+
+
       
       // Need to update available counties
 
@@ -365,11 +368,12 @@
       /////////////////////////  COUNTY DROPDOWN  //////////////////////////
       //////////////////////////////////////////////////////////////////////  
 
-          // Create dropdown 1
-          var list = d3.select("#counties")
+
 
           //d3.selectAll(".county-dd").remove()
 
+          
+         
           var selectedCounties = selectedStateG.map(function(d){
             return d.value.Counties;
           });
@@ -379,19 +383,38 @@
           })
 
          
+          // Create dropdown 1
+          var list = d3.select("#counties")
+              //.append("select").selectAll("option")
+              //.data(selectedCounties2);
 
-          listEnter = list.append("select").selectAll("option")
-              .data(selectedCounties2)
-              .enter().append("option")
-              .attr("value", function(d){
-                  return countyMap.get(d).County_Name;
-              })
-              .text(function(d){
-                  return countyMap.get(d).County_Name;
-              })
-              .attr("class", "county-dd")
-              // Set the default value to LA County for Initial Figure
-              .property("selected", function(d){ return d.key === "6037"; })
+          var selection = list.selectAll("select");
+              if (selection.empty()) {
+                selection = list.append("select");
+              }
+
+
+
+          selection = selection.selectAll("option")
+                .data(selectedCounties2, function(d){
+                  return d;
+                });
+                console.log(selectedCounties2)
+
+            // exit selection
+            selection.exit().remove();
+
+            // enter selection
+            selection.enter().append("option")
+                .attr("value", function(d){
+                    return countyMap.get(d).County;
+                })
+                .text(function(d){
+                    return countyMap.get(d).County_Name;
+                })
+
+
+
 
           
 
@@ -417,12 +440,14 @@
                   .select("select")
                   .property("value")
 
+                  
 
               // Filter data to only include selected county
               var selectCounty = nested.filter(function(d){
                 return +d.key === +selected;
               });
 
+              console.log(selectCounty)
 
               // Group the county-level data
              var Counties = svg.selectAll(".counties")
