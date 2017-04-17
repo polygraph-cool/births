@@ -307,3 +307,22 @@ stateCounty = left_join(condensedCN, stateNames, by = "State") %>%
 
 write.csv(stateCounty, "../Raw_Data/stateCountyNames.csv")
 ```
+
+```{r}
+stateMean = read.csv("../Raw_Data/stateData.csv", header = TRUE, stringsAsFactors = FALSE)
+
+stateData2 <- allBirthData %>% 
+  mutate(number = State, number = sprintf("%02s", number)) %>%  
+  filter(Year >= 1995) %>% 
+  mutate(Yr = str_sub(Year, start= -2),
+         M = sprintf("%02d", Month), 
+         Date = paste0(Yr, M))
+  group_by(number, Date) %>% 
+  summarize(stateBirths = mean(stateBirths)) 
+  
+
+
+stateData2 <- left_join(stateData, states2, by = "number")
+
+write.csv(stateData2, "../d3Graphics/Exploration3/stateData.csv")
+```

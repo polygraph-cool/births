@@ -127,6 +127,11 @@
           .y(function(d) { return y(+d.Births); })
           ;
 
+      // define the line
+      var valueLineState = d3.line()
+          .x(function(d) { return x(parseTimeMonth(d.month)); })
+          .y(function(d) { return y(+d.stateBirths); })
+          ;
 
 
       // append the svg object to the body of the page
@@ -174,6 +179,7 @@
       d3.queue()
         .defer(d3.csv, "stateCountyNames.csv")
         .defer(d3.csv, "CondensedBirth3.csv")
+        .defer(d3.csv, "stateData.csv")
         .await(ready);
   
 
@@ -181,7 +187,8 @@
       // Get the data
  function ready(error, 
       stateCounty,
-      data) {
+      data, 
+      stateData) {
 
           if (error) throw error;
 
@@ -200,6 +207,16 @@
               d.Births = +d.Births * 10;
               d.County = d.County;
           });
+
+
+          // format the state level data
+          stateData.forEach(function(d){
+            d.Date = parseTime(d.Date);
+            d.month = parseMonth(d.Date);
+            d.year = parseYear(d.Date);
+            d.stateBirths = +d.stateBirths;
+            d.states = d.states
+          })
 
 
           ///////////////////////////  NEST COUNTIES  //////////////////////////
@@ -239,6 +256,23 @@
                 return { Counties:nest };
               })
               .entries(stateCounty)
+
+          ///////////////////////////  NEST STATES2  //////////////////////////
+
+          // Nest the data to create a line for each county and each year
+          var nestMStates = d3.nest()
+              .key(function(d) { return d.states; })
+              .rollup(function(leaves){
+                var extent = d3.extent(leaves, function(d){
+                  return d.stateBirths
+                })
+                var nest = d3.nest().key(function(d){
+                  return d.year
+                })
+                .entries(leaves);
+                return {extent:extent, years:nest};
+              })
+              .entries(stateData);
 
 
 
@@ -298,10 +332,6 @@
             var countyMap = d3.map(stateCounty, function(d){
               return d.County
             }) 
-
-            console.log(countyMap)
-
-            console.log(countyMap.get("16001"))
 
             
       //////////////////////////////////////////////////////////////////////
@@ -399,7 +429,7 @@
                 .data(selectedCounties2, function(d){
                   return d;
                 });
-                console.log(selectedCounties2)
+
 
             // exit selection
             selection.exit().remove();
@@ -447,7 +477,6 @@
                 return +d.key === +selected;
               });
 
-              console.log(selectCounty)
 
               // Group the county-level data
              var Counties = svg.selectAll(".counties")
@@ -563,10 +592,8 @@
 
           // Create dropdown  (Event: Storms)
           var stormsList = d3.select("#icon-dropdown")
-              .attr("class", "dd events")
-
-          stormsList.append("select").selectAll("option")
-              .data(nested2)
+            stormsList.append("select").selectAll("option")
+              .data(nestMStates)
               .enter().append("option")
               .attr("value", function(d){
                 return d.key;
@@ -574,29 +601,99 @@
               .text(function(d){
                 return d.key;
               })
-              .property("selected", function(d){ 
+              /*.property("selected", function(d){ 
                 return d.key === "2015"; 
-              })
+              })*/
 
 
       ///////////////////////////  STORM CHANGE  //////////////////////////
 
           // Select year from dropdown
           stormsList.on('change', function(){
-            var selectedYear = d3.select(this)
-                .select("select")
-                .property("value")
+
+            // Quickly remove any previously drawn lines
+
+            svg.selectAll(".line").remove();
+
+          ////////////  DATA JOIN FOR STATES  /////////// 
+
+              // Determine which county was selected from dropdown
+              var avStateSel = d3.select(this)
+                  .select("select")
+                  .property("value")
+
+                  
+
+              // Filter data to only include selected county
+              var selectAvState = nestMStates.filter(function(d){
+                return d.key === avStateSel;
+              });
 
 
-            // select all paths and select one that the year matches
-            var selStorms = svg.selectAll(".line")
-              // de-select all the lines
-              .classed("selected", false)
-              .filter(function(d) {
-                  return +d.key === +selectedYear
-              })
-              // Set class to selected for matching line
-              .classed("selected", true)
+              // Group the county-level data
+             var avStates = svg.selectAll(".avStates")
+                  .data(selectAvState, function(d){
+                    return d ? d.key : this.key;
+                  });
+
+                 
+              // Remove any lines that don't carry over between counties
+              avStates.exit().remove();
+
+
+              // Add grouping element
+              var avStatesEnter = avStates.enter()
+                  .append("g")
+                  .attr("class", "counties")
+                  .each(function(d){
+                    y.domain(d.value.extent)
+                  });
+
+
+              // Select all the paths
+              var statePaths = avStatesEnter.selectAll("path")
+                  .data(function(d) {
+                    return (d.value.years);
+                  })
+
+ console.log(statePaths)
+              // Enter and append any new paths
+              var statePathsEnter = statePaths.enter()
+                  .append("path")
+                  .attr("class", "line")
+                  .transition()
+                      .duration(5000)
+                      .attr("d",function(d){
+                          return valueLineState(d.values);
+                      });
+
+              /*// If a line was already selected when the county was changed
+              // Make sure that same year's line is still selected
+              var selLineU = svg.selectAll(".line")
+                  .filter(function(d) {
+                    return +d.key === +blueLineY
+                  })
+                  .classed("selected", true)
+
+               avStates = avStatesEnter
+                  .merge(Counties);
+*/
+
+                ////////////  UPDATE Y AXIS  /////////// 
+
+                /* X axis could be updated the same way but the 
+                x axis doesn't change in this figure*/
+
+                // Update Y Axis
+                d3.select(".y")
+                  .transition()
+                  .duration(750)
+                  .call(d3.axisLeft(y)
+                      .ticks(5)
+                      .tickSizeInner(0)
+                      .tickPadding(6)
+                      .tickSize(0, 0));
+          //});
           });
 
       };
