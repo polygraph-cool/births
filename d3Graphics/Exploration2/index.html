@@ -120,10 +120,6 @@
       var x = d3.scaleTime().domain([parseTimeMonth("jan"),parseTimeMonth("dec")]).range([0, width]);
       var y = d3.scaleLinear().range([height, 0]);
 
-      /*// Define the axes
-      var xAxis = d3.axisBottom()
-          .scale(x)
-      var yAxis = d3.axisLeft(y)*/
 
       // define the line
       var valueLine = d3.line()
@@ -150,20 +146,20 @@
       ////////////////////////////  RESPONSIVE  ////////////////////////////
       //////////////////////////////////////////////////////////////////////  
 
-    // make chart responsive
-    d3.select("#graph")
-        .append("div")
-        .classed("svg-container", true) //container class to make it responsive
-        .append("svg")
+      // make chart responsive
+      d3.select("#graph")
+          .append("div")
+          .classed("svg-container", true) //container class to make it responsive
+          .append("svg")
 
-      //responsive SVG needs these 2 attributes and no width and height attr
-        .attr("preserveAspectRatio", "xMinYMin meet")
-        .attr("viewBox", function(d){
-          "0 0 1280 640";
-        })
+        //responsive SVG needs these 2 attributes and no width and height attr
+          .attr("preserveAspectRatio", "xMinYMin meet")
+          .attr("viewBox", function(d){
+            "0 0 1280 640";
+          })
 
-      //class to make it responsive
-        .classed("svg-content-responsive", true); 
+        //class to make it responsive
+          .classed("svg-content-responsive", true); 
 
 
 
@@ -175,6 +171,8 @@
       // Get the data
       d3.csv("CondensedBirth3.csv", function(error, data) {
           if (error) throw error;
+
+
           // format the data
           data.forEach(function(d) {
               d.Date = parseTime(d.Date);
@@ -184,6 +182,9 @@
               d.County = d.County;
           });
 
+
+
+          ///////////////////////////  NEST COUNTIES  //////////////////////////
 
           // Nest the data to create a line for each county and each year
           var nested = d3.nest()
@@ -200,51 +201,67 @@
               })
               .entries(data);
 
+
+          ///////////////////////////  NEST YEARS  //////////////////////////
+
           // Nest data by year
           var nested2 = d3.nest()
               .key(function(d){ return d.year; })
               .entries(data);
 
-              console.log(nested)
+
+      //////////////////////////////////////////////////////////////////////
+      //////////////////////////  INITIAL FIGURE  //////////////////////////
+      //////////////////////////////////////////////////////////////////////  
+
+
+      ///////////////////////////  LA COUNTY  //////////////////////////
+
 
           var makeInitGraph = function(data){
 
-          var LA = nested.filter(function(d){
-            return +d.key == "6037";
-          })
+              var LA = nested.filter(function(d){
+                return +d.key == "6037";
+              })
 
-          // Draw initial view (LA County)
-          // For lazy loading
-          var LACounty = svg.selectAll("g")
-                  .data(LA, function(d){
-                    return d ? d.key : this.key;
-                  })
-                  .enter()
-                  .append("g")
-                  .attr("class", "counties")
-                  .each(function(d){
-                    y.domain(d.value.extent)
-                  })
-                  .selectAll("path")
-                  .data(function(d) {
-                    return (d.value.years);
-                  })
-                  .enter()
-                  .append("path")
-                  .attr("d",function(d){
-                    return valueLine(d.values);
-                  })
-                  .attr("class", "line");
+              // Draw initial view (LA County)
+              // For lazy loading
+              var LACounty = svg.selectAll("g")
+                      .data(LA, function(d){
+                        return d ? d.key : this.key;
+                      })
+                      .enter()
+                      .append("g")
+                      .attr("class", "counties")
+                      .each(function(d){
+                        y.domain(d.value.extent)
+                      })
+                      .selectAll("path")
+                      .data(function(d) {
+                        return (d.value.years);
+                      })
+                      .enter()
+                      .append("path")
+                      .attr("d",function(d){
+                        return valueLine(d.values);
+                      })
+                      .attr("class", "line");
 
-            var initialLine = svg.selectAll(".line")
-                .filter(function(d){
-                  return +d.key === 2015;
-                })
-                .classed("selected", true)
+                var initialLine = svg.selectAll(".line")
+                    .filter(function(d){
+                      return +d.key === 2015;
+                    })
+                    .classed("selected", true)
             };
 
+            // Call function to create initial figure
             makeInitGraph();
 
+
+            
+      //////////////////////////////////////////////////////////////////////
+      //////////////////////////////  AXES  ////////////////////////////////
+      ////////////////////////////////////////////////////////////////////// 
 
             var xaxis = svg.append("g")
                    .attr("transform", "translate(0," + height + ")")
@@ -266,6 +283,9 @@
                       .tickSize(0, 0));
 
               
+      //////////////////////////////////////////////////////////////////////
+      /////////////////////////  COUNTY DROPDOWN  //////////////////////////
+      //////////////////////////////////////////////////////////////////////     
 
           // Create dropdown 1
           var list = d3.select("#counties")
@@ -278,13 +298,18 @@
               .text(function(d){
                   return d.key;
               })
+              // Set the default value to LA County for Initial Figure
               .property("selected", function(d){ return d.key === "6037"; })
 
 
+      ///////////////////////////  COUNTY CHANGE  //////////////////////////
 
           // Create line based on selection from dropdown 1
           list.on('change', function(){
-              
+
+
+              ////////////  DETECTING SELECTED YEAR  ///////////  
+
               // Detecting whether a single year has already been selected
               var blueLine = d3.selectAll(".selected")
                   .data()
@@ -292,16 +317,19 @@
               var blueLineY = blueLine[0].key
 
 
+              ////////////  DATA JOIN FOR COUNTIES  /////////// 
+
+              // Determine which county was selected from dropdown
               var selected = d3.select(this)
                   .select("select")
                   .property("value")
+
 
               // Filter data to only include selected county
               var selectCounty = nested.filter(function(d){
                 return +d.key === +selected;
               });
 
-              console.log(selectCounty)
 
               // Group the county-level data
              var Counties = svg.selectAll(".counties")
@@ -309,8 +337,12 @@
                     return d ? d.key : this.key;
                   });
 
+
+              // Remove any lines that don't carry over between counties
               Counties.exit().remove();
 
+
+              // Add grouping element
               var CountiesEnter = Counties.enter()
                   .append("g")
                   .attr("class", "counties")
@@ -318,15 +350,15 @@
                     y.domain(d.value.extent)
                   });
 
-                  console.log(CountiesEnter)
 
-
+              // Select all the paths
               var Paths = CountiesEnter.selectAll("path")
                   .data(function(d) {
                     return (d.value.years);
                   })
 
 
+              // Enter and append any new paths
               var PathsEnter = Paths.enter()
                   .append("path")
                   .attr("class", "line")
@@ -336,17 +368,22 @@
                           return valueLine(d.values);
                       });
 
+              // If a line was already selected when the county was changed
+              // Make sure that same year's line is still selected
               var selLineU = svg.selectAll(".line")
                   .filter(function(d) {
                     return +d.key === +blueLineY
                   })
                   .classed("selected", true)
 
-                      console.log(selLineU)
-
                Counties = CountiesEnter
                   .merge(Counties);
 
+
+                ////////////  UPDATE Y AXIS  /////////// 
+
+                /* X axis could be updated the same way but the 
+                x axis doesn't change in this figure*/
 
                 // Update Y Axis
                 d3.select(".y")
@@ -360,6 +397,9 @@
           });
 
          
+      //////////////////////////////////////////////////////////////////////
+      //////////////////////////  YEAR DROPDOWN  ///////////////////////////
+      //////////////////////////////////////////////////////////////////////  
 
           // Create dropdown 2 (year)
           var yList = d3.select("#year")
@@ -375,25 +415,69 @@
               .property("selected", function(d){ return d.key === "2015"; })
 
 
- 
+      ///////////////////////////  YEAR CHANGE  //////////////////////////
 
-          // Select year (colored)
+          // Select year from dropdown
           yList.on('change', function(){
             var selectedYear = d3.select(this)
                 .select("select")
                 .property("value")
 
-              console.log(selectedYear)
+
             // select all paths and select one that the year matches
             var selLine = svg.selectAll(".line")
+              // de-select all the lines
               .classed("selected", false)
               .filter(function(d) {
                   return +d.key === +selectedYear
               })
+              // Set class to selected for matching line
               .classed("selected", true)
-
-
           })
+
+      //////////////////////////////////////////////////////////////////////
+      /////////////////////////  EVENT DROPDOWNS  //////////////////////////
+      //////////////////////////////////////////////////////////////////////  
+
+        
+
+          // Create dropdown  (Event: Storms)
+          var stormsList = d3.select("#icon-dropdown")
+              .attr("class", "dd events")
+
+          stormsList.append("select").selectAll("option")
+              .data(nested2)
+              .enter().append("option")
+              .attr("value", function(d){
+                return d.key;
+              })    
+              .text(function(d){
+                return d.key;
+              })
+              .property("selected", function(d){ 
+                return d.key === "2015"; 
+              })
+
+
+      ///////////////////////////  STORM CHANGE  //////////////////////////
+
+          // Select year from dropdown
+          stormsList.on('change', function(){
+            var selectedYear = d3.select(this)
+                .select("select")
+                .property("value")
+
+
+            // select all paths and select one that the year matches
+            var selStorms = svg.selectAll(".line")
+              // de-select all the lines
+              .classed("selected", false)
+              .filter(function(d) {
+                  return +d.key === +selectedYear
+              })
+              // Set class to selected for matching line
+              .classed("selected", true)
+          });
 
       });
   </script>
