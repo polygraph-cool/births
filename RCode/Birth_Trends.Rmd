@@ -255,7 +255,7 @@ fifteenonly <- allBirthData %>%
 condensed2 <- allBirthData %>% 
   mutate(complete = County %in% fifteenonly$County) %>% 
   filter(complete == TRUE,
-         Year >= 1985) %>% 
+         Year >= 1995) %>% 
   mutate(Yr = str_sub(Year, start= -2),
          M = sprintf("%02d", Month)) %>% 
   mutate(Date = paste0(Yr, M),
@@ -272,20 +272,38 @@ One option to limit the dataset a little further is to only include counties for
 
 ```{r}
 
-all30 <- allBirthData %>% 
+all20 <- allBirthData %>% 
   mutate(complete = County %in% fifteenonly$County) %>% 
   filter(complete == TRUE,
-         Year >= 1985) %>%
+         Year >= 1995) %>%
   select(c(3, 6)) %>% 
   group_by(County) %>% 
   summarize(years = n_distinct(Year)) %>% 
-  filter(years >= 30)
+  filter(years >= 20)
 
 condensed3 <- condensed2 %>% 
-  mutate(complete = County %in% all30$County) %>% 
+  mutate(complete = County %in% all20$County) %>% 
   filter(complete == TRUE) %>% 
   select(-4)
 
   
-  write.csv(condensed3, "../Raw_Data/CondensedBirth3.csv")
+write.csv(condensed3, "../Raw_Data/CondensedBirth3.csv")
 ```  
+
+## Making Lookup table for county and state names
+```{r}
+countyNames <- read.csv("../Raw_Data/countyNames.csv", header = TRUE, stringsAsFactors = FALSE)
+stateNames <- read.csv("../Raw_Data/stateNames.csv", header = TRUE, stringsAsFactors = FALSE)
+```
+
+```{r}
+condensedCN <- countyNames %>% 
+  mutate(complete = County %in% all20$County) %>% 
+  filter(complete == TRUE) %>% 
+  select(-4)
+
+stateCounty = left_join(condensedCN, stateNames, by = "State") %>% 
+  select(-1)
+
+write.csv(stateCounty, "../Raw_Data/stateCountyNames.csv")
+```
