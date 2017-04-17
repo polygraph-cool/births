@@ -313,16 +313,35 @@ stateMean = read.csv("../Raw_Data/stateData.csv", header = TRUE, stringsAsFactor
 
 stateData2 <- allBirthData %>% 
   mutate(number = State, number = sprintf("%02s", number)) %>%  
-  filter(Year >= 1995) %>% 
+  filter(Year >= 1995,
+         Year < 2003) %>% 
   mutate(Yr = str_sub(Year, start= -2),
          M = sprintf("%02d", Month), 
-         Date = paste0(Yr, M))
+         Date = paste0(Yr, M)) %>% 
   group_by(number, Date) %>% 
   summarize(stateBirths = mean(stateBirths)) 
   
+stateData3 <- left_join(stateData2, states2, by = "number") 
+
+stateData3 <- stateData3 %>% 
+  ungroup() %>% 
+  select(c(2:4))
+
+write.csv(stateData3, "../d3Graphics/Exploration2/stateData.csv")
+```
 
 
-stateData2 <- left_join(stateData, states2, by = "number")
+```{r}
+stateAvg0315 <- read.table("../Raw_Data/StateAvg0315.txt", header = TRUE, stringsAsFactors = FALSE)
 
-write.csv(stateData2, "../d3Graphics/Exploration3/stateData.csv")
+stateAvg <- stateAvg0315 %>% 
+  mutate(Yr = str_sub(Year, start= -2),
+         M = sprintf("%02d", Month.Code), 
+         Date = paste0(Yr, M)) %>% 
+  select(c(1,7,10))
+
+stateAvgAll <- rbind(stateAvg, stateData3)
+
+write.csv(stateData3, "../d3Graphics/Exploration2/stateData.csv")
+
 ```
