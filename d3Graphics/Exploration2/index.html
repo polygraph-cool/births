@@ -291,6 +291,18 @@
             makeInitGraph();
 
 
+      //////////////////////////////////////////////////////////////////////
+      //////////////////////////  COUNTY NAMES  ////////////////////////////
+      //////////////////////////////////////////////////////////////////////
+
+            var countyMap = d3.map(stateCounty, function(d){
+              return d.County
+            }) 
+
+            console.log(countyMap)
+
+            console.log(countyMap.get("16001"))
+
             
       //////////////////////////////////////////////////////////////////////
       //////////////////////////////  AXES  ////////////////////////////////
@@ -333,15 +345,6 @@
               // Set the default value to LA County for Initial Figure
               .property("selected", function(d){ return d.key === "California"; })
 
-      //////////////////////////////////////////////////////////////////////
-      /////////////////////////  COUNTY DROPDOWN  //////////////////////////
-      //////////////////////////////////////////////////////////////////////     
-
-          
-
-
-          
-
       ///////////////////////////  STATE CHANGE  //////////////////////////
 
       // variable for defining which state is selected
@@ -358,7 +361,9 @@
               return d.key === selectedState;
             }) 
 
-           
+      //////////////////////////////////////////////////////////////////////
+      /////////////////////////  COUNTY DROPDOWN  //////////////////////////
+      //////////////////////////////////////////////////////////////////////  
 
           // Create dropdown 1
           var list = d3.select("#counties")
@@ -379,19 +384,16 @@
               .data(selectedCounties2)
               .enter().append("option")
               .attr("value", function(d){
-                  return d;
+                  return countyMap.get(d).County_Name;
               })
               .text(function(d){
-                  return d;
+                  return countyMap.get(d).County_Name;
               })
               .attr("class", "county-dd")
               // Set the default value to LA County for Initial Figure
               .property("selected", function(d){ return d.key === "6037"; })
 
           
-
-
-console.log(selectedStateG)
 
       ///////////////////////////  COUNTY CHANGE  //////////////////////////
 
