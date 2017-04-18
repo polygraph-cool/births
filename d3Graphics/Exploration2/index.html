@@ -91,6 +91,8 @@
 
 
 
+
+
   <script src="https://d3js.org/d3.v4.js"></script>
   <!--<script src="birthTrends1.js"></script>-->
   <div id = "graph">
@@ -106,8 +108,8 @@
 
       // set the dimensions and margins of the graph
       var margin = {top: 20, right: 20, bottom: 30, left: 50},
-        width = 1280 - margin.left - margin.right,
-        height = 640 - margin.top - margin.bottom;
+        width = 930 - margin.left - margin.right,
+        height = 460 - margin.top - margin.bottom;
 
       // parse the date / time
       var parseTime = d3.timeParse("%y%m");
@@ -916,8 +918,11 @@ console.log(CountiesEnter)
       };
   </script>
 </div>
+
+
 </div>
 
+<div id="right-column"></div>
 
 </body>
 </html>

@@ -12,25 +12,35 @@ body {
   font-weight: 400;
 }
 
-#container {
-  width: 1280px;
-  height: 800px;
-  position: relative;
+#right-column {
+  width: 350px;
+  height: 100%;
+  position: fixed;
+  float: right;
 }
 
+#container {
+  width: 930px;
+  height: 700px;
+  position: relative;
+  overflow: hidden;
+}
+
+
+
 #graph {
-  width: 1280px;
-  height: 640px;
+  width: 930px;
+  height: 460px;
   clear: both;
   position: relative;
   top: 100px;
 }
 
-.svg-container {
+/*.svg-container {
     display: inline-block;
     position: relative;
     width: 100%;
-    padding-bottom: 100%; /* aspect ratio */
+    padding-bottom: 100%; /* aspect ratio 
     vertical-align: top;
     overflow: hidden;
 }
@@ -40,7 +50,7 @@ body {
     position: absolute;
     top: 10px;
     left: 0;
-}
+}*/
 
 /*//////////////////////////////////////////*/
 /*////////////// DROP-DOWNS ////////////////*/ 
@@ -48,23 +58,23 @@ body {
 
 
 #dropdowns {
-  width: 850px;
+  width: 600px;
   height: 100px;
   position: absolute;
   top: 0;
-  left: 50px;
+  left: 20px;
 }
 
 #dropdown-a, #dropdown-b {
   display: inline-block;
-  width: 300px;
+  width: 215px;
   height: 100px;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 #dropdown-c {
   display: inline-block;
-  width: 150px;
+  width: 110px;
   height: 100px;
 }
 
@@ -134,7 +144,7 @@ body {
 }
 
 #icons {
-  width: 240px;
+  width: 170px;
   height: 100px;
   position: absolute;
   top: 0;
@@ -148,7 +158,7 @@ body {
   position: relative;
   width: 48px;
   height: 48px;
-  margin: 0 48px 4px 0px;
+  /*margin: 0 48px 4px 0px;*/
 }
 
 #icon-a svg,
