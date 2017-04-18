@@ -151,38 +151,6 @@
                 "translate(" + margin.left + "," + margin.top + ")")
           .attr("class", "svg");
 
-
-        //Append a defs (for definition) element to your SVG
-        var defs = svg.append("defs");
-
-        //Append a linearGradient element to the defs and give it a unique id
-        var linearGradient = defs.append("linearGradient")
-            .attr("id", "linear-gradient");
-
-        //Horizontal gradient
-        linearGradient
-            .attr("x1", "0%")
-            .attr("y1", "0%")
-            .attr("x2", "100%")
-            .attr("y2", "0%");
-
-         //Append multiple color stops by using D3's data/enter step
-        linearGradient.selectAll("stop") 
-
-        .data([                             
-            {offset: "0%", color: "#B2C1E3"}, 
-            {offset: "33.3%", color: "#B8DBA3"}, 
-            {offset: "58.3%", color: "#FCEB9F"}, 
-            {offset: "83%", color: "#F9B3A0"},           
-            {offset: "100%", color: "#B2C1E3"}    
-          ])                  
-        .enter().append("stop")
-        .attr("offset", function(d) { return d.offset; })   
-        .attr("stop-color", function(d) { return d.color; });
-
-
-
-
       //////////////////////////////////////////////////////////////////////
       ////////////////////////////  RESPONSIVE  ////////////////////////////
       //////////////////////////////////////////////////////////////////////  
@@ -279,6 +247,12 @@
           })
 
 
+
+          //////////////////////////////////////////////////////////////////////
+          //////////////////////////// NESTING DATA ////////////////////////////
+          //////////////////////////////////////////////////////////////////////
+
+
           ///////////////////////////  NEST COUNTIES  //////////////////////////
 
           // Nest the data to create a line for each county and each year
@@ -352,27 +326,87 @@
             })
             .entries(stateNormal)
 
+      //////////////////////////////////////////////////////////////////////
+      //////////////////////////  COUNTY NAMES  ////////////////////////////
+      //////////////////////////////////////////////////////////////////////
+
+            var countyMap = d3.map(stateCounty, function(d){
+              return d.County
+            }) 
+
+            console.log(countyMap)
+
+
+      //////////////////////////////////////////////////////////////////////
+      /////////////////////////  STATE DROPDOWN  //////////////////////////
+      //////////////////////////////////////////////////////////////////////     
+
+          // Create dropdown 1
+          var Slist = d3.select("#states")
+          Slist.append("select").selectAll("option")
+              .data(nestedStates)
+              .enter().append("option")
+              .attr("value", function(d){
+                  return d.key;
+              })
+              .text(function(d){
+                  return d.key;
+              })
+
+      //////////////////////////////////////////////////////////////////////
+      /////////////////////////  COUNTY DROPDOWN  //////////////////////////
+      //////////////////////////////////////////////////////////////////////  
+
+
+          // Figure out which state is displayed
+
+          var updateCountyDrop = function(selectCounty){
+              var selectedState = Slist.select("select").property("value")
+
+              var selectedStateG = nestedStates.filter(function(d){
+                  return d.key === selectedState;
+              }) 
+
+              var selectedCounties = selectedStateG.map(function(d){
+                return d.value.Counties;
+              })
+
+              var selectedCounties2 = selectedCounties[0].map(function(d){
+                return d.key;
+              })
+
+              console.log(selectedCounties2)
+
+              var Clist = d3.select("#counties")
+                  .append("select").selectAll("option")
+                  .data(selectedCounties2)
+                  .enter().append("option")
+                  .attr("value", function(d){
+                    return countyMap.get(d).County;
+                  })
+                  .text(function(d){
+                    return countyMap.get(d).County_Name;
+                  })
+                  .property("selected", function(d){
+                  return +d === selectCounty; })
+                
+              Clist.exit().remove();
+          }
 
 
 
       //////////////////////////////////////////////////////////////////////
-      //////////////////////////  INITIAL FIGURE  //////////////////////////
-      //////////////////////////////////////////////////////////////////////  
+      ///////////////////// MULTI LINE COUNTY FUNCTION /////////////////////
+      //////////////////////////////////////////////////////////////////////
 
+          var multiCounty = function(data, countyCode, year){
 
-      ///////////////////////////  LA COUNTY  //////////////////////////
-
-
-          var makeInitGraph = function(data){
-
-              var LA = nested.filter(function(d){
-                return +d.key == "6037";
+              var county = data.filter(function(d){
+                return +d.key == +countyCode;
               })
 
-              // Draw initial view (LA County)
-              // For lazy loading
-              var LACounty = svg.selectAll("g")
-                      .data(LA, function(d){
+              var pickedCounty = svg.selectAll("g")
+                      .data(county, function(d){
                         return d ? d.key : this.key;
                       })
                       .enter()
@@ -394,22 +428,33 @@
 
                 var initialLine = svg.selectAll(".line")
                     .filter(function(d){
-                      return +d.key === 2015;
+                      return +d.key === +year;
                     })
                     .classed("selected", true)
+
+                // Reset the State dropdown based on the state of selected county
+                var stateDrop = Slist.selectAll("option")
+                  .property("selected", function(d){
+                  return d.key === countyMap.get(county[0].key).stateName;
+                })
+
+                // Print which state has been selected (for updating county dropdown)
+                selectedState = Slist.select("select").property("value")
+
+                // Print which county has been selected (for updating county dropdown)
+                selectedCounty = countyMap.get(county[0].key).County;
+
+
+                // Update county dropdown
+                updateCountyDrop(selectedCounty);
+
             };
 
+            ///////////////////////////  CALL TO INITIAL GRAPH  //////////////////////////
+
             // Call function to create initial figure
-            makeInitGraph();
-
-
-      //////////////////////////////////////////////////////////////////////
-      //////////////////////////  COUNTY NAMES  ////////////////////////////
-      //////////////////////////////////////////////////////////////////////
-
-            var countyMap = d3.map(stateCounty, function(d){
-              return d.County
-            }) 
+            // currently set to LA County
+            multiCounty(nested, 6037, 2015);
 
             
       //////////////////////////////////////////////////////////////////////
@@ -437,29 +482,7 @@
 
 
 
-
-      //////////////////////////////////////////////////////////////////////
-      /////////////////////////  STATE DROPDOWN  //////////////////////////
-      //////////////////////////////////////////////////////////////////////     
-
-          // Create dropdown 1
-          var Slist = d3.select("#states")
-          Slist.append("select").selectAll("option")
-              .data(nestedStates)
-              .enter().append("option")
-              .attr("value", function(d){
-                  return d.key;
-              })
-              .text(function(d){
-                  return d.key;
-              })
-              // Set the default value to LA County for Initial Figure
-              .property("selected", function(d){ return d.key === "California"; })
-
       ///////////////////////////  STATE CHANGE  //////////////////////////
-
-
-
       
       // Need to update available counties
 
@@ -471,6 +494,8 @@
             selectedStateG = nestedStates.filter(function(d){
               return d.key === selectedState;
             }) 
+
+            console.log(selectedStateG)
 
       //////////////////////////////////////////////////////////////////////
       /////////////////////////  COUNTY DROPDOWN  //////////////////////////
@@ -492,7 +517,7 @@
 
          
           // Create dropdown 1
-          var list = d3.select("#counties")
+          var list = d3.select("#counties2")
               //.append("select").selectAll("option")
               //.data(selectedCounties2);
 
@@ -512,6 +537,8 @@
             // exit selection
             selection.exit().remove();
 
+            console.log(selection)
+
             // enter selection
             selection.enter().append("option")
                 .attr("value", function(d){
@@ -529,12 +556,12 @@
       ///////////////////////////  COUNTY CHANGE  //////////////////////////
 
           // Create line based on selection from dropdown 1
-          list.on('change', function(){
+          list.on('click', function(){
 
 
               ////////////  DETECTING SELECTED YEAR  ///////////  
 
-              /*// Detecting whether a single year has already been selected
+              // Detecting whether a single year has already been selected
               var blueLine = d3.selectAll(".selected")
                   //.data()
                   if(blueLine.empty()){
@@ -542,8 +569,7 @@
                   }
 
 
-              var blueLineY = blueLine[0].key*/
-
+              var blueLineY = blueLine[0].key
               svg.selectAll(".line2").remove()
               svg.selectAll(".area").remove()
 
@@ -688,10 +714,6 @@ console.log(CountiesEnter)
               .text(function(d){
                 return d.key;
               })
-              /*.property("selected", function(d){ 
-                return d.key === "2015"; 
-              })*/
-
 
       
       ///////////////////////////  STORM CHANGE  //////////////////////////
@@ -746,10 +768,9 @@ console.log(CountiesEnter)
                   //.datum(selectAvState)
                   .attr("d", function(d){
                     return areaFill(d.values); })
-                  //.attr("fill", "#B2C1E3")
+                  .attr("fill", "#B2C1E3")
                   .attr("opacity", 0.8)
-                  .attr("class", "area")
-                  .style("fill", "url(#linear-gradient)"); 
+                  .attr("class", "area"); 
 
                   
 
@@ -762,7 +783,7 @@ console.log(CountiesEnter)
                   .attr("d", function(d){
                     return valueLineA(d.values);
                   })
-                 
+
 
 
 
@@ -852,22 +873,16 @@ console.log(CountiesEnter)
                   .y1(function(d, i) { return y(+d.high); })
                   .curve(d3.curveBasis);
 
-                  console.log(areaFill)
-
                   svg.selectAll(".area").remove();
                 
                 var areaEnter = nStates.enter().append("path")
                   //.datum(selectAvState)
                   .attr("d", function(d){
                     return areaFill(d.values); })
-                  //.attr("fill", "#B2C1E3")
+                  .attr("fill", "#B2C1E3")
                   .attr("opacity", 0.8)
-                  .attr("class", "area")
-                  .style("fill", "url(#linear-gradient)");
-
-                  
-
-                  console.log(areaEnter)  
+                  .attr("class", "area");
+ 
 
                 // Add Median Line (later so on top of area)
                 var stateNPathsEnter = nStates.enter()
