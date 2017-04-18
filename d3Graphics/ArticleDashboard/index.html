@@ -358,8 +358,6 @@ function ready(error,
             return d.County
           })
 
-          console.log(countyMap)
-
 
     //////////////////////////////////////////////////////////////////////
     /////////////////////////  STATE DROPDOWN  //////////////////////////
@@ -380,43 +378,55 @@ function ready(error,
     //////////////////////////////////////////////////////////////////////
     /////////////////////////  COUNTY DROPDOWN  //////////////////////////
     //////////////////////////////////////////////////////////////////////
+ 
+          // define Clist (county list) as outer variable
+          var ClistG = null;
+
+          var updateCountyDrop = function(selectCounty){
+              // Figure out which state is displayed
+              var selectedState = Slist.select("select").property("value")
+
+              // Filter for that state
+              var selectedStateG = nestedStates.filter(function(d){
+                  return d.key === selectedState;
+              }) 
+
+              var selectedCounties = selectedStateG.map(function(d){
+                return d.value.Counties;
+              })
+
+              var selectedCounties2 = selectedCounties[0].map(function(d){
+                return d.key;
+              })
+
+              var Clist = d3.select("#counties")
 
 
-        // Figure out which state is displayed
+              var selection = Clist.selectAll("select");
+                if (selection.empty()) {
+                  selection = Clist.append("select");
+                }
 
-        var updateCountyDrop = function(selectCounty){
-            var selectedState = Slist.select("select").property("value")
+              selection = selection.selectAll("option")
+                  .data(selectedCounties2, function(d){
+                    return d;
+                  })
 
-            var selectedStateG = nestedStates.filter(function(d){
-                return d.key === selectedState;
-            })
+              selection.exit().remove();
 
-            var selectedCounties = selectedStateG.map(function(d){
-              return d.value.Counties;
-            })
+              selection.enter().append("option")
+                  .attr("value", function(d){
+                    return countyMap.get(d).County;
+                  })
+                  .text(function(d){
+                    return countyMap.get(d).County_Name;
+                  })
+                  .property("selected", function(d){
+                  return +d === selectCounty; }) 
 
-            var selectedCounties2 = selectedCounties[0].map(function(d){
-              return d.key;
-            })
-
-            console.log(selectedCounties2)
-
-            var Clist = d3.select("#counties")
-                .append("select").selectAll("option")
-                .data(selectedCounties2)
-                .enter().append("option")
-                .attr("value", function(d){
-                  return countyMap.get(d).County;
-                })
-                .text(function(d){
-                  return countyMap.get(d).County_Name;
-                })
-                .property("selected", function(d){
-                return +d === selectCounty; })
-
-            Clist.exit().remove();
-        }
-
+              ClistG = Clist; 
+              
+          }
 
 
     //////////////////////////////////////////////////////////////////////
@@ -425,54 +435,79 @@ function ready(error,
 
         var multiCounty = function(data, countyCode, year){
 
-            var county = data.filter(function(d){
-              return +d.key == +countyCode;
-            })
-
-            var pickedCounty = svg.selectAll("g")
-                    .data(county, function(d){
-                      return d ? d.key : this.key;
-                    })
-                    .enter()
-                    .append("g")
-                    .attr("class", "counties")
-                    .each(function(d){
-                      y.domain(d.value.extent)
-                    })
-                    .selectAll("path")
-                    .data(function(d) {
-                      return (d.value.years);
-                    })
-                    .enter()
-                    .append("path")
-                    .attr("d",function(d){
-                      return valueLine(d.values);
-                    })
-                    .attr("class", "line");
-
-              var initialLine = svg.selectAll(".line")
-                  .filter(function(d){
-                    return +d.key === +year;
-                  })
-                  .classed("selected", true)
-
-              // Reset the State dropdown based on the state of selected county
-              var stateDrop = Slist.selectAll("option")
-                .property("selected", function(d){
-                return d.key === countyMap.get(county[0].key).stateName;
+              var county = data.filter(function(d){
+                return +d.key == +countyCode;
               })
 
-              // Print which state has been selected (for updating county dropdown)
-              selectedState = Slist.select("select").property("value")
+              var pickedCounty = svg.selectAll("g")
+                      .data(county, function(d){
+                        return d ? d.key : this.key;
+                      })
 
-              // Print which county has been selected (for updating county dropdown)
-              selectedCounty = countyMap.get(county[0].key).County;
+              pickedCounty.exit().remove();
+
+              var pickedCountyEnter = pickedCounty.enter()
+                      .append("g")
+                      .attr("class", "counties")
+                      .each(function(d){
+                        y.domain(d.value.extent)
+                      });
+
+              var Paths = pickedCountyEnter.selectAll("path")
+                      .data(function(d) {
+                        return (d.value.years);
+                      })
 
 
-              // Update county dropdown
-              updateCountyDrop(selectedCounty);
+              var PathsEnter = Paths.enter()
+                      .append("path")
+                      .attr("d",function(d){
+                        return valueLine(d.values);
+                      })
+                      .attr("class", "line");
 
-          };
+                var initialLine = svg.selectAll(".line")
+                    .filter(function(d){
+                      return +d.key === +year;
+                    })
+                    .classed("selected", true)
+
+                // Reset the State dropdown based on the state of selected county
+                var stateDrop = Slist.selectAll("option")
+                  .property("selected", function(d){
+                  return d.key === countyMap.get(county[0].key).stateName;
+                })
+
+                // Print which state has been selected (for updating county dropdown)
+                selectedState = Slist.select("select").property("value")
+
+                // Print which county has been selected (for updating county dropdown)
+                selectedCounty = countyMap.get(county[0].key).County;
+
+                // Update county dropdown
+                updateCountyDrop(selectedCounty);
+
+                pickedCounty = pickedCountyEnter
+                  .merge(pickedCounty);
+
+
+               ////////////  UPDATE Y AXIS  /////////// 
+
+                /* X axis could be updated the same way but the 
+                x axis doesn't change in this figure*/
+
+                // Update Y Axis
+                d3.select(".y")
+                  .transition()
+                  .duration(750)
+                  .call(d3.axisLeft(y)
+                      .ticks(5)
+                      .tickSizeInner(0)
+                      .tickPadding(6)
+                      .tickSize(0, 0));
+
+            };
+
 
           ///////////////////////////  CALL TO INITIAL GRAPH  //////////////////////////
 
@@ -504,188 +539,138 @@ function ready(error,
                     .tickPadding(6)
                     .tickSize(0, 0));
 
-
-
     ///////////////////////////  STATE CHANGE  //////////////////////////
 
     // Need to update available counties
 
-        Slist.on('change', function(){
-          var selectedState = d3.select(this)
-              .select("select")
-              .property("value")
-
-          selectedStateG = nestedStates.filter(function(d){
-            return d.key === selectedState;
-          })
-
-          console.log(selectedStateG)
-
-    //////////////////////////////////////////////////////////////////////
-    /////////////////////////  COUNTY DROPDOWN  //////////////////////////
-    //////////////////////////////////////////////////////////////////////
-
-
-
-        //d3.selectAll(".county-dd").remove()
-
-
-
-        var selectedCounties = selectedStateG.map(function(d){
-          return d.value.Counties;
-        });
-
-        var selectedCounties2 = selectedCounties[0].map(function(d){
-          return d.key;
-        })
-
-
-        // Create dropdown 1
-        var list = d3.select("#counties2")
-            //.append("select").selectAll("option")
-            //.data(selectedCounties2);
-
-        var selection = list.selectAll("select");
-            if (selection.empty()) {
-              selection = list.append("select");
-            }
-
-
-
-        selection = selection.selectAll("option")
-              .data(selectedCounties2, function(d){
-                return d;
-              });
-
-
-          // exit selection
-          selection.exit().remove();
-
-          console.log(selection)
-
-          // enter selection
-          selection.enter().append("option")
-              .attr("value", function(d){
-                  return countyMap.get(d).County;
-              })
-              .text(function(d){
-                  return countyMap.get(d).County_Name;
-              })
-
-
-
-
-
-
-    ///////////////////////////  COUNTY CHANGE  //////////////////////////
-
-        // Create line based on selection from dropdown 1
-        list.on('click', function(){
-
-
-            ////////////  DETECTING SELECTED YEAR  ///////////
-
-            // Detecting whether a single year has already been selected
-            var blueLine = d3.selectAll(".selected")
-                //.data()
-                if(blueLine.empty()){
-                  blueLine[0].key == 2015
-                }
-
-
-            var blueLineY = blueLine[0].key
-            svg.selectAll(".line2").remove()
-            svg.selectAll(".area").remove()
-
-
-            ////////////  DATA JOIN FOR COUNTIES  ///////////
-
-            // Determine which county was selected from dropdown
-            var selected = d3.select(this)
+          Slist.on('change', function(){
+            var selectedState = d3.select(this)
                 .select("select")
                 .property("value")
 
+                // Print which state has been selected (for updating county dropdown)
+                selectedState = Slist.select("select").property("value")
 
 
-            // Filter data to only include selected county
-            var selectCounty = nested.filter(function(d){
-              return +d.key === +selected;
-            });
+                // Update county dropdown
+                updateCountyDrop();
+
+          });
+
+    ///////////////////////////  COUNTY CHANGE  //////////////////////////
+
+          // Create line based on selection from dropdown 1
+          ClistG.on('change', function(){
 
 
-            // Group the county-level data
-           var Counties = svg.selectAll(".counties")
-                .data(selectCounty, function(d){
-                  return d ? d.key : this.key;
-                });
+            ////////////  DETECTING SELECTED YEAR  ///////////  
+
+              // Detecting whether a single year has already been selected
+              var blueLine = d3.selectAll(".selected")
+                  .data()
+
+              var blueLineY = blueLine[0].key
+
+                  /*if(blueLine.empty()){
+                    blueLine[0].key == 2015
+                  }*/
 
 
-            // Remove any lines that don't carry over between counties
-            Counties.exit().remove();
+              //var blueLineY = blueLine[0].key*/
+              svg.selectAll(".line2").remove()
+              svg.selectAll(".area").remove()
 
 
-            // Add grouping element
-            var CountiesEnter = Counties.enter()
-                .append("g")
-                .attr("class", "counties")
-                .each(function(d){
-                  y.domain(d.value.extent)
-                });
+
+            ////////////  DATA JOIN FOR COUNTIES  /////////// 
+
+              // Determine which county was selected from dropdown
+              var selected = d3.select(this)
+                  .select("select")
+                  .property("value")
+
+              multiCounty(nested, selected, blueLineY)
+                  
+
+              /*// Filter data to only include selected county
+              var selectCounty = nested.filter(function(d){
+                return +d.key === +selected;
+              });
+
+
+              // Group the county-level data
+             var Counties = svg.selectAll(".counties")
+                  .data(selectCounty, function(d){
+                    return d ? d.key : this.key;
+                  });
+
+
+              // Remove any lines that don't carry over between counties
+              Counties.exit().remove();
+
+
+              // Add grouping element
+              var CountiesEnter = Counties.enter()
+                  .append("g")
+                  .attr("class", "counties")
+                  .each(function(d){
+                    y.domain(d.value.extent)
+                  });
 
 console.log(CountiesEnter)
-            // Select all the paths
-            var Paths = CountiesEnter.selectAll("path")
-                .data(function(d) {
-                  return (d.value.years);
-                })
+              // Select all the paths
+              var Paths = CountiesEnter.selectAll("path")
+                  .data(function(d) {
+                    return (d.value.years);
+                  })
 
-                console.log(Paths)
-            // Enter and append any new paths
-            var PathsEnter = Paths.enter()
-                .append("path")
-                .attr("class", "line")
-                .transition()
-                    .duration(5000)
-                    .attr("d",function(d){
-                        return valueLine(d.values);
-                    });
+                  console.log(Paths)
+              // Enter and append any new paths
+              var PathsEnter = Paths.enter()
+                  .append("path")
+                  .attr("class", "line")
+                  .transition()
+                      .duration(5000)
+                      .attr("d",function(d){
+                          return valueLine(d.values);
+                      });
 
-                    console.log(PathsEnter)
+                      console.log(PathsEnter)
 
-            // If a line was already selected when the county was changed
-            // Make sure that same year's line is still selected
-            var selLineU = svg.selectAll(".line")
-                .filter(function(d) {
-                  return +d.key === +blueLineY
-                })
-                .classed("selected", true)
+              // If a line was already selected when the county was changed
+              // Make sure that same year's line is still selected
+              var selLineU = svg.selectAll(".line")
+                  .filter(function(d) {
+                    return +d.key === +blueLineY
+                  })
+                  .classed("selected", true)
 
-             Counties = CountiesEnter
-                .merge(Counties);
+               Counties = CountiesEnter
+                  .merge(Counties);
 
 
-              ////////////  UPDATE Y AXIS  ///////////
+                ////////////  UPDATE Y AXIS  /////////// 
 
-              /* X axis could be updated the same way but the
-              x axis doesn't change in this figure*/
+                /* X axis could be updated the same way but the 
+                x axis doesn't change in this figure*/
 
-              // Update Y Axis
-              d3.select(".y")
-                .transition()
-                .duration(750)
-                .call(d3.axisLeft(y)
-                    .ticks(5)
-                    .tickSizeInner(0)
-                    .tickPadding(6)
-                    .tickSize(0, 0));
-        });
+                // Update Y Axis
+                d3.select(".y")
+                  .transition()
+                  .duration(750)
+                  .call(d3.axisLeft(y)
+                      .ticks(5)
+                      .tickSizeInner(0)
+                      .tickPadding(6)
+                      .tickSize(0, 0));
+          });
 
-      });
 
 
     //////////////////////////////////////////////////////////////////////
     //////////////////////////  YEAR DROPDOWN  ///////////////////////////
     //////////////////////////////////////////////////////////////////////
+
 
         // Create dropdown 2 (year)
         var yList = d3.select("#year")
@@ -724,8 +709,6 @@ console.log(CountiesEnter)
     //////////////////////////////////////////////////////////////////////
     /////////////////////////  EVENT DROPDOWNS  //////////////////////////
     //////////////////////////////////////////////////////////////////////
-
-
 
         // Create dropdown  (Event: Storms)
         var stormsList = d3.select("#icon-dropdown")
