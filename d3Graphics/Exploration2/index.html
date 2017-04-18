@@ -297,66 +297,11 @@
 
           ///////////////////////////  ROLLUP STATES  //////////////////////////
 
-          // Nest the data to create a line for each county and each year
-          /*var nestAStates = d3.nest()
-              .key(function(d) { return d.states; })
-              .key(function(d){ return d.month; })
-              .rollup(function(d){ return {
-                first: d3.quantile(
-                  d.map(function(d){ 
-                    return d.stateBirths
-                  ;})
-                  .sort(d3.ascending), .25),
-                median: d3.median(d, function(d){ 
-                  return d.stateBirths
-                ;}),
-                last: d3.quantile(
-                  d.map(function(d){
-                    return d.stateBirths
-                  ;})
-                  .sort(d3.ascending), .75)
-              }; })
-              .entries(stateData);*/
-
-
-         /* var nestAStates = d3.nest()
-              .key(function(d) { return d.states; })
-              .key(function(d) { return d.month; })
-              .rollup(function(d){
-                var first = d3.quantile(d.map(function(d){
-                  return +d.stateBirths
-                })
-                  .sort(d3.ascending), .25)
-                var last = d3.quantile(d.map(function(d){
-                  return +d.stateBirths
-                })
-                  .sort(d3.ascending), .75)
-                var median = d3.median(d, function(d){
-                  return +d.stateBirths
-                })
-              })
-              .entries(stateData);*/
 
           var nestAStates = d3.nest()
             .key(function(d){
               return d.states;
             })
-            /*.rollup(function(leaves){
-                /*var min = d3.min(leaves, function(d){
-                  return +d.low;
-                })
-                var max = d3.max(leaves, function(d){
-                  return +d.high;
-                })
-                var extent = d3.extent(leaves, function(d){
-                  return +d.median
-                })
-                /*var nest = d3.nest().key(function(d){
-                  return d.month
-                })
-                .entries(leaves);
-                return {extent:extent};
-              })*/
             .entries(stateAverages)
 
               console.log(nestAStates)
@@ -702,8 +647,11 @@ console.log(CountiesEnter)
 
             // Quickly remove any previously drawn lines
             svg.selectAll(".line").remove();
+            svg.selectAll(".line2").remove();
 
-          ////////////  DATA JOIN FOR STATES  /////////// 
+
+
+          ////////////  DATA JOIN FOR MEDIAN  /////////// 
               // Determine which county was selected from dropdown
               var avStateSel = d3.select(this)
                   .select("select")
@@ -714,7 +662,7 @@ console.log(CountiesEnter)
                 return d.key === avStateSel;
               });
 
-
+              console.log(selectAvState)
               // Group the county-level data
              var avStates = svg.selectAll(".avStates")
                   .data(selectAvState, function(d){
@@ -727,12 +675,40 @@ console.log(CountiesEnter)
 
               y.domain([d3.min(selectAvState[0].values, function(d) {return +d.low}), d3.max(selectAvState[0].values, function(d){ return +d.high})]);
 
+              ////////////  DATA JOIN FOR AREA  ///////////   
+               
+                var areaFill = d3.area()
+                  // Same x axis (could use .x0 and .x1 to set different ones)
+                  .x(function(d) { return x(parseTimeMonth(d.month)); })
+                  .y0(function(d, i) { return y(+d.low); })
+                  .y1(function(d, i) { return y(+d.high); })
+                  .curve(d3.curveLinear);
+
+                  console.log(areaFill)
+
+                  svg.selectAll(".area").remove();
+                
+                var areaEnter = avStates.enter().append("path")
+                  //.datum(selectAvState)
+                  .attr("d", function(d){
+                    return areaFill(d.values); })
+                  .attr("fill", "#B2C1E3")
+                  .attr("opacity", 0.5)
+                  .attr("class", "area");  
+
+                  
+
+                  console.log(areaEnter)  
+
+                // Add Median Line (later so on top of area)
                 var statePathsEnter = avStates.enter()
                   .append("path")
-                  .attr("class", "line")
+                  .attr("class", "line2")
                   .attr("d", function(d){
                     return valueLineA(d.values);
                   })
+
+
 
 
                 ////////////  UPDATE Y AXIS  /////////// 
