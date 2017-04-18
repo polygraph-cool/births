@@ -247,8 +247,8 @@ body {
 
 .line2 {
   fill: none;
-  stroke: #676767;
-  stroke-width: 1px;
+  stroke: #FFFFFF;
+  stroke-width: 3px;
 }
 
 .selected {
@@ -279,12 +279,6 @@ body {
   fill: #999999;
 }
 
-.area{
-   background:url(
-
-data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAHElEQVQYV2PcdPDxfz97WUYGKIAzMARgKjFUAABfpQgFIox1sQAAAABJRU5ErkJggg==
-    ) repeat;
-}
 
 
 /*//////////////////////////////////////////*/

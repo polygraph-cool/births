@@ -152,6 +152,35 @@
           .attr("class", "svg");
 
 
+        //Append a defs (for definition) element to your SVG
+        var defs = svg.append("defs");
+
+        //Append a linearGradient element to the defs and give it a unique id
+        var linearGradient = defs.append("linearGradient")
+            .attr("id", "linear-gradient");
+
+        //Horizontal gradient
+        linearGradient
+            .attr("x1", "0%")
+            .attr("y1", "0%")
+            .attr("x2", "100%")
+            .attr("y2", "0%");
+
+         //Append multiple color stops by using D3's data/enter step
+        linearGradient.selectAll("stop") 
+
+        .data([                             
+            {offset: "0%", color: "#B2C1E3"}, 
+            {offset: "33.3%", color: "#B8DBA3"}, 
+            {offset: "58.3%", color: "#FCEB9F"}, 
+            {offset: "83%", color: "#F9B3A0"},           
+            {offset: "100%", color: "#B2C1E3"}    
+          ])                  
+        .enter().append("stop")
+        .attr("offset", function(d) { return d.offset; })   
+        .attr("stop-color", function(d) { return d.color; });
+
+
 
 
       //////////////////////////////////////////////////////////////////////
@@ -505,11 +534,18 @@
 
               ////////////  DETECTING SELECTED YEAR  ///////////  
 
-              // Detecting whether a single year has already been selected
+              /*// Detecting whether a single year has already been selected
               var blueLine = d3.selectAll(".selected")
-                  .data()
+                  //.data()
+                  if(blueLine.empty()){
+                    blueLine[0].key == 2015
+                  }
 
-              var blueLineY = blueLine[0].key
+
+              var blueLineY = blueLine[0].key*/
+
+              svg.selectAll(".line2").remove()
+              svg.selectAll(".area").remove()
 
 
               ////////////  DATA JOIN FOR COUNTIES  /////////// 
@@ -710,9 +746,10 @@ console.log(CountiesEnter)
                   //.datum(selectAvState)
                   .attr("d", function(d){
                     return areaFill(d.values); })
-                  .attr("fill", "#B2C1E3")
-                  .attr("opacity", 0.5)
-                  .attr("class", "area");  
+                  //.attr("fill", "#B2C1E3")
+                  .attr("opacity", 0.8)
+                  .attr("class", "area")
+                  .style("fill", "url(#linear-gradient)"); 
 
                   
 
@@ -725,6 +762,7 @@ console.log(CountiesEnter)
                   .attr("d", function(d){
                     return valueLineA(d.values);
                   })
+                 
 
 
 
@@ -822,9 +860,10 @@ console.log(CountiesEnter)
                   //.datum(selectAvState)
                   .attr("d", function(d){
                     return areaFill(d.values); })
-                  .attr("fill", "#B2C1E3")
-                  .attr("opacity", 0.5)
-                  .attr("class", "area");  
+                  //.attr("fill", "#B2C1E3")
+                  .attr("opacity", 0.8)
+                  .attr("class", "area")
+                  .style("fill", "url(#linear-gradient)");
 
                   
 
