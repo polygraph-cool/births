@@ -1,14 +1,17 @@
 /* minimal css reset */
 html, body, div, h1, h2, h3, a, p, img, dl, dt, dd, ul, li {
+
 	padding: 0px;
 	margin: 0;
 	border: 0;
 	outline: 0;
 	color: black;
+
 }
 
 body {
 	background-size: 100% 100%;
+
 	background-color: white;
 	font-family: 'Publico Text Web';
 	font-size: 1rem;
@@ -25,11 +28,13 @@ body {
 #container {
   width: 100%;
   display: flex;
+
 }
 
 
 
 #graph {
+
   width: 850px;
   position: relative;
   flex-grow: 1;
@@ -397,6 +402,7 @@ body {
 
 
 
+
 .intro-prose {
     font-size: .95rem;
     color: black;
@@ -416,3 +422,4 @@ body {
     margin-bottom: 1rem;
     line-height: 1.5;
 }
+

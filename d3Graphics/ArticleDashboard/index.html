@@ -13,6 +13,7 @@
 
 <body>
 
+
 <div class="intro-section">
   <p class="intro-prose">Damn (stylized as DAMN.) is the fourth studio album by American rapper Kendrick Lamar.[1] It was released on April 14, 2017, by Top Dawg Entertainment, Aftermath Entertainment and Interscope Records.[2] The album features production from a variety of record producers, including executive producer and Top Dawg Entertainment label-head Anthony "Top Dawg" Tiffith, Sounwave, DJ Dahi, Mike Will Made It and Ricci Riera, as well as production contributions from James Blake, Steve Lacy BadBadNotGood, Greg Kurstin, The Alchemist, 9th Wonder, and others.
   </p>
@@ -27,6 +28,7 @@
   <p class="intro-prose">Damn (stylized as DAMN.) is the fourth studio album by American rapper Kendrick Lamar.[1] It was released on April 14, 2017, by Top Dawg Entertainment, Aftermath Entertainment and Interscope Records.[2] The album features production from a variety of record producers, including executive producer and Top Dawg Entertainment label-head Anthony "Top Dawg" Tiffith, Sounwave, DJ Dahi, Mike Will Made It and Ricci Riera, as well as production contributions from James Blake, Steve Lacy BadBadNotGood, Greg Kurstin, The Alchemist, 9th Wonder, and others.
   </p>
 </div>
+
 
 <div id = "container">
 
@@ -57,6 +59,7 @@
     </div>
 
   </div>
+
   <!--Adding event icons-->
   <div id="icons">
     <p class = "dd-title events">Events</p>
@@ -68,6 +71,7 @@
           <polygon points="19,15.9 15.2,23.8 19,23.9 17.1,31.9 20.7,22 17.3,22.4"/>
         </g>
       </svg>
+
     </div>
     <div id="icon-b">
         <svg width="36" height="36" viewBox="0 0 36 36">
@@ -82,6 +86,7 @@
               <line x1="19.5" y1="13.6" x2="22.7" y2="16.8"/>
           </g>
         </svg>
+
     </div>
     <div id="icon-c">
         <svg width="36" height="36" viewBox="0 0 36 36">
@@ -89,6 +94,7 @@
             <polyline points="1.9,31.8 5.9,28.9 0,24.6 7.8,22.9 5.8,12.7 13.2,16.8 19.5,4.2 21.5,18 26.9,14.8 26.9,21.4
               36,22.4 28.6,28.5 30.6,31.8"/>
             <polyline points="10.4,31.8 12.4,29.8 10.4,26.1 12.4,26.1 11.4,21.2 16.1,23.1 18,18 18.7,24.9 22.3,22.9 22.3,26.1
+
               24.5,26.3 22.6,28.5 25.6,31.8"/>
           </g>
         </svg>
@@ -98,6 +104,7 @@
     <div id="icon-dropdown2"></div>
 
   </div>
+
   <div id = "graph"></div>
   <div id="right-column">
     <p class="right-column-prose">Damn (stylized as DAMN.) is the fourth studio album by American rapper Kendrick Lamar.[1] It was released on April 14, 2017, by Top Dawg Entertainment, Aftermath Entertainment and Interscope Records.[2] The album features production from a variety of record producers, including executive producer and Top Dawg Entertainment label-head Anthony "Top Dawg" Tiffith, Sounwave, DJ Dahi, Mike Will Made It and Ricci Riera, as well as production contributions from James Blake, Steve Lacy BadBadNotGood, Greg Kurstin, The Alchemist, 9th Wonder, and others.</p>
@@ -379,6 +386,7 @@ function ready(error,
     /////////////////////////  COUNTY DROPDOWN  //////////////////////////
     //////////////////////////////////////////////////////////////////////
  
+
           // define Clist (county list) as outer variable
           var ClistG = null;
 
@@ -429,11 +437,12 @@ function ready(error,
           }
 
 
-    //////////////////////////////////////////////////////////////////////
-    ///////////////////// MULTI LINE COUNTY FUNCTION /////////////////////
-    //////////////////////////////////////////////////////////////////////
 
-        var multiCounty = function(data, countyCode, year){
+      //////////////////////////////////////////////////////////////////////
+      ///////////////////// MULTI LINE COUNTY FUNCTION /////////////////////
+      //////////////////////////////////////////////////////////////////////
+
+          var multiCounty = function(data, countyCode, year){
 
               var county = data.filter(function(d){
                 return +d.key == +countyCode;
@@ -493,6 +502,7 @@ function ready(error,
 
                ////////////  UPDATE Y AXIS  /////////// 
 
+
                 /* X axis could be updated the same way but the 
                 x axis doesn't change in this figure*/
 
@@ -507,6 +517,7 @@ function ready(error,
                       .tickSize(0, 0));
 
             };
+
 
 
           ///////////////////////////  CALL TO INITIAL GRAPH  //////////////////////////
@@ -543,6 +554,7 @@ function ready(error,
 
     // Need to update available counties
 
+
           Slist.on('change', function(){
             var selectedState = d3.select(this)
                 .select("select")
@@ -557,13 +569,17 @@ function ready(error,
 
           });
 
+
     ///////////////////////////  COUNTY CHANGE  //////////////////////////
+
 
           // Create line based on selection from dropdown 1
           ClistG.on('change', function(){
 
 
             ////////////  DETECTING SELECTED YEAR  ///////////  
+
+
 
               // Detecting whether a single year has already been selected
               var blueLine = d3.selectAll(".selected")
@@ -582,7 +598,9 @@ function ready(error,
 
 
 
+
             ////////////  DATA JOIN FOR COUNTIES  /////////// 
+
 
               // Determine which county was selected from dropdown
               var selected = d3.select(this)
