@@ -114,6 +114,7 @@
       var parseYear = d3.timeFormat("%Y"),
         parseMonth = d3.timeFormat("%b");
       var parseTimeMonth = d3.timeParse("%b");
+      var parseMonthOnly = d3.timeParse("%m")
 
 
       // set the ranges
@@ -133,6 +134,11 @@
           .y(function(d) { return y(+d.stateBirths); })
           ;
 
+      // define the line
+      var valueLineA = d3.line()
+          .x(function(d) { return x(parseTimeMonth(d.month)); })
+          .y(function(d) { return y(+d.median); })
+          ;
 
       // append the svg object to the body of the page
       // appends a 'group' element to 'svg'
@@ -180,6 +186,7 @@
         .defer(d3.csv, "stateCountyNames.csv")
         .defer(d3.csv, "CondensedBirth3.csv")
         .defer(d3.csv, "stateData.csv")
+        .defer(d3.csv, "stateAverages.csv")
         .await(ready);
   
 
@@ -188,7 +195,8 @@
  function ready(error, 
       stateCounty,
       data, 
-      stateData) {
+      stateData,
+      stateAverages) {
 
           if (error) throw error;
 
@@ -216,6 +224,17 @@
             d.year = parseYear(d.Date);
             d.stateBirths = +d.stateBirths;
             d.states = d.states
+            d.dayAvg = +d.dayAvg
+          })
+
+          // format state average data
+          stateAverages.forEach(function(d){
+            d.states = d.states;
+            d.month = parseMonth(parseMonthOnly(d.M));
+            d.median = +d.median;
+            d.low = +d.low;
+            d.high = +d.high;
+            d.values = +d.median;
           })
 
 
@@ -274,6 +293,73 @@
               })
               .entries(stateData);
 
+              console.log(nestMStates)
+
+          ///////////////////////////  ROLLUP STATES  //////////////////////////
+
+          // Nest the data to create a line for each county and each year
+          /*var nestAStates = d3.nest()
+              .key(function(d) { return d.states; })
+              .key(function(d){ return d.month; })
+              .rollup(function(d){ return {
+                first: d3.quantile(
+                  d.map(function(d){ 
+                    return d.stateBirths
+                  ;})
+                  .sort(d3.ascending), .25),
+                median: d3.median(d, function(d){ 
+                  return d.stateBirths
+                ;}),
+                last: d3.quantile(
+                  d.map(function(d){
+                    return d.stateBirths
+                  ;})
+                  .sort(d3.ascending), .75)
+              }; })
+              .entries(stateData);*/
+
+
+         /* var nestAStates = d3.nest()
+              .key(function(d) { return d.states; })
+              .key(function(d) { return d.month; })
+              .rollup(function(d){
+                var first = d3.quantile(d.map(function(d){
+                  return +d.stateBirths
+                })
+                  .sort(d3.ascending), .25)
+                var last = d3.quantile(d.map(function(d){
+                  return +d.stateBirths
+                })
+                  .sort(d3.ascending), .75)
+                var median = d3.median(d, function(d){
+                  return +d.stateBirths
+                })
+              })
+              .entries(stateData);*/
+
+          var nestAStates = d3.nest()
+            .key(function(d){
+              return d.states;
+            })
+            /*.rollup(function(leaves){
+                /*var min = d3.min(leaves, function(d){
+                  return +d.low;
+                })
+                var max = d3.max(leaves, function(d){
+                  return +d.high;
+                })
+                var extent = d3.extent(leaves, function(d){
+                  return +d.median
+                })
+                /*var nest = d3.nest().key(function(d){
+                  return d.month
+                })
+                .entries(leaves);
+                return {extent:extent};
+              })*/
+            .entries(stateAverages)
+
+              console.log(nestAStates)
 
 
 
@@ -497,14 +583,14 @@
                     y.domain(d.value.extent)
                   });
 
-
+console.log(CountiesEnter)
               // Select all the paths
               var Paths = CountiesEnter.selectAll("path")
                   .data(function(d) {
                     return (d.value.years);
                   })
 
-
+                  console.log(Paths)
               // Enter and append any new paths
               var PathsEnter = Paths.enter()
                   .append("path")
@@ -514,6 +600,8 @@
                       .attr("d",function(d){
                           return valueLine(d.values);
                       });
+
+                      console.log(PathsEnter)
 
               // If a line was already selected when the county was changed
               // Make sure that same year's line is still selected
@@ -593,7 +681,7 @@
           // Create dropdown  (Event: Storms)
           var stormsList = d3.select("#icon-dropdown")
             stormsList.append("select").selectAll("option")
-              .data(nestMStates)
+              .data(nestAStates)
               .enter().append("option")
               .attr("value", function(d){
                 return d.key;
@@ -606,26 +694,23 @@
               })*/
 
 
+      
       ///////////////////////////  STORM CHANGE  //////////////////////////
 
           // Select year from dropdown
           stormsList.on('change', function(){
 
             // Quickly remove any previously drawn lines
-
             svg.selectAll(".line").remove();
 
           ////////////  DATA JOIN FOR STATES  /////////// 
-
               // Determine which county was selected from dropdown
               var avStateSel = d3.select(this)
                   .select("select")
                   .property("value")
-
                   
-
               // Filter data to only include selected county
-              var selectAvState = nestMStates.filter(function(d){
+              var selectAvState = nestAStates.filter(function(d){
                 return d.key === avStateSel;
               });
 
@@ -636,48 +721,19 @@
                     return d ? d.key : this.key;
                   });
 
-                 
+
               // Remove any lines that don't carry over between counties
               avStates.exit().remove();
 
+              y.domain([d3.min(selectAvState[0].values, function(d) {return +d.low}), d3.max(selectAvState[0].values, function(d){ return +d.high})]);
 
-              // Add grouping element
-              var avStatesEnter = avStates.enter()
-                  .append("g")
-                  .attr("class", "counties")
-                  .each(function(d){
-                    y.domain(d.value.extent)
-                  });
-
-
-              // Select all the paths
-              var statePaths = avStatesEnter.selectAll("path")
-                  .data(function(d) {
-                    return (d.value.years);
-                  })
-
- console.log(statePaths)
-              // Enter and append any new paths
-              var statePathsEnter = statePaths.enter()
+                var statePathsEnter = avStates.enter()
                   .append("path")
                   .attr("class", "line")
-                  .transition()
-                      .duration(5000)
-                      .attr("d",function(d){
-                          return valueLineState(d.values);
-                      });
-
-              /*// If a line was already selected when the county was changed
-              // Make sure that same year's line is still selected
-              var selLineU = svg.selectAll(".line")
-                  .filter(function(d) {
-                    return +d.key === +blueLineY
+                  .attr("d", function(d){
+                    return valueLineA(d.values);
                   })
-                  .classed("selected", true)
 
-               avStates = avStatesEnter
-                  .merge(Counties);
-*/
 
                 ////////////  UPDATE Y AXIS  /////////// 
 

@@ -81,6 +81,7 @@
               .entries(data);
 
 
+
           // Create dropdown for county selection
           var list = d3.select("#counties")
           list.append("select").selectAll("option")
@@ -115,11 +116,13 @@
                     return d ? d.key : this.key;
                   });
                  
+                 console.log(lines)
               //lines.exit().remove();
 
               // Quick fix to destroy lines and re-draw
               svg.selectAll("path").remove()
 
+console.log(selectCounty[0].values)
 
               // Scale the range of the data
               x.domain(d3.extent(selectCounty[0].values, function(d) { return d.monthYear; }));
@@ -127,6 +130,7 @@
               y.domain([0, d3.max(selectCounty[0].values, function(d) { return +d.countyBirths; })]);
               y2.domain(y.domain());
 
+console.log(lines)
 
               var linesEnter = lines.enter().append("path")
                   .attr("class", "line")
@@ -134,7 +138,7 @@
                       return valueline(d.values);
                   });
 
-
+                  console.log(linesEnter)
               lines = lines.merge(linesEnter)
 
               // Quick fix to destroy axes and re-draw

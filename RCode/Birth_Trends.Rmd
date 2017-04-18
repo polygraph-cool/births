@@ -338,10 +338,17 @@ stateAvg <- stateAvg0315 %>%
   mutate(Yr = str_sub(Year, start= -2),
          M = sprintf("%02d", Month.Code), 
          Date = paste0(Yr, M)) %>% 
-  select(c(1,7,10))
+  select(c(1,7,10)) 
 
 stateAvgAll <- rbind(stateAvg, stateData3)
 
-write.csv(stateData3, "../d3Graphics/Exploration2/stateData.csv")
+stateAvgAll2 <- stateAvgAll %>%
+  mutate(Yr = str_sub(Date, end = 2),
+         M = str_sub(Date, start = -2),
+         dayAvg = ifelse(M %in% c(01, 03, 05, 07, 08, 10, 12), stateBirths/31, 
+                         ifelse(M %in% c(04, 06, 09, 11), stateBirths/30,
+                                ifelse(M = 02 & Yr %in% 96, 00, 04, 08, 12), stateBirths/29, stateBirths/28)))
+
+write.csv(stateAvgAll, "../d3Graphics/Exploration2/stateData.csv")
 
 ```

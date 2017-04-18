@@ -226,6 +226,12 @@ body {
   clip-path: url(#clip);
 }
 
+.line2 {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1px;
+}
+
 .selected {
   fill: none;
   stroke: #7D93CA;
