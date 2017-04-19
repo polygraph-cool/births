@@ -461,14 +461,6 @@ function ready(error,
             };
 
 
-          ///////////////////////////  CALL TO INITIAL GRAPH  //////////////////////////
-
-          // Call function to create initial figure
-          // currently set to LA County
-          multiCounty(nested, 6037, 2015);
-
-
-
       //////////////////////////////////////////////////////////////////////
       /////////////////////// BANDED COUNTY FUNCTION ///////////////////////
       //////////////////////////////////////////////////////////////////////
@@ -479,9 +471,9 @@ function ready(error,
     
             // Filter data to only include selected county
             var selectACounty = data.filter(function(d){
-              return d.key === countyCode;
+              return +d.key === +countyCode;
             });
-
+//
             // Group the county-level data
            var aCounty = svg.selectAll(".aCounty")
                 .data(selectACounty, function(d){
@@ -538,7 +530,13 @@ function ready(error,
             }
 
 
-bandCounty(nestACounties, "6037");
+          ///////////////////////////  CALL TO INITIAL GRAPH  //////////////////////////
+
+          // Call function to create initial figure
+          // currently set to LA County
+          multiCounty(nested, 6037, 2015);
+          bandCounty(nestACounties, 6037)
+
 
 
 
@@ -631,7 +629,6 @@ bandCounty(nestACounties, "6037");
             .classed("selected", true)
         })
 
-    
 
         var pinBubbleChart = new ScrollMagic.Scene({
       				// triggerElement: ".third-chart-wrapper",
