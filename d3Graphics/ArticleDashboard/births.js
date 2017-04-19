@@ -520,8 +520,6 @@ function ready(error,
                       })
                       .attr("class", "line");
 
-                      console.log(PathsEnter)
-
                 var initialLine = svg.selectAll(".line")
                     .filter(function(d){
                       return +d.key === +year;
@@ -536,6 +534,7 @@ function ready(error,
 
                 // Print which state has been selected (for updating county dropdown)
                 selectedState = Slist.select("select").property("value")
+
 
                 // Print which county has been selected (for updating county dropdown)
                 selectedCounty = stateMap.get(state[0].key).County;
@@ -649,21 +648,23 @@ function ready(error,
                   return valueLineA(d.values);
                 })
 
-              // Reset the State dropdown based on the state of selected state
-              var stateDrop = Slist.selectAll("option")
+              // Reset the State dropdown based on the state of selected county
+                var stateDrop = Slist.selectAll("option")
                   .property("selected", function(d){
-                  return d.key === selectACounty[0].key;
+                  return d.key === countyMap.get(selectACounty[0].key).stateName;
                 })
 
                 // Print which state has been selected (for updating county dropdown)
                 selectedState = Slist.select("select").property("value")
 
+                console.log(selectedState)
+
                 // Print which county has been selected (for updating county dropdown)
                 selectedCounty = countyMap.get(selectACounty[0].key).County;
+                console.log(selectedCounty)
 
                 // Update county dropdown
                 updateCountyDrop(selectedCounty);
-
 
                   ////////////  UPDATE Y AXIS  /////////// 
 
@@ -745,10 +746,8 @@ function ready(error,
                 // Print which state has been selected (for updating county dropdown)
                 selectedState = Slist.select("select").property("value")
 
-
                 // Print which county has been selected (for updating county dropdown)
                 selectedCounty = stateMap.get(state[0].key).County;
-
 
 
                 // Update county dropdown
@@ -766,7 +765,6 @@ function ready(error,
                       .tickPadding(6)
                       .tickSize(0, 0));
             }
-
 
           ///////////////////////////  CALL TO INITIAL GRAPH  //////////////////////////
 
@@ -807,14 +805,16 @@ function ready(error,
                 // Print which state has been selected (for updating county dropdown)
                 selectedState = Slist.select("select").property("value")
 
+                console.log(selectedState)
+
                 svg.selectAll(".area").remove();
 
 
                 ////////////  RUNNING UPDATE MULTI FUNCTION  ///////////  
-                multiState(nestMStates, selectedState)
+                multiState(nestMStates, selectedState);
 
                 /////////// RUNNING UPDATE BAND FUNCTION /////////
-                bandState(nestAStates, selectedState)
+                bandState(nestAStates, selectedState);
 
                 // Update county dropdown
                 updateCountyDrop();
