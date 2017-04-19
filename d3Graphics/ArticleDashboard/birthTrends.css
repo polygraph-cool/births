@@ -211,6 +211,7 @@ body {
 #icon-dropdown {
   width: 40%;
   height: 48px;
+  top-margin: 100px;
 }
 
 #icon-dropdown2 {
@@ -220,9 +221,8 @@ body {
 
 #icon-dropdown select{
   position: absolute;
-  top: 50%;
   left: 0;
-  margin: -18px 0 0 -18px;
+  margin: 0 0 0 -18px;
 }
 
 #icon-dropdown2 select{
@@ -230,6 +230,22 @@ body {
   top: 50%;
   left: 50%;
   margin: -18px 0 0 -18px;
+}
+
+.dd2 select{
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  display: block;
+  padding: 0.5em 3em 0.5em 0;
+  margin: 0 0 0 20px;
+  font-family: 'Publico Text Web';
+  font-size: 1rem;
+  font-weight: 600;
+  color: #7D93CA;
+  background-color: #F2F2F9;
+  border: none;
 }
 
 

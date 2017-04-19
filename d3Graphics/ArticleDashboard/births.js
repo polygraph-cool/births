@@ -281,6 +281,55 @@ function ready(error,
           })
           .entries(stateNormal)
 
+
+    //////////////////////////////////////////////////////////////////////
+    //////////////////////////  COUNTY NAMES  ////////////////////////////
+    //////////////////////////////////////////////////////////////////////
+
+    var events = [
+      {
+        type: "sports",
+        year: 2005,
+        months: ["July", "August"],
+        title: "Red Sox World Series Win",
+        state: "Massachusetts",
+        county: "Suffolk"
+      },
+      {
+        type: "storms",
+        year: 2013,
+        months: ["July", "August"],
+        title: "Hurricane Sandy",
+        state: "New York",
+        county: "Suffolk"
+      },
+      {
+        type: "storms",
+        year: 2006,
+        months: ["May", "June"],
+        title: "Hurricane Katrina",
+        state: "Louisiana",
+        county: "Orleans"
+      }
+
+    ];
+
+    var eventNest = d3.nest()
+      .key(function(d){
+        return d.type
+      })
+      .rollup(function(leaves){
+        var nest = d3.nest().key(function(d){
+          return d.title
+        })
+        .entries(leaves);
+        return { Title:nest };
+      })
+      .entries(events)
+
+    console.log(events)
+    console.log(eventNest)
+
     //////////////////////////////////////////////////////////////////////
     //////////////////////////  COUNTY NAMES  ////////////////////////////
     //////////////////////////////////////////////////////////////////////
@@ -325,7 +374,9 @@ function ready(error,
               // Filter for that state
               var selectedStateG = nestedStates.filter(function(d){
                   return d.key === selectedState;
-              }) 
+              }); 
+
+              console.log(selectedStateG)
 
               var selectedCounties = selectedStateG.map(function(d){
                 return d.value.Counties;
@@ -382,6 +433,58 @@ function ready(error,
             })
             .property("selected", function(d){ return d.key === "2015"; })
 
+    //////////////////////////////////////////////////////////////////////
+    //////////////////////////  EVENT DROPDOWN  //////////////////////////
+    //////////////////////////////////////////////////////////////////////
+
+                  // Defining an event selection function to be applied
+                  // to all event icons
+                  var eventSelection = function(eventType){
+                      var eList = d3.select("#icon-dropdown")
+
+                      var stormsOnly = eventNest.filter(function(d){
+                        return d.key === eventType;
+                      }) 
+
+                      var selectedStorms = stormsOnly.map(function(d){
+                        return d.value.Title;
+                      })
+
+                      var selectedStorms2 = selectedStorms[0].map(function(d){
+                        return d.key;
+                      })
+
+                      var eSelection = eList.selectAll("select");
+                        if (eSelection.empty()){
+                          eSelection = eList.append("select")
+                        }
+
+                      eSelection = eSelection.selectAll("option")
+                          .data(selectedStorms2, function(d){
+                            return d;
+                          })
+
+                      eSelection.exit().remove();
+
+                      eSelection.enter().append("option")
+                          .attr("value", function(d){
+                            return d;
+                          })
+                          .text(function(d){
+                            return d;
+                          })
+                    }
+
+                var stormsIcon = d3.select("#icon-storms")
+                  .on('click', function(){
+                     eventSelection("storms");
+                  });
+
+                var sportsIcon = d3.select("#icon-sports")
+                  .on('click', function(){
+                    eventSelection("sports");
+                  });
+  
     //////////////////////////////////////////////////////////////////////
     //////////////////////////////  AXES  ////////////////////////////////
     //////////////////////////////////////////////////////////////////////
@@ -802,16 +905,16 @@ function ready(error,
 
           // Call function to create initial figure
           // currently set to LA County
-          multiCounty(nestedPCounties, 25025, 2005);
+          //multiCounty(nested, 25025, 2005);
           //bandCounty(nestACounties, 6037)
 
-          //multiState(nestMStates, "New York")
-          //bandState(nestAStates, "Maine")
+          multiState(nestMStates, "Maine")
+          bandState(nestAStates, "Maine")
 
 
           //////////////////////// TOGGLE DISABLE COUNTY DROPDOWN  //////////////////////////
 
-          var stormIcon = d3.select("#icon-storms")
+          /*var stormIcon = d3.select("#icon-storms")
               .on('click', function(d){
                   d3.selectAll(".area")
                     .classed("hidden", true);
@@ -824,7 +927,7 @@ function ready(error,
               .on('click', function(d){
                   d3.selectAll(".line")
                     .classed("hidden", true);
-                })
+                })*/
 
 
           ///////////////////////////  STATE CHANGE  //////////////////////////
@@ -874,10 +977,10 @@ function ready(error,
                   .property("value")
 
               ////////////  RUNNING UPDATE MULTI FUNCTION  /////////// 
-              multiCounty(nestedPCounties, selected, selectedYear)
+              multiCounty(nested, selected, selectedYear)
 
               /////////// RUNNING UPDATE BAND FUNCTION /////////
-              //bandCounty(nestACounties, selected)
+              bandCounty(nestACounties, selected)
                   
           });
 
