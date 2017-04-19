@@ -329,6 +329,24 @@ function ready(error,
               
           }
 
+
+    //////////////////////////////////////////////////////////////////////
+    //////////////////////////  YEAR DROPDOWN  ///////////////////////////
+    //////////////////////////////////////////////////////////////////////
+
+        // Create dropdown 2 (year)
+        var yList = d3.select("#year")
+        yList.append("select").selectAll("option")
+            .data(nested2)
+            .enter().append("option")
+            .attr("value", function(d){
+              return d.key;
+            })
+            .text(function(d){
+              return d.key;
+            })
+            .property("selected", function(d){ return d.key === "2015"; })
+
     //////////////////////////////////////////////////////////////////////
     //////////////////////////////  AXES  ////////////////////////////////
     //////////////////////////////////////////////////////////////////////
@@ -368,7 +386,6 @@ function ready(error,
                       .data(county, function(d){
                         return d ? d.key : this.key;
                       })
-                      console.log(county)
 
               pickedCounty.exit().remove();
 
@@ -460,6 +477,111 @@ function ready(error,
 
             };
 
+      //////////////////////////////////////////////////////////////////////
+      ////////////////////// MULTI LINE STATE FUNCTION /////////////////////
+      //////////////////////////////////////////////////////////////////////
+
+          var multiState = function(data, stateName, year){
+
+
+              var state = data.filter(function(d){
+                return d.key == stateName;
+              })
+
+
+
+              var pickedstate = svg.selectAll("g")
+                      .data(state, function(d){
+                        return d ? d.key : this.key;
+                      })
+
+
+              pickedstate.exit().remove();
+
+              var pickedstateEnter = pickedstate.enter()
+                      .append("g")
+                      .attr("class", "counties")
+                      .each(function(d){
+                        y.domain(d.value.extent)
+                      });
+
+              var Paths = pickedstateEnter.selectAll("path")
+                      .data(function(d) {
+                        return (d.value.years);
+                      })
+
+              var PathsEnter = Paths.enter()
+                      .append("path")
+                      .attr("d",function(d){
+                        return valueLineState(d.values);
+                      })
+                      .attr("class", "line");
+
+                      console.log(PathsEnter)
+
+                var initialLine = svg.selectAll(".line")
+                    .filter(function(d){
+                      return +d.key === +year;
+                    })
+                    .classed("selected", true)
+
+                // Reset the State dropdown based on the state of selected state
+                var stateDrop = Slist.selectAll("option")
+                  .property("selected", function(d){
+                  return d.key === state[0].key;
+                })
+
+                // Print which state has been selected (for updating county dropdown)
+                selectedState = Slist.select("select").property("value")
+
+
+                pickedstate = pickedstateEnter
+                  .merge(pickedstate);
+
+
+               ////////////  UPDATE X AXIS  ///////////
+
+                var xAxis = d3.axisBottom(x)
+                  .ticks(d3.timeMonth)
+                  .ticks(d3.timeMonth)
+                  .tickSize(0, 0)
+                  .tickFormat(d3.timeFormat("%b"))
+                  .tickSizeInner(0)
+                  .tickPadding(10);
+
+                svg.append("g")
+                  .attr("transform", "translate(0," + height + ")")
+                  .attr("class", "x axis")
+                  .call(xAxis);
+
+                // Update X Axis
+                svg.select(".x")
+                  .transition()
+                  .duration(750)
+                  .call(xAxis)
+
+
+                ////////////  UPDATE Y AXIS  ///////////
+
+                var yAxis = d3.axisLeft(y)
+                    .ticks(5)
+                    .tickSizeInner(0)
+                    .tickPadding(6)
+                    .tickSize(0,0);
+
+                svg.append("g")
+                    .attr("class", "y axis")
+                    .call(yAxis);
+
+                // Update Y Axis
+                svg.select(".y")
+                  .transition()
+                  .duration(5000)
+                  .call(yAxis)
+
+            };
+
+
 
       //////////////////////////////////////////////////////////////////////
       /////////////////////// BANDED COUNTY FUNCTION ///////////////////////
@@ -473,19 +595,22 @@ function ready(error,
             var selectACounty = data.filter(function(d){
               return +d.key === +countyCode;
             });
-//
+
             // Group the county-level data
            var aCounty = svg.selectAll(".aCounty")
                 .data(selectACounty, function(d){
                   return d ? d.key : this.key;
                 });
 
-                console.log(aCounty)
-
             // Remove any lines that don't carry over between counties
             aCounty.exit().remove();
 
-            y.domain([d3.min(selectACounty[0].values, function(d) {return +d.low}), d3.max(selectACounty[0].values, function(d){ return +d.high})]);
+            y.domain([d3.min(selectACounty[0].values, function(d) {
+              return +d.low
+            }), 
+            d3.max(selectACounty[0].values, function(d){ 
+              return +d.high
+            })]);
 
             ////////////  DATA JOIN FOR AREA  ///////////
 
@@ -525,8 +650,76 @@ function ready(error,
                       .tickSizeInner(0)
                       .tickPadding(6)
                       .tickSize(0, 0));
+            }
 
 
+      //////////////////////////////////////////////////////////////////////
+      /////////////////////// BANDED STATE FUNCTION ///////////////////////
+      //////////////////////////////////////////////////////////////////////
+
+            var bandState = function(data, stateName){
+
+            ////////////  DATA JOIN FOR MEDIAN  ///////////
+    
+            // Filter data to only include selected State
+            var selectAState = data.filter(function(d){
+              return d.key === stateName;
+            });
+
+            // Group the State-level data
+           var aState = svg.selectAll(".aState")
+                .data(selectAState, function(d){
+                  return d ? d.key : this.key;
+                });
+
+            // Remove any lines that don't carry over between counties
+            aState.exit().remove();
+
+            y.domain([d3.min(selectAState[0].values, function(d) {
+              return +d.low
+            }), 
+            d3.max(selectAState[0].values, function(d){ 
+              return +d.high
+            })]);
+
+            ////////////  DATA JOIN FOR AREA  ///////////
+
+              var areaFill = d3.area()
+                // Same x axis (could use .x0 and .x1 to set different ones)
+                .x(function(d) { return x(parseTimeMonth(d.month)); })
+                .y0(function(d, i) { return y(+d.low); })
+                .y1(function(d, i) { return y(+d.high); })
+                .curve(d3.curveBasis);
+
+                svg.selectAll(".area").remove();
+
+              var areaEnter = aState.enter().append("path")
+                //.datum(selectAvState)
+                .attr("d", function(d){
+                  return areaFill(d.values); })
+                .attr("fill", "#B2C1E3")
+                .attr("opacity", 0.8)
+                .attr("class", "area");
+
+
+              // Add Median Line (later so on top of area)
+              var StatePathsEnter = aState.enter()
+                .append("path")
+                .attr("class", "line2")
+                .attr("d", function(d){
+                  return valueLineA(d.values);
+                })
+
+                  ////////////  UPDATE Y AXIS  /////////// 
+
+                  d3.select(".y")
+                    .transition()
+                    .duration(750)
+                    .call(d3.axisLeft(y)
+                      .ticks(5)
+                      .tickSizeInner(0)
+                      .tickPadding(6)
+                      .tickSize(0, 0));
             }
 
 
@@ -538,9 +731,25 @@ function ready(error,
           bandCounty(nestACounties, 6037)
 
 
+          //////////////////////// TOGGLE DISABLE COUNTY DROPDOWN  //////////////////////////
+
+          var stormIcon = d3.select("#icon-storms")
+              .on('click', function(d){
+                  d3.selectAll(".area")
+                    .classed("hidden", true);
+                  d3.selectAll(".line2")
+                    .classed("hidden", true);
+                })
 
 
-    ///////////////////////////  STATE CHANGE  //////////////////////////
+            var sportsIcon = d3.select("#icon-sports")
+              .on('click', function(d){
+                  d3.selectAll(".line")
+                    .classed("hidden", true);
+                })
+
+
+          ///////////////////////////  STATE CHANGE  //////////////////////////
 
           Slist.on('change', function(){
             var selectedState = d3.select(this)
@@ -550,25 +759,31 @@ function ready(error,
                 // Print which state has been selected (for updating county dropdown)
                 selectedState = Slist.select("select").property("value")
 
+                svg.selectAll(".area").remove();
+
+
+                ////////////  RUNNING UPDATE MULTI FUNCTION  ///////////  
+                multiState(nestMStates, selectedState)
+
+                /////////// RUNNING UPDATE BAND FUNCTION /////////
+                bandState(nestAStates, selectedState)
+
                 // Update county dropdown
                 updateCountyDrop();
 
           });
 
 
-    ///////////////////////////  COUNTY CHANGE  //////////////////////////
+          ///////////////////////////  COUNTY CHANGE  //////////////////////////
 
           ClistG.on('change', function(){
 
             ////////////  DETECTING SELECTED YEAR  ///////////  
 
-              // Detecting whether a single year has already been selected
-              var blueLine = d3.selectAll(".selected")
-                  .data()
+              // Detecting what year is present on the year dropdown menu
+              selectedYear = yList.select("select").property("value")
 
-              var blueLineY = blueLine[0].key
 
-              //var blueLineY = blueLine[0].key*/
               svg.selectAll(".line2").remove()
               svg.selectAll(".area").remove()
 
@@ -578,38 +793,16 @@ function ready(error,
                   .select("select")
                   .property("value")
 
-            ////////////  RUNNING UPDATE FUNCTION  ///////////  
+              ////////////  RUNNING UPDATE MULTI FUNCTION  /////////// 
+              multiCounty(nested, selected, selectedYear)
 
-              multiCounty(nested, selected, blueLineY)
-
-            /////////// RUNNING UPDATE BAND FUNCTION /////////
-
+              /////////// RUNNING UPDATE BAND FUNCTION /////////
               bandCounty(nestACounties, selected)
                   
           });
 
 
-
-    //////////////////////////////////////////////////////////////////////
-    //////////////////////////  YEAR DROPDOWN  ///////////////////////////
-    //////////////////////////////////////////////////////////////////////
-
-
-        // Create dropdown 2 (year)
-        var yList = d3.select("#year")
-        yList.append("select").selectAll("option")
-            .data(nested2)
-            .enter().append("option")
-            .attr("value", function(d){
-              return d.key;
-            })
-            .text(function(d){
-              return d.key;
-            })
-            .property("selected", function(d){ return d.key === "2015"; })
-
-
-    ///////////////////////////  YEAR CHANGE  //////////////////////////
+        ///////////////////////////  YEAR CHANGE  //////////////////////////
 
         // Select year from dropdown
         yList.on('change', function(){
@@ -629,6 +822,9 @@ function ready(error,
             .classed("selected", true)
         })
 
+    //////////////////////////////////////////////////////////////////////
+    //////////////////////////  SCROLLYTELLING  //////////////////////////
+    //////////////////////////////////////////////////////////////////////
 
         var pinBubbleChart = new ScrollMagic.Scene({
       				// triggerElement: ".third-chart-wrapper",
@@ -672,13 +868,15 @@ function ready(error,
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
             }
             else{
-              console.log("entering from the front!");
+                multiCounty(nested, 42101, 2015);
+                bandCounty(nestACounties, 42101);
 
             }
           })
           .on("leave",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
-              console.log("leaving from the back!");
+                multiCounty(nested, 6037, 2015);
+                bandCounty(nestACounties, 42101);
             }
             else{
             }
