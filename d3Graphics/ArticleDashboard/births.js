@@ -11,8 +11,8 @@
 
     // set the dimensions and margins of the graph
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
-      width = 930 - margin.left - margin.right,
-      height = 460 - margin.top - margin.bottom;
+      width = 850 - margin.left - margin.right,
+      height = 370 - margin.top - margin.bottom;
 
     // parse the date / time
     var parseTime = d3.timeParse("%y%m");
@@ -91,6 +91,7 @@
       .defer(d3.csv, "stateAverages.csv")
       .defer(d3.csv, "stateAveragesNormal.csv")
       .defer(d3.csv, "countyAverages.csv")
+      .defer(d3.csv, "pBirthsCounty.csv")
       .await(ready);
 
 
@@ -102,7 +103,8 @@ function ready(error,
     stateData,
     stateAverages,
     stateNormal,
-    countyAverages) {
+    countyAverages,
+    pBirthsCounty) {
 
         if (error) throw error;
 
@@ -163,6 +165,16 @@ function ready(error,
           d.values = +d.median;
         })
 
+        // format the data
+        pBirthsCounty.forEach(function(d) {
+            d.Date = parseTime(d.Date);
+            d.month = parseMonth(d.Date);
+            d.year = parseYear(d.Date);
+            d.pBirths = +d.pBirths / 10;
+            d.Births = +d.pBirthsN / 100;
+            d.County = d.County;
+        });
+
 
 
         //////////////////////////////////////////////////////////////////////
@@ -186,6 +198,26 @@ function ready(error,
               return {extent:extent, years:nest};
             })
             .entries(data);
+
+
+        ///////////////////////////  NEST COUNTIES  //////////////////////////
+
+        // Nest the data to create a line for each county and each year
+        var nestedPCounties = d3.nest()
+            .key(function(d) { return d.County; })
+            .rollup(function(leaves){
+              var extent = d3.extent(leaves, function(d){
+                return d.Births
+              })
+              var nest = d3.nest().key(function(d){
+                return d.year
+              })
+              .entries(leaves);
+              return {extent:extent, years:nest};
+            })
+            .entries(pBirthsCounty);
+
+            console.log(pBirthsCounty)
 
         /////////////////////////// NEST COUNTY AVG  //////////////////////////
 
@@ -770,11 +802,11 @@ function ready(error,
 
           // Call function to create initial figure
           // currently set to LA County
-          //multiCounty(nested, 6037, 2015);
+          multiCounty(nestedPCounties, 25025, 2005);
           //bandCounty(nestACounties, 6037)
 
           //multiState(nestMStates, "New York")
-          bandState(nestAStates, "Maine")
+          //bandState(nestAStates, "Maine")
 
 
           //////////////////////// TOGGLE DISABLE COUNTY DROPDOWN  //////////////////////////
@@ -842,10 +874,10 @@ function ready(error,
                   .property("value")
 
               ////////////  RUNNING UPDATE MULTI FUNCTION  /////////// 
-              multiCounty(nested, selected, selectedYear)
+              multiCounty(nestedPCounties, selected, selectedYear)
 
               /////////// RUNNING UPDATE BAND FUNCTION /////////
-              bandCounty(nestACounties, selected)
+              //bandCounty(nestACounties, selected)
                   
           });
 
@@ -878,7 +910,7 @@ function ready(error,
       				// triggerElement: ".third-chart-wrapper",
       				triggerElement: "#container",
       				triggerHook:0,
-      				offset: -100,
+      				offset: -300,
       				duration:600
       			})
       			.addIndicators({name: "pin chart"}) // add indicators (requires plugin)
@@ -933,8 +965,8 @@ function ready(error,
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 0,
-            duration:400
+            offset: 400,
+            duration:800
           })
           .addIndicators({name: "second trigger"}) // add indicators (requires plugin)
           .addTo(controller)
@@ -948,7 +980,7 @@ function ready(error,
           })
           .on("leave",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
-                bandState(nestAStates, "Arizona");
+                bandState(nestAStates, "Florida");
             }
             else{
             }

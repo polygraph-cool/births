@@ -266,6 +266,19 @@ condensed2 <- allBirthData %>%
 write.csv(condensed2, "../Raw_Data/CondensedBirth2.csv")
 ```
 
+## Calculating Percentage Per Month
+```{r}
+
+condensedPercent <- allBirthData %>% 
+  mutate(complete = County %in% all20$County) %>% 
+  filter(complete == TRUE, 
+         Year >= 1995) %>%
+  group_by()
+  
+
+
+```
+
 After all of that, the file size is reduced to 4.6 MB or an 84% reduction in file size. Not bad! 
 
 One option to limit the dataset a little further is to only include counties for which we have all 30 years (1985 - 2015) of data. 
@@ -345,10 +358,72 @@ stateAvgAll <- rbind(stateAvg, stateData3)
 stateAvgAll2 <- stateAvgAll %>%
   mutate(Yr = str_sub(Date, end = 2),
          M = str_sub(Date, start = -2),
-         dayAvg = ifelse(M %in% c(01, 03, 05, 07, 08, 10, 12), stateBirths/31, 
-                         ifelse(M %in% c(04, 06, 09, 11), stateBirths/30,
-                                ifelse(M = 02 & Yr %in% 96, 00, 04, 08, 12), stateBirths/29, stateBirths/28)))
+         dayAvg = ifelse(M %in% c("01", "03", "05", "07", "08", "10", "12"), stateBirths/31, 
+                         ifelse(M %in% c("04", "06", "09", "11"), stateBirths/30, 
+                                ifelse(M == "02" & Yr %in% c("96", "00", "04", "08", "12") , stateBirths/29, stateBirths/28)))) %>% 
+  mutate(dayAvg = (round(dayAvg))) %>% 
+  select(c(1,2,3,6))
+                         
 
-write.csv(stateAvgAll, "../d3Graphics/Exploration2/stateData.csv")
 
+write.csv(stateAvgAll2, "../d3Graphics/Exploration2/stateData.csv")
+
+```
+
+
+```{r}
+Cali <- stateData3 %>% 
+  filter(states == "California") %>% 
+  mutate(Yr = str_sub(Date, end = 2),
+         M = as.numeric(str_sub(Date, start = -2)))
+
+ggplot(Cali, aes(x = M, y = stateBirths)) + geom_smooth()
+
+
+Maine <- stateData3 %>% 
+  filter(states == "Maine") %>% 
+  mutate(Yr = str_sub(Date, end = 2),
+         M = as.numeric(str_sub(Date, start = -2)))
+
+ggplot(Maine, aes(x = M, y = stateBirths)) + geom_smooth()
+
+
+```
+
+
+```{r}
+byState <- stateData3 %>% 
+  mutate(Yr = str_sub(Date, end = 2),
+         M = as.numeric(str_sub(Date, start = -2))) %>% 
+  group_by(states, M) %>% 
+  summarise(median = median(stateBirths),
+            low = quantile(stateBirths, probs=0.25),
+            high = quantile(stateBirths, probs = 0.75)) 
+  
+
+write.csv(byState, "../d3Graphics/Exploration2/stateAverages.csv")
+```
+
+```{r}
+byState2 <- stateAvgAll2 %>% 
+  mutate(Yr = str_sub(Date, end = 2),
+         M = as.numeric(str_sub(Date, start = -2))) %>% 
+  group_by(states, M) %>% 
+  summarise(median = median(dayAvg),
+            low = quantile(dayAvg, probs=0.25),
+            high = quantile(dayAvg, probs = 0.75)) 
+
+write.csv(byState2, "../d3Graphics/Exploration2/stateAveragesNormal.csv")
+```
+
+```{r}
+byCounty <- condensed3 %>% 
+    mutate(Yr = str_sub(Date, end = 2),
+         M = as.numeric(str_sub(Date, start = -2))) %>% 
+    group_by(County, M) %>% 
+      summarise(median = median(Births*10),
+            low = quantile((Births*10), probs=0.25),
+            high = quantile((Births*10), probs = 0.75)) 
+
+write.csv(byCounty, "../d3Graphics/ArticleDashboard/countyAverages.csv")
 ```

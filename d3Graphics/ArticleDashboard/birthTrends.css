@@ -28,14 +28,19 @@ body {
 #container {
   width: 100%;
   display: flex;
+  margin: 0 auto;
 }
 
 
 #graph {
-
+  height: 800px;
   width: 850px;
   position: relative;
   flex-grow: 1;
+}
+
+#graph svg{
+  margin-top: 100px;
 }
 
 
@@ -411,7 +416,6 @@ body {
     font-weight: 100;
     line-height: 1.5;
     margin-bottom: 1.5rem;
-    display:none;
 }
 
 .intro-section {
