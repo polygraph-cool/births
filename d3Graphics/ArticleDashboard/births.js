@@ -283,7 +283,7 @@ function ready(error,
 
 
     //////////////////////////////////////////////////////////////////////
-    //////////////////////////  COUNTY NAMES  ////////////////////////////
+    ////////////////////////  DEFINING EVENTS  ///////////////////////////
     //////////////////////////////////////////////////////////////////////
 
     var events = [
@@ -310,6 +310,14 @@ function ready(error,
         title: "Hurricane Katrina",
         state: "Louisiana",
         county: "Orleans"
+      },
+      {
+        type: "sports",
+        year: 2014,
+        months: ["October", "November"],
+        title: "Seahawks Superbowl Win",
+        state: "Washington",
+        county: "King",
       }
 
     ];
@@ -338,8 +346,16 @@ function ready(error,
             return d.County;
           })
 
+          var countyNameMap = d3.map(stateCounty, function(d){
+            return d.County_Name
+          })
+
           var stateMap = d3.map(stateCounty, function(d){
             return d.stateName;
+          })
+
+          var eventMap = d3.map(events, function(d){
+            return d.title;
           })
 
 
@@ -437,6 +453,8 @@ function ready(error,
     //////////////////////////  EVENT DROPDOWN  //////////////////////////
     //////////////////////////////////////////////////////////////////////
 
+                  var eListG = null;
+
                   // Defining an event selection function to be applied
                   // to all event icons
                   var eventSelection = function(eventType){
@@ -473,6 +491,8 @@ function ready(error,
                           .text(function(d){
                             return d;
                           })
+
+                      eListG = eList;
                     }
 
                 var stormsIcon = d3.select("#icon-storms")
@@ -571,6 +591,14 @@ function ready(error,
 
                 pickedCounty = pickedCountyEnter
                   .merge(pickedCounty);
+
+                 // Reset the State dropdown based on the state of selected county
+                var yearSel = yList.selectAll("option")
+                  .property("selected", function(d){
+                    return +d.key === +year;
+                  })
+
+                  console.log(yearSel)
 
 
                ////////////  UPDATE X AXIS  ///////////
@@ -911,25 +939,6 @@ function ready(error,
           multiState(nestMStates, "Maine")
           bandState(nestAStates, "Maine")
 
-
-          //////////////////////// TOGGLE DISABLE COUNTY DROPDOWN  //////////////////////////
-
-          /*var stormIcon = d3.select("#icon-storms")
-              .on('click', function(d){
-                  d3.selectAll(".area")
-                    .classed("hidden", true);
-                  d3.selectAll(".line2")
-                    .classed("hidden", true);
-                })
-
-
-            var sportsIcon = d3.select("#icon-sports")
-              .on('click', function(d){
-                  d3.selectAll(".line")
-                    .classed("hidden", true);
-                })*/
-
-
           ///////////////////////////  STATE CHANGE  //////////////////////////
 
           Slist.on('change', function(){
@@ -987,23 +996,52 @@ function ready(error,
 
         ///////////////////////////  YEAR CHANGE  //////////////////////////
 
-        // Select year from dropdown
-        yList.on('change', function(){
-          var selectedYear = d3.select(this)
-              .select("select")
-              .property("value")
+          // Select year from dropdown
+          yList.on('change', function(){
+            var selectedYear = d3.select(this)
+                .select("select")
+                .property("value")
 
 
-          // select all paths and select one that the year matches
-          var selLine = svg.selectAll(".line")
-            // de-select all the lines
-            .classed("selected", false)
-            .filter(function(d) {
-                return +d.key === +selectedYear
-            })
-            // Set class to selected for matching line
-            .classed("selected", true)
-        })
+            // select all paths and select one that the year matches
+            var selLine = svg.selectAll(".line")
+              // de-select all the lines
+              .classed("selected", false)
+              .filter(function(d) {
+                  return +d.key === +selectedYear
+              })
+              // Set class to selected for matching line
+              .classed("selected", true)
+          })
+
+
+        ///////////////////////////  EVENT CHANGE  //////////////////////////
+                  
+          d3.selectAll("#icon-dropdown")
+            .on('change', function(){
+
+              // Remove any banded graphics that may still be present
+              svg.selectAll(".area").remove();
+
+              // Determine which event was selected from dropdown
+              var selected = d3.select(this)
+                  .select("select")
+                  .property("value")
+
+              var selectedEvent = eventMap.get(selected).county
+
+              var selectedCode = countyNameMap.get(selectedEvent).County
+
+              var selectedYear = eventMap.get(selected).year
+
+
+
+              ////////////  RUNNING UPDATE MULTI FUNCTION  /////////// 
+              multiCounty(nested, selectedCode, selectedYear)
+
+                  
+          });
+
 
     //////////////////////////////////////////////////////////////////////
     //////////////////////////  SCROLLYTELLING  //////////////////////////
