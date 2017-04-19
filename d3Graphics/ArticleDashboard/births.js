@@ -232,7 +232,6 @@ function ready(error,
             })
             .entries(stateData);
 
-            console.log(nestMStates)
 
         /////////////////////////// NEST STATE AVG  //////////////////////////
 
@@ -255,7 +254,11 @@ function ready(error,
     //////////////////////////////////////////////////////////////////////
 
           var countyMap = d3.map(stateCounty, function(d){
-            return d.County
+            return d.County;
+          })
+
+          var stateMap = d3.map(stateCounty, function(d){
+            return d.stateName;
           })
 
 
@@ -534,6 +537,12 @@ function ready(error,
                 // Print which state has been selected (for updating county dropdown)
                 selectedState = Slist.select("select").property("value")
 
+                // Print which county has been selected (for updating county dropdown)
+                selectedCounty = stateMap.get(state[0].key).County;
+
+                // Update county dropdown
+                updateCountyDrop(selectedCounty);
+
 
                 pickedstate = pickedstateEnter
                   .merge(pickedstate);
@@ -640,6 +649,22 @@ function ready(error,
                   return valueLineA(d.values);
                 })
 
+              // Reset the State dropdown based on the state of selected state
+              var stateDrop = Slist.selectAll("option")
+                  .property("selected", function(d){
+                  return d.key === selectACounty[0].key;
+                })
+
+                // Print which state has been selected (for updating county dropdown)
+                selectedState = Slist.select("select").property("value")
+
+                // Print which county has been selected (for updating county dropdown)
+                selectedCounty = countyMap.get(selectACounty[0].key).County;
+
+                // Update county dropdown
+                updateCountyDrop(selectedCounty);
+
+
                   ////////////  UPDATE Y AXIS  /////////// 
 
                   d3.select(".y")
@@ -662,23 +687,23 @@ function ready(error,
             ////////////  DATA JOIN FOR MEDIAN  ///////////
     
             // Filter data to only include selected State
-            var selectAState = data.filter(function(d){
+            var state = data.filter(function(d){
               return d.key === stateName;
             });
 
             // Group the State-level data
            var aState = svg.selectAll(".aState")
-                .data(selectAState, function(d){
+                .data(state, function(d){
                   return d ? d.key : this.key;
                 });
 
             // Remove any lines that don't carry over between counties
             aState.exit().remove();
 
-            y.domain([d3.min(selectAState[0].values, function(d) {
+            y.domain([d3.min(state[0].values, function(d) {
               return +d.low
             }), 
-            d3.max(selectAState[0].values, function(d){ 
+            d3.max(state[0].values, function(d){ 
               return +d.high
             })]);
 
@@ -710,6 +735,26 @@ function ready(error,
                   return valueLineA(d.values);
                 })
 
+
+               // Reset the State dropdown based on the state of selected state
+                var stateDrop = Slist.selectAll("option")
+                  .property("selected", function(d){
+                  return d.key === state[0].key;
+                })
+
+                // Print which state has been selected (for updating county dropdown)
+                selectedState = Slist.select("select").property("value")
+
+
+                // Print which county has been selected (for updating county dropdown)
+                selectedCounty = stateMap.get(state[0].key).County;
+
+
+
+                // Update county dropdown
+                updateCountyDrop(selectedCounty);
+
+
                   ////////////  UPDATE Y AXIS  /////////// 
 
                   d3.select(".y")
@@ -727,8 +772,11 @@ function ready(error,
 
           // Call function to create initial figure
           // currently set to LA County
-          multiCounty(nested, 6037, 2015);
-          bandCounty(nestACounties, 6037)
+          //multiCounty(nested, 6037, 2015);
+          //bandCounty(nestACounties, 6037)
+
+          //multiState(nestMStates, "New York")
+          bandState(nestAStates, "Maine")
 
 
           //////////////////////// TOGGLE DISABLE COUNTY DROPDOWN  //////////////////////////
@@ -868,15 +916,39 @@ function ready(error,
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
             }
             else{
-                multiCounty(nested, 42101, 2015);
-                bandCounty(nestACounties, 42101);
+                bandState(nestAStates, "Florida")
 
             }
           })
           .on("leave",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
-                multiCounty(nested, 6037, 2015);
-                bandCounty(nestACounties, 42101);
+                bandState(nestAStates, "Maine");
+            }
+            else{
+            }
+          })
+          ;
+
+          var secondTrigger = new ScrollMagic.Scene({
+            // triggerElement: ".third-chart-wrapper",
+            triggerElement: "#right-column",
+            triggerHook:0,
+            offset: 0,
+            duration:400
+          })
+          .addIndicators({name: "second trigger"}) // add indicators (requires plugin)
+          .addTo(controller)
+          .on("enter",function(e){
+            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+            }
+            else{
+                bandState(nestAStates, "Arizona")
+
+            }
+          })
+          .on("leave",function(e){
+            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+                bandState(nestAStates, "Arizona");
             }
             else{
             }
