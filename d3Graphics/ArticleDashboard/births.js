@@ -290,7 +290,7 @@ function ready(error,
       {
         type: "sports",
         year: 2005,
-        months: ["July", "August"],
+        months: ["Jul", "Aug"],
         title: "Red Sox World Series Win",
         state: "Massachusetts",
         county: "Suffolk"
@@ -298,7 +298,7 @@ function ready(error,
       {
         type: "storms",
         year: 2013,
-        months: ["July", "August"],
+        months: ["Jul", "Aug"],
         title: "Hurricane Sandy",
         state: "New York",
         county: "Suffolk"
@@ -306,7 +306,7 @@ function ready(error,
       {
         type: "storms",
         year: 2006,
-        months: ["May", "June"],
+        months: ["May", "Jun"],
         title: "Hurricane Katrina",
         state: "Louisiana",
         county: "Orleans"
@@ -314,7 +314,7 @@ function ready(error,
       {
         type: "sports",
         year: 2014,
-        months: ["October", "November"],
+        months: ["Oct", "Nov"],
         title: "Seahawks Superbowl Win",
         state: "Washington",
         county: "King",
@@ -357,7 +357,6 @@ function ready(error,
           var eventMap = d3.map(events, function(d){
             return d.title;
           })
-
 
     //////////////////////////////////////////////////////////////////////
     /////////////////////////  STATE DROPDOWN  //////////////////////////
@@ -1034,10 +1033,51 @@ function ready(error,
 
               var selectedYear = eventMap.get(selected).year
 
-
+              var selectedMonths = eventMap.get(selected).months
+              console.log(selectedMonths)
 
               ////////////  RUNNING UPDATE MULTI FUNCTION  /////////// 
               multiCounty(nested, selectedCode, selectedYear)
+
+              var selectedLine = d3.selectAll(".selected")
+
+              var selectedLineData = selectedLine._groups[0][0].__data__.values
+
+              console.log(selectedLineData)
+
+              var eventMonthMap = d3.map(selectedLineData, function(d){
+                return d.month;
+              })
+
+              var selectedMonthsArray = [eventMonthMap.get(selectedMonths[0]), eventMonthMap.get(selectedMonths[1])]
+
+              
+
+              svg.append("g").selectAll("circle")
+                .data(selectedMonthsArray, function(d){ return d.values; })
+                .enter()
+                .append("circle")
+                .attr("r", 8)
+                .attr("cx", function(d){ return x(parseTimeMonth(d.month))})
+                .attr("cy", function(d){ return y(d.Births)})
+                .attr("fill", "#EF445B")
+                .attr("stroke", "#FFFFFF")
+                .attr("stroke-width", 3)
+
+
+              /*var circle = svg.selectAll("circle")
+                    .data(selectedMonthsArray, function(d) { return d; });
+
+                    console.log(circle)
+                circle.exit().remove();
+
+                circle.enter().append("circle")
+                    .attr("cy", function(d) { return +d.Births; })
+                    .attr("cx", function(d){return parseMonth(d.month)})
+                    .attr("r", 20)
+                    .attr("fill", "red");*/
+
+                
 
                   
           });
