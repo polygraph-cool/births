@@ -105,11 +105,8 @@
             .attr("class", "right")
             .attr("offset", p2P)
             .attr("stop-color", "#7D93CA")
-
-            console.log("I ran!")
         }
 
-        console.log(linearGradient)
 
 
     //////////////////////////////////////////////////////////////////////
@@ -272,8 +269,6 @@ function ready(error,
             })
             .entries(pBirthsCounty);
 
-            console.log(pBirthsCounty)
-
         /////////////////////////// NEST COUNTY AVG  //////////////////////////
 
         var nestACounties = d3.nest()
@@ -348,7 +343,17 @@ function ready(error,
         months: ["Jul", "Aug"],
         title: "Red Sox World Series Win",
         state: "Massachusetts",
-        county: 25025
+        county: 25025,
+        causeTitle: "World Series Win",
+        causelabel: "In October 2004, the Boston Red Sox won the World Series for the first time since 1918. Did fans' celebrations result in an increase in babies 9 months later?",
+        causeX: 50,
+        causeY: -20,
+        causedX: 0,
+        causedY: 0,
+        resultTitle: "Red Sox Babies?",
+        resultlabel: "It doesn't look like it. The late summer of 2005 actually welcomed the fewest Boston babies.",
+        resultdX: 0,
+        resultdY: 50,
       },
       {
         type: "storms",
@@ -356,7 +361,17 @@ function ready(error,
         months: ["Jul", "Aug"],
         title: "Hurricane Sandy",
         state: "New York",
-        county: 36103
+        county: 36103,
+        causeTitle: "Hurricane",
+        causelabel: "When Hurricane Sandy hit the northeast US, around 8 million homes reportedly lost power. Did this cause a mini baby-boom 9 months later?",
+        causeX: 50,
+        causeY: -20,
+        causedX: 0,
+        causedY: 0,
+        resultTitle: "Hurricane Babies?",
+        resultlabel: "Probably not. The number of babies born in the affected areas 9 months later was just a little low for early summer.",
+        resultdX: 0,
+        resultdY: -50,
       },
       {
         type: "storms",
@@ -364,7 +379,17 @@ function ready(error,
         months: ["May", "Jun"],
         title: "Hurricane Katrina",
         state: "Louisiana",
-        county: 22071
+        county: 22071,
+        causeTitle: "Hurricane",
+        causelabel: "When Hurricane Katrina hit New Orleans, ...",
+        causeX: 50,
+        causeY: -20,
+        causedX: 0,
+        causedY: 0,
+        resultTitle: "Hurricane Babies?",
+        resultlabel: "It's hard to tell. This minor increase could be a result of increased conception during the storm or people slowly returning to the city.",
+        resultdX: 0,
+        resultdY: -100,
       },
       {
         type: "sports",
@@ -373,6 +398,16 @@ function ready(error,
         title: "Seahawks Superbowl Win",
         state: "Washington",
         county: 53033,
+        causeTitle: "Superbowl Win",
+        causelabel: "In 2013, the Seattle Seahawks won the Superbowl for the first time ever. Was there an increase in births 9 months later?",
+        causeX: 20,
+        causeY: -20,
+        causedX: 0,
+        causedY: 0,
+        resultTitle: "Superbowl Babies?",
+        resultlabel: "Probably not. The number of babies in Seattle 9 months later was just about average for the mid-fall.",
+        resultdX: -.005,
+        resultdY: 150,
       }
 
     ];
@@ -389,7 +424,6 @@ function ready(error,
         return { Title:nest };
       })
       .entries(events)
-
 
     //////////////////////////////////////////////////////////////////////
     //////////////////////////  COUNTY NAMES  ////////////////////////////
@@ -579,6 +613,81 @@ function ready(error,
                     .tickSizeInner(0)
                     .tickPadding(6)
                     .tickSize(0, 0));
+
+    //////////////////////////////////////////////////////////////////////
+    ////////////////////////// EVENT ANNOTATIONS /////////////////////////
+    //////////////////////////////////////////////////////////////////////
+
+    var eventAnnotationCause = function(title, label, x, y, dy, dx){  
+      const type = d3.annotationCustomType(
+        d3.annotationCallout, 
+        {"className":"custom",
+          "note":{"lineType":"vertical"}})
+      
+
+      const annotations = [
+        {
+          note: {
+            label: label,
+            title: title,
+          },
+          x: x,
+          y: y,
+          dy: dy,
+          dx: dx
+        }]
+
+        const makeAnnotations = d3.annotation()
+          .textWrap(250)
+          .notePadding(15)
+          .type(type)
+          .annotations(annotations)
+
+        svg.append("g")
+          .attr("class", "annotation-group")
+          .call(makeAnnotations)
+
+    }
+          
+
+    var eventAnnotationResult = function(title, label, month, births, dx, dy){
+
+        var type = d3.annotationCustomType(
+          d3.annotationCallout,
+          {"className":"custom",
+          "note":{"lineType":"vertical"}})
+
+        var annotations = [
+        {
+          note:{
+            label: label,
+            title: title
+          },
+          data: { month: month, Births: births},
+          dy: dy,
+          dx: dx
+        }]
+
+        var makeAnnotations = d3.annotation()
+          //.editMode(true)
+          .textWrap(225)
+          .notePadding(15)
+          .type(type)
+          .accessors({
+            x: d => x(parseTimeMonth(d.month)),
+            y: d => y(d.Births)
+          })
+          .accessorsInverse({
+            month: d => parseMonth(x.invert(d.x)),
+            Births: d => y.invert(d.y)
+          })
+          .annotations(annotations)
+
+          svg.append("g")
+            .attr("class", "annotation-group")
+            .call(makeAnnotations)
+
+  }
 
 
       //////////////////////////////////////////////////////////////////////
@@ -982,7 +1091,7 @@ function ready(error,
           //multiCounty(nested, 25025, 2005);
           //bandCounty(nestACounties, 6037)
 
-          multiState(nestMStates, "Maine")
+          //multiState(nestMStates, "Maine")
           bandState(nestAStates, "Maine")
 
           ///////////////////////////  STATE CHANGE  //////////////////////////
@@ -1114,9 +1223,46 @@ function ready(error,
 
               var selectedGradient = d3.selectAll(".selected")
                   .classed("selected-event", true)
+
+              // pull variables needed for annotations
+
+              var selectedCauseTitle = eventMap.get(selected).causeTitle
+
+              var selectedCauseLabel = eventMap.get(selected).causelabel
+
+              var selectedX = eventMap.get(selected).causeX
+
+              var selectedY = eventMap.get(selected).causeY
+
+              var selecteddX = eventMap.get(selected).causedX
+
+              var selecteddY = eventMap.get(selected).causedY
+
+              eventAnnotationCause(selectedCauseTitle, selectedCauseLabel, selectedX, selectedY, selecteddX, selecteddY)
                   
+              var selectedResultitle = eventMap.get(selected).resultTitle
+
+              var selectedResultLabel = eventMap.get(selected).resultlabel
+
+              var selectedRdX = eventMap.get(selected).resultdX
+
+              var selectedRdY = eventMap.get(selected).resultdY
+
+              var selectedRMonth = eventMonthMap.get(selectedMonths[0]).month
+
+              var selectedRBirths = eventMonthMap.get(selectedMonths[0]).Births
+
+              eventAnnotationResult(selectedResultitle, selectedResultLabel, selectedRMonth, selectedRBirths, selectedRdX, selectedRdY)
+
+console.log(selectedRdY)
+
           });
 
+          
+
+
+  //eventAnnotationCause("World Series Win", "testing label", 50, 10)
+  //eventAnnotationResult("Red Sox Babies?", "testing label", "jun", 1100, 0, 50)
 
     //////////////////////////////////////////////////////////////////////
     //////////////////////////  SCROLLYTELLING  //////////////////////////

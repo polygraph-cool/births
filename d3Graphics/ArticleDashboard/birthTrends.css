@@ -310,6 +310,41 @@ body {
   opacity: 0;
 }
 
+: root {
+  --annotation-color: #EF445B;
+}
+
+.annotation path {
+  stroke: #EF445B;
+  stroke-width: 4px;
+  fill: none;
+}
+
+
+
+.annotation text {
+  fill: #999999;
+  font-family: 'Atlas Grotesk Web';
+  font-weight: 100;
+  font-size: 0.8em;
+}
+
+.annotation-note .annotation-note-title, text.title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  fill: #EF445B;
+  font-family: 'Publico Text Web';
+}
+
+
+
+
+.annotation-note-bg {
+  fill: #FFFFFF;
+}
+
+
+
 
 
 /*//////////////////////////////////////////*/
