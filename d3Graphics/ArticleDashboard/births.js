@@ -348,7 +348,7 @@ function ready(error,
         months: ["Jul", "Aug"],
         title: "Red Sox World Series Win",
         state: "Massachusetts",
-        county: "Suffolk"
+        county: 25025
       },
       {
         type: "storms",
@@ -356,7 +356,7 @@ function ready(error,
         months: ["Jul", "Aug"],
         title: "Hurricane Sandy",
         state: "New York",
-        county: "Suffolk"
+        county: 36103
       },
       {
         type: "storms",
@@ -364,7 +364,7 @@ function ready(error,
         months: ["May", "Jun"],
         title: "Hurricane Katrina",
         state: "Louisiana",
-        county: "Orleans"
+        county: 22071
       },
       {
         type: "sports",
@@ -372,7 +372,7 @@ function ready(error,
         months: ["Oct", "Nov"],
         title: "Seahawks Superbowl Win",
         state: "Washington",
-        county: "King",
+        county: 53033,
       }
 
     ];
@@ -1071,19 +1071,17 @@ function ready(error,
                   .select("select")
                   .property("value")
 
-              var selectedState = eventMap.get(selected).state;
-
+              // Determine the county of the selected event
               var selectedEvent = eventMap.get(selected).county
 
-              var selectedCode = countyNameMap.get(selectedEvent).County
-
+              // Determine the year of the selected event's births
               var selectedYear = eventMap.get(selected).year
 
+              // Determine the months of the selected event's births
               var selectedMonths = eventMap.get(selected).months
 
               ////////////  RUNNING UPDATE MULTI FUNCTION  /////////// 
-              multiCounty(nested, selectedCode, selectedYear)
-
+              multiCounty(nested, selectedEvent, selectedYear)
 
               var selectedLine = d3.selectAll(".selected")
 
