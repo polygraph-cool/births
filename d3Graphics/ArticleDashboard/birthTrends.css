@@ -281,6 +281,12 @@ body {
   transition: 0.5s;
 }
 
+.selected-event {
+  fill: none;
+  stroke: url(#linear-gradient);
+  stroke-width: 4px;
+}
+
 .axis {
   font-family: 'Publico Text Web';
   font-size: 0.7rem;

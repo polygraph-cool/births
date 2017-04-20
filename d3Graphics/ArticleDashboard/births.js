@@ -20,6 +20,8 @@
       parseMonth = d3.timeFormat("%b");
     var parseTimeMonth = d3.timeParse("%b");
     var parseMonthOnly = d3.timeParse("%m")
+    var parseMonthNum = d3.timeFormat("%m")
+
 
 
     // set the ranges
@@ -56,6 +58,60 @@
               "translate(" + margin.left + "," + margin.top + ")")
         .attr("class", "svg");
 
+    // Gradient (for event styling later)
+    // Idea and code from Nadieh Bremer (https://www.visualcinnamon.com/2016/05/smooth-color-legend-d3-svg-gradient.html)
+    //Append a defs (for definition) element to your SVG
+    var defs = svg.append("defs");
+
+    //Append a linearGradient element to the defs and give it a unique id
+    var linearGradient = defs.append("linearGradient")
+        .attr("id", "linear-gradient")
+        .attr("x1", "0%")
+        .attr("y1", "0%")
+        .attr("x2", "100%")
+        .attr("y2", "0%");
+
+    var gradientUpdate = function(months){
+
+        svg.selectAll(".left").remove();
+        svg.selectAll(".right").remove();
+
+        var percent = d3.format(",%")
+
+        var p1 = months[0]
+        var p1N = parseMonthNum(parseTimeMonth(p1))
+        var p1P = percent((p1N-1)/11)
+
+        var p2 = months[1]
+        var p2N = parseMonthNum(parseTimeMonth(p2))
+        var p2P = percent((p2N-1)/11)
+
+        linearGradient.append("stop")
+            .attr("class", "left")
+            .attr("offset", p1P)
+            .attr("stop-color", "#7D93CA")
+
+        linearGradient.append("stop")
+            .attr("class", "left")
+            .attr("offset", p1P)
+            .attr("stop-color", "#EF445B")
+
+        linearGradient.append("stop")
+            .attr("class", "right")
+            .attr("offset", p2P)
+            .attr("stop-color", "#EF445B")
+
+        linearGradient.append("stop")
+            .attr("class", "right")
+            .attr("offset", p2P)
+            .attr("stop-color", "#7D93CA")
+
+            console.log("I ran!")
+        }
+
+        console.log(linearGradient)
+
+
     //////////////////////////////////////////////////////////////////////
     ////////////////////////////  RESPONSIVE  ////////////////////////////
     //////////////////////////////////////////////////////////////////////
@@ -74,7 +130,6 @@
 
       //class to make it responsive
         .classed("svg-content-responsive", true);
-
 
 
 
@@ -335,8 +390,6 @@ function ready(error,
       })
       .entries(events)
 
-    console.log(events)
-    console.log(eventNest)
 
     //////////////////////////////////////////////////////////////////////
     //////////////////////////  COUNTY NAMES  ////////////////////////////
@@ -390,8 +443,6 @@ function ready(error,
               var selectedStateG = nestedStates.filter(function(d){
                   return d.key === selectedState;
               }); 
-
-              console.log(selectedStateG)
 
               var selectedCounties = selectedStateG.map(function(d){
                 return d.value.Counties;
@@ -497,6 +548,8 @@ function ready(error,
                 var stormsIcon = d3.select("#icon-storms")
                   .on('click', function(){
                      eventSelection("storms");
+                      d3.select(this)
+                        .classed(".current", true)
                   });
 
                 var sportsIcon = d3.select("#icon-sports")
@@ -553,7 +606,6 @@ function ready(error,
                         y.domain(d.value.extent)
                       });
 
-                      console.log(pickedCountyEnter)
               var Paths = pickedCountyEnter.selectAll("path")
                       .data(function(d) {
                         return (d.value.years);
@@ -596,8 +648,6 @@ function ready(error,
                   .property("selected", function(d){
                     return +d.key === +year;
                   })
-
-                  console.log(yearSel)
 
 
                ////////////  UPDATE X AXIS  ///////////
@@ -819,11 +869,8 @@ function ready(error,
                 // Print which state has been selected (for updating county dropdown)
                 selectedState = Slist.select("select").property("value")
 
-                console.log(selectedState)
-
                 // Print which county has been selected (for updating county dropdown)
                 selectedCounty = countyMap.get(selectACounty[0].key).County;
-                console.log(selectedCounty)
 
                 // Update county dropdown
                 updateCountyDrop(selectedCounty);
@@ -948,10 +995,7 @@ function ready(error,
                 // Print which state has been selected (for updating county dropdown)
                 selectedState = Slist.select("select").property("value")
 
-                console.log(selectedState)
-
                 svg.selectAll(".area").remove();
-
 
                 ////////////  RUNNING UPDATE MULTI FUNCTION  ///////////  
                 multiState(nestMStates, selectedState);
@@ -1027,6 +1071,8 @@ function ready(error,
                   .select("select")
                   .property("value")
 
+              var selectedState = eventMap.get(selected).state;
+
               var selectedEvent = eventMap.get(selected).county
 
               var selectedCode = countyNameMap.get(selectedEvent).County
@@ -1034,26 +1080,25 @@ function ready(error,
               var selectedYear = eventMap.get(selected).year
 
               var selectedMonths = eventMap.get(selected).months
-              console.log(selectedMonths)
 
               ////////////  RUNNING UPDATE MULTI FUNCTION  /////////// 
               multiCounty(nested, selectedCode, selectedYear)
+
 
               var selectedLine = d3.selectAll(".selected")
 
               var selectedLineData = selectedLine._groups[0][0].__data__.values
 
-              console.log(selectedLineData)
-
+              // Create a map based on selected line data
               var eventMonthMap = d3.map(selectedLineData, function(d){
                 return d.month;
               })
 
+              // Generate array of data for only the two months necessary
               var selectedMonthsArray = [eventMonthMap.get(selectedMonths[0]), eventMonthMap.get(selectedMonths[1])]
 
-              
-
-              svg.append("g").selectAll("circle")
+              // Add circles to lines
+              var circle = svg.append("g").selectAll("circle")
                 .data(selectedMonthsArray, function(d){ return d.values; })
                 .enter()
                 .append("circle")
@@ -1064,21 +1109,13 @@ function ready(error,
                 .attr("stroke", "#FFFFFF")
                 .attr("stroke-width", 3)
 
+              circle.exit().remove();
 
-              /*var circle = svg.selectAll("circle")
-                    .data(selectedMonthsArray, function(d) { return d; });
+              // update gradient for line
+              gradientUpdate(selectedMonths);
 
-                    console.log(circle)
-                circle.exit().remove();
-
-                circle.enter().append("circle")
-                    .attr("cy", function(d) { return +d.Births; })
-                    .attr("cx", function(d){return parseMonth(d.month)})
-                    .attr("r", 20)
-                    .attr("fill", "red");*/
-
-                
-
+              var selectedGradient = d3.selectAll(".selected")
+                  .classed("selected-event", true)
                   
           });
 
@@ -1091,7 +1128,7 @@ function ready(error,
       				// triggerElement: ".third-chart-wrapper",
       				triggerElement: "#container",
       				triggerHook:0,
-      				offset: -300,
+      				offset: -100,
       				duration:600
       			})
       			.addIndicators({name: "pin chart"}) // add indicators (requires plugin)
