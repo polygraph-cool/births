@@ -129,6 +129,14 @@
         .classed("svg-content-responsive", true);
 
 
+    //////////////////////////////////////////////////////////////////////
+    ////////////////////////////  TRANSITIONS ////////////////////////////
+    //////////////////////////////////////////////////////////////////////
+
+    var eachMulti = d3.transition()
+        .delay(function(d, i) { return i * 500; })
+        .duration(750)
+
 
     //////////////////////////////////////////////////////////////////////
     ////////////////////////////  DATA IMPORT ////////////////////////////
@@ -408,6 +416,25 @@ function ready(error,
         resultlabel: "Probably not. The number of babies in Seattle 9 months later was just about average for the mid-fall.",
         resultdX: -.005,
         resultdY: 150,
+      },
+      {
+        type: "storms",
+        year: 1996,
+        months: ["Oct", "Nov"],
+        title: "Blizzard of 1996",
+        state: "Pennsylvania",
+        county: 42101,
+        causeTitle: "Blizzard",
+        causelabel: "In 1996, Philadelphia was buried in nearly 30 inches of snow in less than 24 hours. Did they welcome an increase in children 9 months later?",
+        causeX: 20,
+        causeY: -20,
+        causedX: 0,
+        causedY: 0,
+        resultTitle: "Blizzard Babies?",
+        resultlabel: "Probably not. The number of newborns seems to be about typical for early fall",
+        resultdX: -.005,
+        resultdY: 60,
+
       }
 
     ];
@@ -694,7 +721,7 @@ function ready(error,
       ///////////////////// MULTI LINE COUNTY FUNCTION /////////////////////
       //////////////////////////////////////////////////////////////////////
 
-          var multiCounty = function(data, countyCode, year){
+          var multiCounty = function(data, countyCode, year, transition){
 
 
               var county = data.filter(function(d){
@@ -723,16 +750,16 @@ function ready(error,
 
               var PathsEnter = Paths.enter()
                       .append("path")
-                      .attr("d",function(d){
-                        return valueLine(d.values);
-                      })
-                      .attr("class", "line");
+                      .attr("d", function(d) { return valueLine(d.values)})
+                      .attr("class", "line")
+
 
                 var initialLine = svg.selectAll(".line")
                     .filter(function(d){
                       return +d.key === +year;
                     })
                     .classed("selected", true)
+
 
                 // Reset the State dropdown based on the state of selected county
                 var stateDrop = Slist.selectAll("option")
@@ -1141,7 +1168,7 @@ function ready(error,
               multiCounty(nested, selected, selectedYear)
 
               /////////// RUNNING UPDATE BAND FUNCTION /////////
-              bandCounty(nestACounties, selected)
+              //bandCounty(nestACounties, selected)
                   
           });
 
@@ -1254,15 +1281,8 @@ function ready(error,
 
               eventAnnotationResult(selectedResultitle, selectedResultLabel, selectedRMonth, selectedRBirths, selectedRdX, selectedRdY)
 
-console.log(selectedRdY)
-
           });
 
-          
-
-
-  //eventAnnotationCause("World Series Win", "testing label", 50, 10)
-  //eventAnnotationResult("Red Sox Babies?", "testing label", "jun", 1100, 0, 50)
 
     //////////////////////////////////////////////////////////////////////
     //////////////////////////  SCROLLYTELLING  //////////////////////////
