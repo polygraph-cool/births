@@ -17,7 +17,7 @@
 <div class="intro-section">
   <p class="intro-prose">Next time you find yourself in a large group of people looking for a fun parlor trick, try betting that two people in the room share the same birthday. If you're simply looking for a month/day match between two people, some <a href="https://en.wikipedia.org/wiki/Birthday_problem">math sorcery</a> suggests you've got a 50% chance of finding one in a group of 23 people. If you hang out with larger crowds, say 70 people or so, you've got a 99.9% chance of two people sharing a birthday. 
   </p>
-  <p class="intro-prose">Now, of course, this is an estimate based on probability, but it's likely that your chances of finding a match are even better than expected. You see, this estimate assumes that people are just as likely to be born on any day of the year. But, if you have ever jumped from one birthday party to another in August only to find your social calendar suspiciously empty in February, you probably already know that that's not the case. 
+  <p class="intro-prose">Now, of course, this is an estimate based on probability, but it's likely that your chances of finding a match are slightly better than expected. You see, this estimate assumes that people are just as likely to be born on any day of the year. But, if you have ever jumped from one birthday party to another in August only to find your social calendar suspiciously empty in February, you probably already know that that's not the case. 
   </p>
   <p class="intro-prose">In the United States, the highest number of babies are born in July through September, and the fewest are born in January. The internet is filled with hypotheses as to why this is the case and, understandably, most of them revolve around conditions that may impact conception. Evolutionary biology, SuperBowl wins, terrorist activity, large storms, people don't like having sex when it's too hot...the list of potential culprits goes on and on. This piqued our curiosity so we decided to analyze the trends in birth timing for over 31 million babies.
   </p>
@@ -50,9 +50,14 @@
         </div>
     </div><!--
 
+   --><div id = "toggleouter">
+      <p class = "dd-title data">View</p>
+        <div id = "toggle", class = "toggle">
+        </div>
+    </div><!--
 
    --><div id = "dropdown-c">
-      <p class = "dd-title year">Year</p>
+     <!-- <p class = "dd-title year">Year</p>-->
         <div id = "year", class = "dd">
           <div class="select__arrow short"></div>
         </div>
@@ -64,18 +69,53 @@
   <div id="icons">
     <p class = "dd-title events">Events</p>
     <div id="icon-a">
-      <svg width="36" height="36" viewBox="0 0 36 36">
+      <svg width="32" height="32" viewBox="0 0 36 36">
         <g id="icon-storms">
           <path d="M12.5,22C6.8,24.3,4,19.8,4,17c0-2.8,2.3-5.1,5.1-5.1c0.4,0,0.7,0,1,0.1c0-0.1,0-0.2,0-0.3
             c0-4.2,3.4-7.6,7.6-7.6c3.3,0,6.1,2.1,7.2,5C25.3,9.1,25.6,9,26,9c3.3,0,5.9,2.7,5.9,5.9c0,3.3-3.2,8.3-9.3,5.9"/>
           <polygon points="19,15.9 15.2,23.8 19,23.9 17.1,31.9 20.7,22 17.3,22.4"/>
         </g>
       </svg>
-
     </div>
+
     <div id="icon-b">
-        <svg width="36" height="36" viewBox="0 0 36 36">
-          <g id="icon-sports">
+      <svg width="32" height="32" viewBox="0 0 36 36">
+        <g id="icon-hurricane">
+          <path d="M28.324,17.363 C29.05,22.905,25.21,33.321,3.413,31.57c-2.786-0.224,9.505-2.606,7.635-4.477c-3.134-3.133-3.714-6.959-3.354-9.73 C8.49,11.257,15.285,1.599,32.8,4.907c1.63,0.309-7.253,0.973-7.253,3.698S27.623,12.007,28.324,17.363z"/>
+    <circle cx="17.994" cy="18.013" r="2.883"/>
+        </g>
+      </svg>
+    </div>
+
+    <div id="icon-c">
+      <svg width="32" height="32" viewBox="0 0 36 36">
+        <g id="icon-snow">
+          <line x1="17.818" y1="16.595" x2="17.82" y2="5.912"/>
+          <polyline points="22.411,7.591 17.851,12.15 13.292,7.591   "/>
+          <circle cx="17.82" cy="4.456" r="1.456"/>
+          <line x1="16.019" y1="17.644" x2="6.559" y2="12.184"/>
+          <polyline points="10.309,9.047 11.978,15.275 5.75,16.945   "/>
+          <circle cx="5.298" cy="11.456" r="1.456"/>
+          <line x1="16.11" y1="19.834" x2="6.25" y2="25.525"/>
+          <polyline points="5.408,20.709 11.637,22.378 9.969,28.606  "/>
+          <circle cx="4.989" cy="26.253" r="1.456"/>
+          <line x1="17.851" y1="20.736" x2="17.851" y2="30.088"/>
+          <polyline points="13.259,28.41 17.819,23.849 22.379,28.408   "/>
+          <circle cx="17.851" cy="31.544" r="1.456"/>
+          <line x1="19.632" y1="19.655" x2="29.75" y2="25.497"/>
+          <polyline points="26,28.634 24.331,22.405 30.558,20.735   "/>
+          <path d="M30.281,27.486 c-0.694-0.403-0.933-1.293-0.532-1.99c0.403-0.696,1.293-0.935,1.988-0.533c0.699,0.402,0.937,1.292,0.534,1.989 C31.87,27.648,30.979,27.888,30.281,27.486z"/>
+          <line x1="19.705" y1="17.829" x2="29.479" y2="12.184"/>
+          <polyline points="30.321,17 24.092,15.331 25.76,9.103   "/>
+          <circle cx="30.74" cy="11.457" r="1.456"/>
+          <path d="M19.89,18.666 c0,0.356-0.093,0.699-0.258,0.989c-0.343,0.633-1.016,1.068-1.781,1.081h-0.033c-0.706,0-1.333-0.356-1.708-0.902 c-0.23-0.33-0.363-0.739-0.363-1.168c0-0.369,0.099-0.719,0.271-1.022c0.355-0.627,1.028-1.049,1.8-1.049 c0.845,0,1.569,0.508,1.886,1.234C19.823,18.085,19.89,18.369,19.89,18.666z"/>
+        </g>
+      </svg>
+    </div>
+
+    <div id="icon-d">
+        <svg width="32" height="32" viewBox="0 0 36 36">
+          <g id="icon-football">
               <path d="M29.9,6c2.4,2.4,1.7,12.8-4.7,19.2c-6.3,6.4-16.7,7.3-19.1,4.9c-2.4-2.4-1.8-12.6,4.7-19.2
                 C17.3,4.3,27.5,3.6,29.9,6z"/>
               <line x1="5.5" y1="20.4" x2="15.8" y2="30.5"/>
@@ -86,16 +126,17 @@
               <line x1="19.5" y1="13.6" x2="22.7" y2="16.8"/>
           </g>
         </svg>
-
     </div>
-    <div id="icon-c">
-        <svg width="36" height="36" viewBox="0 0 36 36">
-          <g id="icon-terrorism">
-            <polyline points="1.9,31.8 5.9,28.9 0,24.6 7.8,22.9 5.8,12.7 13.2,16.8 19.5,4.2 21.5,18 26.9,14.8 26.9,21.4
-              36,22.4 28.6,28.5 30.6,31.8"/>
-            <polyline points="10.4,31.8 12.4,29.8 10.4,26.1 12.4,26.1 11.4,21.2 16.1,23.1 18,18 18.7,24.9 22.3,22.9 22.3,26.1
 
-              24.5,26.3 22.6,28.5 25.6,31.8"/>
+    <div id="icon-e">
+        <svg width="32" height="32" viewBox="0 0 36 36">
+          <g id="icon-baseball">
+            <path d="M29.95,14.364 c-1.017-3.339-3.409-6.241-6.847-7.778c-3.299-1.475-6.891-1.392-9.975-0.086"/>
+            <path d="M6.182,22.037 c1.083,3.169,3.417,5.902,6.715,7.376c3.438,1.537,7.195,1.385,10.363-0.084"/>
+            <path d="M13.128,6.5 c-2.81,1.189-5.199,3.392-6.542,6.397c-1.343,3.005-1.392,6.254-0.404,9.14"/>
+            <path d="M23.26,29.329 c2.641-1.224,4.873-3.361,6.154-6.227c1.281-2.866,1.385-5.954,0.536-8.738"/>
+            <path stroke-dasharray="0.886" d="M6.182,22.037 c3.644,0.161,7.184-1.872,8.763-5.403c1.578-3.532,0.733-7.525-1.816-10.133"/>
+            <path stroke-dasharray="0.886" d="M22.794,29.465 c-2.549-2.609-3.395-6.603-1.816-10.133c1.579-3.532,5.119-5.565,8.763-5.405"/>
           </g>
         </svg>
     </div>

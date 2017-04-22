@@ -113,7 +113,7 @@
     ////////////////////////////  RESPONSIVE  ////////////////////////////
     //////////////////////////////////////////////////////////////////////
 
-    // make chart responsive
+    /*// make chart responsive
     d3.select("#graph")
         .append("div")
         .classed("svg-container", true) //container class to make it responsive
@@ -126,7 +126,7 @@
         })
 
       //class to make it responsive
-        .classed("svg-content-responsive", true);
+        .classed("svg-content-responsive", true);*/
 
 
     //////////////////////////////////////////////////////////////////////
@@ -352,7 +352,7 @@ function ready(error,
         title: "Red Sox World Series Win",
         state: "Massachusetts",
         county: 25025,
-        causeTitle: "World Series Win",
+        causeTitle: "Red Sox World Series Win",
         causelabel: "In October 2004, the Boston Red Sox won the World Series for the first time since 1918. Did fans' celebrations result in an increase in babies 9 months later?",
         causeX: 50,
         causeY: -20,
@@ -406,8 +406,8 @@ function ready(error,
         title: "Seahawks Superbowl Win",
         state: "Washington",
         county: 53033,
-        causeTitle: "Superbowl Win",
-        causelabel: "In 2013, the Seattle Seahawks won the Superbowl for the first time ever. Was there an increase in births 9 months later?",
+        causeTitle: "Seahawks Superbowl Win",
+        causelabel: "In 2013, the Seattle Seahawks won the Superbowl for the first time ever. Did celebrations cause more babies?",
         causeX: 20,
         causeY: -20,
         causedX: 0,
@@ -424,7 +424,7 @@ function ready(error,
         title: "Blizzard of 1996",
         state: "Pennsylvania",
         county: 42101,
-        causeTitle: "Blizzard",
+        causeTitle: "Blizzard of 1996",
         causelabel: "In 1996, Philadelphia was buried in nearly 30 inches of snow in less than 24 hours. Did they welcome an increase in children 9 months later?",
         causeX: 20,
         causeY: -20,
@@ -439,7 +439,7 @@ function ready(error,
 
     ];
 
-    var eventNest = d3.nest()
+   /* var eventNest = d3.nest()
       .key(function(d){
         return d.type
       })
@@ -451,7 +451,7 @@ function ready(error,
         return { Title:nest };
       })
       .entries(events)
-
+*/
     //////////////////////////////////////////////////////////////////////
     //////////////////////////  COUNTY NAMES  ////////////////////////////
     //////////////////////////////////////////////////////////////////////
@@ -541,13 +541,27 @@ function ready(error,
               ClistG = Clist; 
               
           }
+    //////////////////////////////////////////////////////////////////////
+    /////////////////////////  DATA VIEW TOGGLE  /////////////////////////
+    //////////////////////////////////////////////////////////////////////
+
+    var dataviewAvg = d3.select("#toggle.toggle")
+      dataviewAvg.append("button")
+      .text("Average")
+      .attr("class", "toggle average")
+
+    var dataviewYear = d3.select("#toggle.toggle")
+      dataviewYear.append("button")
+      .text("Annual")
+      .attr("class", "toggle year")
+
 
 
     //////////////////////////////////////////////////////////////////////
     //////////////////////////  YEAR DROPDOWN  ///////////////////////////
     //////////////////////////////////////////////////////////////////////
 
-        // Create dropdown 2 (year)
+        // Create dropdown (year)
         var yList = d3.select("#year")
         yList.append("select").selectAll("option")
             .data(nested2)
@@ -560,63 +574,10 @@ function ready(error,
             })
             .property("selected", function(d){ return d.key === "2015"; })
 
-    //////////////////////////////////////////////////////////////////////
-    //////////////////////////  EVENT DROPDOWN  //////////////////////////
-    //////////////////////////////////////////////////////////////////////
+            // By default, this list is hidden, and appears when "Annual" Data view is clicked
+            d3.select("#dropdown-c").classed("hiddendd", true)
 
-                  var eListG = null;
 
-                  // Defining an event selection function to be applied
-                  // to all event icons
-                  var eventSelection = function(eventType){
-                      var eList = d3.select("#icon-dropdown")
-
-                      var stormsOnly = eventNest.filter(function(d){
-                        return d.key === eventType;
-                      }) 
-
-                      var selectedStorms = stormsOnly.map(function(d){
-                        return d.value.Title;
-                      })
-
-                      var selectedStorms2 = selectedStorms[0].map(function(d){
-                        return d.key;
-                      })
-
-                      var eSelection = eList.selectAll("select");
-                        if (eSelection.empty()){
-                          eSelection = eList.append("select")
-                        }
-
-                      eSelection = eSelection.selectAll("option")
-                          .data(selectedStorms2, function(d){
-                            return d;
-                          })
-
-                      eSelection.exit().remove();
-
-                      eSelection.enter().append("option")
-                          .attr("value", function(d){
-                            return d;
-                          })
-                          .text(function(d){
-                            return d;
-                          })
-
-                      eListG = eList;
-                    }
-
-                var stormsIcon = d3.select("#icon-storms")
-                  .on('click', function(){
-                     eventSelection("storms");
-                      d3.select(this)
-                        .classed(".current", true)
-                  });
-
-                var sportsIcon = d3.select("#icon-sports")
-                  .on('click', function(){
-                    eventSelection("sports");
-                  });
   
     //////////////////////////////////////////////////////////////////////
     //////////////////////////////  AXES  ////////////////////////////////
@@ -1030,6 +991,7 @@ function ready(error,
 
             var bandState = function(data, stateName){
 
+
             ////////////  DATA JOIN FOR MEDIAN  ///////////
     
             // Filter data to only include selected State
@@ -1118,8 +1080,11 @@ function ready(error,
           //multiCounty(nested, 25025, 2005);
           //bandCounty(nestACounties, 6037)
 
-          //multiState(nestMStates, "Maine")
+          multiState(nestMStates, "Maine")
           bandState(nestAStates, "Maine")
+          d3.selectAll(".line").classed("hidden", true)
+          d3.select(".toggle.average").classed("active", true)
+          d3.select(".toggle.year").classed("active", false)
 
           ///////////////////////////  STATE CHANGE  //////////////////////////
 
@@ -1131,17 +1096,26 @@ function ready(error,
                 // Print which state has been selected (for updating county dropdown)
                 selectedState = Slist.select("select").property("value")
 
-                svg.selectAll(".area").remove();
-
-                ////////////  RUNNING UPDATE MULTI FUNCTION  ///////////  
-                multiState(nestMStates, selectedState);
+  
 
                 /////////// RUNNING UPDATE BAND FUNCTION /////////
                 bandState(nestAStates, selectedState);
 
+                ////////////  RUNNING UPDATE MULTI FUNCTION  ///////////  
+                multiState(nestMStates, selectedState);
+
+                if(d3.selectAll(".toggle.average").classed("active") == true){
+                    d3.selectAll(".line").classed("hidden", true)
+                    d3.selectAll(".area").classed("hidden", false)
+                    d3.selectAll(".line2").classed("hidden", false)
+                } else {
+                    d3.selectAll(".area").classed("hidden", true);
+                    d3.selectAll(".line2").classed("hidden", true);
+                    d3.selectAll(".line").classed("hidden", false)
+                }
+
                 // Update county dropdown
                 updateCountyDrop();
-
           });
 
 
@@ -1155,10 +1129,6 @@ function ready(error,
               selectedYear = yList.select("select").property("value")
 
 
-              svg.selectAll(".line2").remove()
-              svg.selectAll(".area").remove()
-
-
               // Determine which county was selected from dropdown
               var selected = d3.select(this)
                   .select("select")
@@ -1168,9 +1138,59 @@ function ready(error,
               multiCounty(nested, selected, selectedYear)
 
               /////////// RUNNING UPDATE BAND FUNCTION /////////
-              //bandCounty(nestACounties, selected)
+              bandCounty(nestACounties, selected)
+
+                if(d3.selectAll(".toggle.average").classed("active") == true){
+                    d3.selectAll(".line").classed("hidden", true)
+                    d3.selectAll(".area").classed("hidden", false)
+                    d3.selectAll(".line2").classed("hidden", false)
+                    
+
+                } else {
+                    d3.selectAll(".area").classed("hidden", true);
+                    d3.selectAll(".line2").classed("hidden", true);
+                    d3.selectAll(".line").classed("hidden", false)
+
+                }
                   
           });
+
+
+        ///////////////////////  AVERAGE TOGGLE CHANGE  /////////////////////
+
+        d3.selectAll(".toggle.average")
+          .on('click', function(){
+
+            d3.select("#dropdown-c").classed("hiddendd", true)
+
+          d3.selectAll(".toggle.average").classed("active", true)
+          d3.selectAll(".toggle.year").classed("active", false)
+
+          d3.selectAll(".line").classed("hidden", true)
+          d3.selectAll(".area").classed("hidden", false)
+          d3.selectAll(".line2").classed("hidden", false)
+
+        })
+
+
+        ///////////////////////  YEARLY TOGGLE CHANGE  /////////////////////
+
+        d3.selectAll(".toggle.year")
+          .on('click', function(){
+
+          d3.select("#dropdown-c").classed("hiddendd", false)
+
+          d3.selectAll(".toggle.average").classed("active", false)
+          d3.selectAll(".toggle.year").classed("active", true)
+
+          d3.selectAll(".area").classed("hidden", true)
+          d3.selectAll(".line2").classed("hidden", true)
+          d3.selectAll(".line").classed("hidden", false)
+
+
+        })
+
+
 
 
         ///////////////////////////  YEAR CHANGE  //////////////////////////
@@ -1196,25 +1216,37 @@ function ready(error,
 
         ///////////////////////////  EVENT CHANGE  //////////////////////////
                   
-          d3.selectAll("#icon-dropdown")
-            .on('change', function(){
+
+            var eventDisplay = function(eventName){
 
               // Remove any banded graphics that may still be present
               svg.selectAll(".area").remove();
 
               // Determine which event was selected from dropdown
-              var selected = d3.select(this)
-                  .select("select")
-                  .property("value")
+              var selected = eventName
+
+              console.log(selected)
 
               // Determine the county of the selected event
-              var selectedEvent = eventMap.get(selected).county
+              var selectedEvent = eventMap.get(eventName).county
+
+              console.log(selectedEvent)
 
               // Determine the year of the selected event's births
               var selectedYear = eventMap.get(selected).year
 
               // Determine the months of the selected event's births
               var selectedMonths = eventMap.get(selected).months
+
+              // Unhide year list
+              d3.select("#dropdown-c").classed("hiddendd", false)
+
+
+              ////////////  RUNNING UPDATE BAND FUNCTION  /////////// 
+              bandCounty(nestACounties, selectedEvent)
+              // and hiding the new elements (in case people toggle the data view)
+              d3.selectAll(".area").classed("hidden", true)
+              d3.selectAll(".line2").classed("hidden", true)
 
               ////////////  RUNNING UPDATE MULTI FUNCTION  /////////// 
               multiCounty(nested, selectedEvent, selectedYear)
@@ -1281,7 +1313,40 @@ function ready(error,
 
               eventAnnotationResult(selectedResultitle, selectedResultLabel, selectedRMonth, selectedRBirths, selectedRdX, selectedRdY)
 
-          });
+              d3.select(".toggle.year").classed("active", true)
+              d3.select(".toggle.average").classed("active", false)
+        }
+
+
+        d3.select("#icon-storms")
+          .on("click", function(){
+            eventDisplay("Hurricane Sandy");
+            d3.selectAll("icons")
+              .classed("selected", false)
+            d3.select("#icon-a")
+              .classed("selected", true)
+          })
+
+        d3.select("#icon-hurricane")
+          .on("click", function(){
+            eventDisplay("Hurricane Katrina")
+          })
+
+        d3.select("#icon-snow")
+          .on("click", function(){
+            eventDisplay("Blizzard of 1996")
+          })
+
+        d3.select("#icon-football")
+          .on("click", function(){
+            eventDisplay("Seahawks Superbowl Win")
+          })
+
+        d3.select("#icon-baseball")
+          .on("click", function(){
+            eventDisplay("Red Sox World Series Win")
+          })
+
 
 
     //////////////////////////////////////////////////////////////////////
@@ -1330,13 +1395,21 @@ function ready(error,
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
             }
             else{
+                multiState(nestMStates, "Florida")
                 bandState(nestAStates, "Florida")
+                d3.selectAll(".line").classed("hidden", true)
+                d3.select(".toggle.average").classed("active", true)
+                d3.select(".toggle.year").classed("active", false)
 
             }
           })
           .on("leave",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
+                multiState(nestMStates, "Maine")
                 bandState(nestAStates, "Maine");
+                d3.selectAll(".line").classed("hidden", true)
+                d3.select(".toggle.average").classed("active", true)
+                d3.select(".toggle.year").classed("active", false)
             }
             else{
             }

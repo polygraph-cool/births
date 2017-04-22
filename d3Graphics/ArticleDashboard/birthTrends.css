@@ -33,7 +33,7 @@ body {
 
 
 #graph {
-  height: 800px;
+  height: 540px;
   width: 850px;
   position: relative;
   flex-grow: 1;
@@ -51,7 +51,7 @@ body {
 
 
 #dropdowns {
-  width: 600px;
+  width: 800px;
   height: 100px;
   position: absolute;
   top: 0;
@@ -61,7 +61,14 @@ body {
 
 #dropdown-a, #dropdown-b {
   display: inline-block;
-  width: 215px;
+  width: 200px;
+  height: 100px;
+  margin-right: 10px;
+}
+
+#toggleouter {
+  display: inline-block;
+  width: 200px;
   height: 100px;
   margin-right: 10px;
 }
@@ -75,14 +82,27 @@ body {
 .dd-title {
   color: #999999;
   top: 0px;
-  text-decoration: underline;
   font-family: 'Atlas Grotesk Web';
-  font-weight: 100;
-  font-size: 1em;
+  font-weight: 300;
+  font-size: .65em;
+  margin-left: 34px;
+  letter-spacing: .25px;
+  text-transform: uppercase;
+}
+
+#toggleouter .dd-title {
+  margin-left: 0;
+  text-align: center;
+  width: 150px;
 }
 
 .dd-title.events{
-  text-align: center;
+  margin: 0 25px 0 50px;
+  color: white;
+  vertical-align: middle;
+  line-height: 40px;
+  display: inline-block;
+  position: absolute;
 }
 
 
@@ -92,9 +112,9 @@ body {
   -webkit-appearance: none;
   -moz-appearance: none;
   display: block;
-  padding: 0.5em 3em 0.5em 0;
-  margin: 0 0 0 20px;
-  font-family: 'Publico Text Web';
+  padding: 0.5em 1em 0.5em 0;
+  margin: 0 0 0 34px;
+  font-family: 'Atlas Grotesk Web';
   font-size: 1.4rem;
   font-weight: 600;
   color: #7D93CA;
@@ -102,14 +122,50 @@ body {
   border: none;
 }
 
-
-#counties {
-  position: relative;
+#dropdown-c.hiddendd {
+  display: none;
 }
 
+.toggle.average {
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+  font-family: 'Atlas Grotesk Web';
+  font-size: .75rem;
+  color: #7D93CA;
+  background-color: white;
+  border: 1px solid rgba(127, 125, 156, 0.54);
+  width: 75px;
+  margin-left: 2px;
+  margin-top: 14px;
+}
+
+.toggle.year {
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+    font-family: 'Atlas Grotesk Web';
+  font-size: .75rem;
+  color: #7D93CA;
+  background-color: white;
+    border: 1px solid rgba(127, 125, 156, 0.54);
+    width: 75px;
+    margin-top: 14px;
+}
+
+.toggle.active{
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 5px inset;
+  border-color: rgb(173, 173, 173);
+  font-weight: 600;
+  background-color: #EEE;
+  color: #666666;
+}
+
+
+#counties,
+#states,
 #year {
   position: relative;
 }
+
 
 .select__arrow.short{
   position: absolute;
@@ -130,7 +186,7 @@ body {
   left: 0;
   width: 0;
   height: 0;
-  margin: -4px 0 0 0;
+  margin: -4px 0 0 10px;
   pointer-events: none;
   border-width: 8px 5px 0 5px;
   border-style: solid;
@@ -138,58 +194,65 @@ body {
 }
 
 #icons {
-  width: 170px;
-  height: 100px;
+  width: 850px;
+  height: 48px;
   position: absolute;
-  top: 0;
-  right: 20px;
+  bottom: 0;
+  background-color: #7D93CA;
   /*display: none;*/
 }
 
 #icon-a,
 #icon-b,
-#icon-c {
+#icon-c,
+#icon-d, 
+#icon-e {
   display: inline-block;
   position: relative;
   width: 48px;
   height: 48px;
   /*margin: 0 48px 4px 0px;*/
+  padding-right: 30px;
 }
 
 #icon-a svg,
 #icon-b svg,
-#icon-c svg {
+#icon-c svg,
+#icon-d svg,
+#icon-e svg {
   position: absolute;
   top: 50%;
   left: 50%;
-  margin: -18px 0 0 -18px;
+  margin: -18px 0 0 25px;
+  pointer-events: none;
 }
 
-#icon-c {
-  margin-right: 0;
-}
 
 #icon-storms,
-#icon-sports,
-#icon-terrorism {
+#icon-hurricane,
+#icon-snow,
+#icon-football,
+#icon-baseball {
   position: absolute;
   fill: none;
-  stroke: #676767;
+  stroke: #FFFFFF;
   stroke-width: 1;
   stroke-miterlimit: 10;
   stroke-linecap: round;
+  pointer-events: all;
 }
 
 #icon-storms:hover,
-#icon-sports:hover,
-#icon-terrorism:hover {
+#icon-hurricane:hover
+#icon-snow:hover,
+#icon-football:hover,
+#icon-baseball:hover {
   position: absolute;
   fill: none;
   stroke: #B2C1E3;
   stroke-width: 1;
   stroke-miterlimit: 10;
   stroke-linecap: round;
-  pointer-events:all;
 }
 
 #icon-a.current,
@@ -206,6 +269,10 @@ body {
   stroke: #7D93CA;
   stroke-width: 2;
   stroke-miterlimit: 10;
+}
+
+#icon-a .selected{
+  fill: white;
 }
 
 #icon-dropdown {
@@ -288,9 +355,9 @@ body {
 }
 
 .axis {
-  font-family: 'Publico Text Web';
-  font-size: 0.7rem;
+  font-family: 'Atlas Grotesk Web';
   font-weight: 300;
+  font-size: .65em;
   color: #999999;
 }
 
@@ -331,9 +398,9 @@ body {
 
 .annotation-note .annotation-note-title, text.title {
   font-size: 1.2rem;
-  font-weight: 600;
+  font-weight: 700;
   fill: #EF445B;
-  font-family: 'Publico Text Web';
+  font-family: 'Canela Web';
 }
 
 
@@ -368,6 +435,25 @@ body {
   font-style:   normal;
   font-stretch: normal;
 }
+
+@font-face {
+  font-family: 'Canela Web';
+  src: url('fonts/Canela-Light-Web.eot');
+  src: url('fonts/Canela-Light-Web.eot?#iefix') format('embedded-opentype'),
+       url('fonts/Canela-Light-Web.woff2') format('woff2'),
+       url('fonts/Canela-Light-Web.woff') format('woff');
+  font-weight:  300;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+.Canela-Light-Web {
+  font-family: 'Canela Web';
+  font-weight:  300;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
 
 
 @font-face {
