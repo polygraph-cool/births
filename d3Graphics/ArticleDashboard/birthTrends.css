@@ -59,7 +59,14 @@ body {
   /*display: none*/;
 }
 
-#dropdown-a, #dropdown-b {
+#dropdown-a {
+  display: inline-block;
+  width: 250px;
+  height: 100px;
+  margin-right: 10px;
+}
+
+#dropdown-b{
   display: inline-block;
   width: 200px;
   height: 100px;
