@@ -149,9 +149,7 @@
       .defer(d3.csv, "CondensedBirth3.csv")
       .defer(d3.csv, "stateData.csv")
       .defer(d3.csv, "stateAverages.csv")
-      .defer(d3.csv, "stateAveragesNormal.csv")
       .defer(d3.csv, "countyAverages.csv")
-      .defer(d3.csv, "pBirthsCounty.csv")
       .await(ready);
 
 
@@ -162,9 +160,7 @@ function ready(error,
     data,
     stateData,
     stateAverages,
-    stateNormal,
-    countyAverages,
-    pBirthsCounty) {
+    countyAverages) {
 
         if (error) throw error;
 
@@ -205,16 +201,6 @@ function ready(error,
           d.values = +d.median;
         })
 
-        stateNormal.forEach(function(d){
-          d.states = d.states;
-          d.month = parseMonth(parseMonthOnly(d.M));
-          d.median = +d.median;
-          d.low = +d.low;
-          d.high = +d.high;
-          d.values = +d.median;
-          d.dayAvg = +d.dayAvg;
-        })
-
         // format state average data
         countyAverages.forEach(function(d){
           d.County = d.County;
@@ -225,15 +211,6 @@ function ready(error,
           d.values = +d.median;
         })
 
-        // format the data
-        pBirthsCounty.forEach(function(d) {
-            d.Date = parseTime(d.Date);
-            d.month = parseMonth(d.Date);
-            d.year = parseYear(d.Date);
-            d.pBirths = +d.pBirths / 10;
-            d.Births = +d.pBirthsN / 100;
-            d.County = d.County;
-        });
 
 
 
@@ -259,23 +236,6 @@ function ready(error,
             })
             .entries(data);
 
-
-        ///////////////////////////  NEST COUNTIES  //////////////////////////
-
-        // Nest the data to create a line for each county and each year
-        var nestedPCounties = d3.nest()
-            .key(function(d) { return d.County; })
-            .rollup(function(leaves){
-              var extent = d3.extent(leaves, function(d){
-                return d.Births
-              })
-              var nest = d3.nest().key(function(d){
-                return d.year
-              })
-              .entries(leaves);
-              return {extent:extent, years:nest};
-            })
-            .entries(pBirthsCounty);
 
         /////////////////////////// NEST COUNTY AVG  //////////////////////////
 
@@ -331,13 +291,6 @@ function ready(error,
           })
           .entries(stateAverages)
 
-        ///////////////////////////  NEST STATE NORMAL  //////////////////////////
-
-        var nestNStates = d3.nest()
-          .key(function(d){
-            return d.states;
-          })
-          .entries(stateNormal)
 
 
     //////////////////////////////////////////////////////////////////////
