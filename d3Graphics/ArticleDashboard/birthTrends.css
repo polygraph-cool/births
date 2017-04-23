@@ -167,6 +167,9 @@ body {
   color: #666666;
 }
 
+.toggle:focus{
+  outline: 0;
+}
 
 #counties,
 #states,

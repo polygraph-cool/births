@@ -108,6 +108,16 @@
         }
 
 
+    ///////////////////// VARIABLES FOR TRANSITIONS //////////////////////
+
+            var areaFill = d3.area()
+                // Same x axis (could use .x0 and .x1 to set different ones)
+                .x(function(d) { return x(parseTimeMonth(d.month)); })
+                .y0(function(d, i) { return y(+d.low); })
+                .y1(function(d, i) { return y(+d.high); })
+                .curve(d3.curveCardinal);
+
+
 
     //////////////////////////////////////////////////////////////////////
     ////////////////////////////  RESPONSIVE  ////////////////////////////
@@ -654,6 +664,8 @@ function ready(error,
       ///////////////////// MULTI LINE COUNTY FUNCTION /////////////////////
       //////////////////////////////////////////////////////////////////////
 
+         var yearLines = null;
+
           var multiCounty = function(data, countyCode, year, transition){
 
 
@@ -679,12 +691,21 @@ function ready(error,
                       .data(function(d) {
                         return (d.value.years);
                       })
+        
+        console.log(AvgLine)
+
+        //AvgPath = valueLineA(AvgLine._groups[0][0].__data__.values)
 
 
               var PathsEnter = Paths.enter()
                       .append("path")
+                      .transition()
+                            .delay(function(d, i){ return i * 50; })
+                            .duration(400)
                       .attr("d", function(d) { return valueLine(d.values)})
                       .attr("class", "line")
+
+              yearLines = PathsEnter;
 
 
                 var initialLine = svg.selectAll(".line")
@@ -876,6 +897,8 @@ function ready(error,
       /////////////////////// BANDED COUNTY FUNCTION ///////////////////////
       //////////////////////////////////////////////////////////////////////
 
+            AvgLine = null;
+
             var bandCounty = function(data, countyCode){
 
             ////////////  DATA JOIN FOR MEDIAN  ///////////
@@ -903,12 +926,7 @@ function ready(error,
 
             ////////////  DATA JOIN FOR AREA  ///////////
 
-              var areaFill = d3.area()
-                // Same x axis (could use .x0 and .x1 to set different ones)
-                .x(function(d) { return x(parseTimeMonth(d.month)); })
-                .y0(function(d, i) { return y(+d.low); })
-                .y1(function(d, i) { return y(+d.high); })
-                .curve(d3.curveCardinal);
+
 
                 svg.selectAll(".area").remove();
                 svg.selectAll(".line2").remove();
@@ -918,7 +936,7 @@ function ready(error,
                 .attr("d", function(d){
                   return areaFill(d.values); })
                 .attr("fill", "#B2C1E3")
-                .attr("opacity", 0.8)
+                .attr("opacity", 0)
                 .attr("class", "area");
 
 
@@ -929,6 +947,8 @@ function ready(error,
                 .attr("d", function(d){
                   return valueLineA(d.values);
                 })
+
+               AvgLine = countyPathsEnter;
 
               // Reset the State dropdown based on the state of selected county
                 var stateDrop = Slist.selectAll("option")
@@ -945,6 +965,7 @@ function ready(error,
                 // Update county dropdown
                 updateCountyDrop(selectedCounty);
 
+
                   ////////////  UPDATE Y AXIS  /////////// 
 
                   d3.select(".y")
@@ -956,6 +977,7 @@ function ready(error,
                       .tickPadding(6)
                       .tickSize(0, 0));
             }
+
 
 
       //////////////////////////////////////////////////////////////////////
@@ -1047,6 +1069,48 @@ function ready(error,
                       .tickSize(0, 0));
             }
 
+
+      //////////////////////////////////////////////////////////////////////
+      ///////////////////// TRANSITION TO AVG FUNCTION /////////////////////
+      //////////////////////////////////////////////////////////////////////
+
+
+      var avgTransition = function(){
+        console.log(AvgLine)
+
+        AvgPath = valueLineA(AvgLine._groups[0][0].__data__.values)
+
+          var t;
+          d3.selectAll(".line")
+          .transition()
+            .delay(function(d, i) { return i * 50; })
+              .duration(400)
+              .attr("d", AvgPath)
+
+          d3.selectAll(".area")
+            .transition()
+            .delay(600)
+            .duration(1000)
+            .attr("opacity", 0.8)
+
+      }
+
+      //////////////////////////////////////////////////////////////////////
+      /////////////////// TRANSITION TO YEARLY FUNCTION ////////////////////
+      //////////////////////////////////////////////////////////////////////
+
+      var yearTransition = function(){
+
+        console.log(yearLines._groups)
+
+        d3.selectAll(".line")
+
+          //.attr("d", valueLine(d))
+
+      }
+
+
+
           ///////////////////////////  CALL TO INITIAL GRAPH  //////////////////////////
 
           // Call function to create initial figure
@@ -1088,8 +1152,7 @@ function ready(error,
                     d3.selectAll(".line").classed("hidden", false)
                 }
 
-                // Update county dropdown
-                updateCountyDrop();
+
           });
 
 
@@ -1155,14 +1218,17 @@ function ready(error,
         d3.selectAll(".toggle.average")
           .on('click', function(){
 
+            avgTransition();
+
+
             d3.select("#dropdown-c").classed("hiddendd", true)
 
           d3.selectAll(".toggle.average").classed("active", true)
           d3.selectAll(".toggle.year").classed("active", false)
 
-          d3.selectAll(".line").classed("hidden", true)
+          /*d3.selectAll(".line").classed("hidden", true)
           d3.selectAll(".area").classed("hidden", false)
-          d3.selectAll(".line2").classed("hidden", false)
+          d3.selectAll(".line2").classed("hidden", false)*/
 
         })
 
@@ -1172,14 +1238,16 @@ function ready(error,
         d3.selectAll(".toggle.year")
           .on('click', function(){
 
+            yearTransition();
+
           d3.select("#dropdown-c").classed("hiddendd", false)
 
           d3.selectAll(".toggle.average").classed("active", false)
           d3.selectAll(".toggle.year").classed("active", true)
 
-          d3.selectAll(".area").classed("hidden", true)
+          /*d3.selectAll(".area").classed("hidden", true)
           d3.selectAll(".line2").classed("hidden", true)
-          d3.selectAll(".line").classed("hidden", false)
+          d3.selectAll(".line").classed("hidden", false)*/
 
 
         })
