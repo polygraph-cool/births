@@ -513,7 +513,11 @@ function ready(error,
                 return d.key;
               })
 
-              selectedCounties2.push("All")
+              // Add an "All" option
+              selectedCounties2.push("001")
+
+              selectedCounties2.sort()
+              console.log(selectedCounties2)
 
 
               var Clist = d3.select("#counties")
@@ -534,13 +538,13 @@ function ready(error,
 
               selection.enter().append("option")
                   .attr("value", function(d){
-                    if (d == "All"){"001"} else {return countyMap.get(d).County;}
+                    if (d == "001"){"All"} else {return countyMap.get(d).County;}
                   })
                   .text(function(d){
-                    if (d != "All"){return countyMap.get(d).County_Name;} else {return "All Counties"}
+                    if (d != "001"){return countyMap.get(d).County_Name;} else {return "All Counties"}
                   })
                   .property("selected", function(d){
-                    return d === "All"; 
+                    return d === "001"; 
                   })
                   /*.property("selected", function(d){
                   return +d === selectCounty; })*/
