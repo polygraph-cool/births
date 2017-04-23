@@ -513,6 +513,9 @@ function ready(error,
                 return d.key;
               })
 
+              selectedCounties2.push("All")
+
+
               var Clist = d3.select("#counties")
 
 
@@ -528,15 +531,23 @@ function ready(error,
 
               selection.exit().remove();
 
+
               selection.enter().append("option")
                   .attr("value", function(d){
-                    return countyMap.get(d).County;
+                    if (d == "All"){"001"} else {return countyMap.get(d).County;}
                   })
                   .text(function(d){
-                    return countyMap.get(d).County_Name;
+                    if (d != "All"){return countyMap.get(d).County_Name;} else {return "All Counties"}
                   })
                   .property("selected", function(d){
-                  return +d === selectCounty; }) 
+                    return d === "All"; 
+                  })
+                  /*.property("selected", function(d){
+                  return +d === selectCounty; })*/
+
+
+                console.log(selection)
+
 
               ClistG = Clist; 
               
@@ -597,7 +608,7 @@ function ready(error,
              var yaxis = svg.append("g")
                  .attr("class", "y axis")
                  .call(d3.axisLeft(y)
-                    .ticks(5)
+                    .ticks(5, "s")
                     .tickSizeInner(0)
                     .tickPadding(6)
                     .tickSize(0, 0));
@@ -765,14 +776,14 @@ function ready(error,
                 // Update X Axis
                 svg.select(".x")
                   .transition()
-                  .duration(750)
+                  .duration(5000)
                   .call(xAxis)
 
 
                 ////////////  UPDATE Y AXIS  ///////////
 
                 var yAxis = d3.axisLeft(y)
-                    .ticks(5)
+                    .ticks(5, "s")
                     .tickSizeInner(0)
                     .tickPadding(6)
                     .tickSize(0,0);
@@ -784,7 +795,7 @@ function ready(error,
                 // Update Y Axis
                 svg.select(".y")
                   .transition()
-                  .duration(5000)
+                  .duration(1500)
                   .call(yAxis)
 
             };
@@ -874,14 +885,14 @@ function ready(error,
                 // Update X Axis
                 svg.select(".x")
                   .transition()
-                  .duration(750)
+                  .duration(1500)
                   .call(xAxis)
 
 
                 ////////////  UPDATE Y AXIS  ///////////
 
                 var yAxis = d3.axisLeft(y)
-                    .ticks(5)
+                    .ticks(5, "s")
                     .tickSizeInner(0)
                     .tickPadding(6)
                     .tickSize(0,0);
@@ -893,7 +904,7 @@ function ready(error,
                 // Update Y Axis
                 svg.select(".y")
                   .transition()
-                  .duration(5000)
+                  .duration(1500)
                   .call(yAxis)
 
             };
@@ -936,9 +947,10 @@ function ready(error,
                 .x(function(d) { return x(parseTimeMonth(d.month)); })
                 .y0(function(d, i) { return y(+d.low); })
                 .y1(function(d, i) { return y(+d.high); })
-                .curve(d3.curveBasis);
+                .curve(d3.curveCardinal);
 
                 svg.selectAll(".area").remove();
+                svg.selectAll(".line2").remove();
 
               var areaEnter = aCounty.enter().append("path")
                 //.datum(selectAvState)
@@ -976,9 +988,9 @@ function ready(error,
 
                   d3.select(".y")
                     .transition()
-                    .duration(750)
+                    .duration(1500)
                     .call(d3.axisLeft(y)
-                      .ticks(5)
+                      .ticks(5, "s")
                       .tickSizeInner(0)
                       .tickPadding(6)
                       .tickSize(0, 0));
@@ -1022,9 +1034,10 @@ function ready(error,
                 .x(function(d) { return x(parseTimeMonth(d.month)); })
                 .y0(function(d, i) { return y(+d.low); })
                 .y1(function(d, i) { return y(+d.high); })
-                .curve(d3.curveBasis);
+                .curve(d3.curveCardinal);
 
                 svg.selectAll(".area").remove();
+                svg.selectAll(".line2").remove();
 
               var areaEnter = aState.enter().append("path")
                 //.datum(selectAvState)
@@ -1067,7 +1080,7 @@ function ready(error,
                     .transition()
                     .duration(750)
                     .call(d3.axisLeft(y)
-                      .ticks(5)
+                      .ticks(5, "s")
                       .tickSizeInner(0)
                       .tickPadding(6)
                       .tickSize(0, 0));
@@ -1128,9 +1141,27 @@ function ready(error,
               // Detecting what year is present on the year dropdown menu
               selectedYear = yList.select("select").property("value")
 
+              // Print which state has been selected (for updating county dropdown)
+              selectedState = Slist.select("select").property("value")
+
 
               // Determine which county was selected from dropdown
-              var selected = d3.select(this)
+
+                if(d3.select(this).select("select").property("value") == "All Counties"){
+
+                  // If "All Counties" is selected, draw state-level chart
+
+                /////////// RUNNING UPDATE BAND FUNCTION /////////
+                bandState(nestAStates, selectedState);
+
+                ////////////  RUNNING UPDATE MULTI FUNCTION  ///////////  
+                multiState(nestMStates, selectedState);
+
+              } else {
+
+                // if any county other than "All Counties" is selected, draw county-level
+
+                 var selected = d3.select(this)
                   .select("select")
                   .property("value")
 
@@ -1139,6 +1170,8 @@ function ready(error,
 
               /////////// RUNNING UPDATE BAND FUNCTION /////////
               bandCounty(nestACounties, selected)
+              }
+
 
                 if(d3.selectAll(".toggle.average").classed("active") == true){
                     d3.selectAll(".line").classed("hidden", true)
@@ -1221,6 +1254,7 @@ function ready(error,
 
               // Remove any banded graphics that may still be present
               svg.selectAll(".area").remove();
+              svg.selectAll(".line2").remove();
 
               // Determine which event was selected from dropdown
               var selected = eventName
