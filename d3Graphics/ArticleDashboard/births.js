@@ -497,8 +497,12 @@ function ready(error,
                     if (d != "001"){return countyMap.get(d).County_Name;} else {return "All Counties"}
                   })
                   .property("selected", function(d){
-                    return d === "001"; 
+                    return d ===  selectCounty; 
                   })
+                  .property("disabled", function(d){
+                    return d == "NaN";
+                  })
+
                   /*.property("selected", function(d){
                   return +d === selectCounty; })*/
 

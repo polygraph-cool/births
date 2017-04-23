@@ -273,9 +273,21 @@ condensedPercent <- allBirthData %>%
   mutate(complete = County %in% all20$County) %>% 
   filter(complete == TRUE, 
          Year >= 1995) %>%
-  group_by()
+  group_by(County, Year) %>% 
+  mutate(sum = sum(countyBirths),
+         pBirths = countyBirths/sum,
+         pBirthsN = ifelse(Month %in% c("01", "03", "05", "07", "08", "10", "12"), pBirths/31, 
+                         ifelse(Month %in% c("04", "06", "09", "11"), pBirths/30, 
+                                ifelse(Month == "02" & Year %in% c("96", "00", "04", "08", "12"), pBirths/29, pBirths/28))),
+         pBirths = round(pBirths * 1000),
+         pBirthsN = round(pBirthsN * 10000),
+         Yr = str_sub(Year, start= -2),
+         M = sprintf("%02d", Month), 
+         Date = paste0(Yr, M)) %>% 
+  ungroup() %>% 
+  select(c(6,9,10,13))
   
-
+write.csv(condensedPercent, "../d3Graphics/ArticleDashboard/pBirthsCounty.csv")
 
 ```
 
@@ -315,10 +327,10 @@ condensedCN <- countyNames %>%
   filter(complete == TRUE) %>% 
   select(-4)
 
-stateCounty = left_join(condensedCN, stateNames, by = "State") %>% 
+stateCounty = right_join(condensedCN, stateNames, by = "State") %>% 
   select(-1)
 
-write.csv(stateCounty, "../Raw_Data/stateCountyNames.csv")
+write.csv(stateCounty, "../d3Graphics/ArticleDashboard/stateCountyNames.csv")
 ```
 
 ```{r}

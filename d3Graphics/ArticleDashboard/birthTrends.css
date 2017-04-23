@@ -336,6 +336,10 @@ body {
   transition: 0.5s;
 }
 
+option[value="NaN"][disabled] {
+  display: none;
+}
+
 .selected-event {
   fill: none;
   stroke: url(#linear-gradient);
