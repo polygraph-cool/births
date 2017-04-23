@@ -327,7 +327,7 @@ body {
   fill: none;
   stroke: #D9D9D9;
   stroke-width: 1px;
-  opacity: 0.7;
+  /*opacity: 0.7;*/
   clip-path: url(#clip);
 }
 

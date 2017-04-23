@@ -47,6 +47,14 @@
         .y(function(d) { return y(+d.median); })
         ;
 
+    // define the area
+    var areaFill = d3.area()
+      // Same x axis (could use .x0 and .x1 to set different ones)
+      .x(function(d) { return x(parseTimeMonth(d.month)); })
+      .y0(function(d, i) { return y(+d.low); })
+      .y1(function(d, i) { return y(+d.high); })
+      .curve(d3.curveCardinal);
+
     // append the svg object to the body of the page
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
@@ -659,6 +667,204 @@ function ready(error,
 
   }
 
+      //////////////////////////////////////////////////////////////////////
+      ///////////////////////////// INITIAL GRAPH //////////////////////////
+      //////////////////////////////////////////////////////////////////////
+
+      
+      // function creates all line and area elements
+      // The rest of the figure, these elements will just be transitioned
+
+
+      var initialGraph = function(stateName){
+
+          //////////////   AREA GRAPH    ///////////////
+
+            // Filter data to only include selected State
+            var state = nestAStates.filter(function(d){
+              return d.key === stateName;
+            });
+
+            // Group the State-level data
+           var aState = svg.selectAll(".areas")
+                .data(state, function(d){
+                  return d ? d.key : this.key;
+                });
+
+            var aStateEnter = aState.enter()
+                .append("g")
+                .attr("class", "areas")
+
+
+            y.domain([d3.min(state[0].values, function(d) {
+              return +d.low
+            }), 
+            d3.max(state[0].values, function(d){ 
+              return +d.high
+            })]);
+
+            ////////////  DATA JOIN FOR AREA  ///////////
+
+              aStateEnter.append("path")
+                //.datum(selectAvState)
+                .attr("d", function(d){
+                  return areaFill(d.values); })
+                .attr("fill", "#B2C1E3")
+                .attr("opacity", 0.8)
+                .attr("class", "area");
+
+console.log(d3.selectAll(".area").data())
+              // Add Median Line (later so on top of area)
+              var StatePathsEnter = aStateEnter
+                .append("path")
+                .attr("class", "line2")
+                .attr("d", function(d){
+                  return valueLineA(d.values);
+                })
+
+
+               // Reset the State dropdown based on the state of selected state
+                var stateDrop = Slist.selectAll("option")
+                  .property("selected", function(d){
+                  return d.key === state[0].key;
+                })
+
+                // Print which state has been selected (for updating county dropdown)
+                selectedState = Slist.select("select").property("value")
+
+                // Print which county has been selected (for updating county dropdown)
+                selectedCounty = stateMap.get(state[0].key).County;
+
+
+                // Update county dropdown
+                updateCountyDrop(selectedCounty);
+
+
+
+
+          /////////// LINE GRAPH /////////////
+
+         var state = nestMStates.filter(function(d){
+                return d.key == stateName;
+              })
+
+
+          var pickedstate = svg.selectAll(".counties")
+                  .data(state, function(d){
+                    return d ? d.key : this.key;
+                  })
+
+          var pickedstateEnter = pickedstate.enter()
+                      .append("g")
+                      .attr("class", "counties")
+                      /*.each(function(d){
+                        y.domain(d.value.extent)
+                      });*/
+
+          var Paths = pickedstateEnter.selectAll("path")
+                      .data(function(d) {
+                        return (d.value.years);
+                      })
+
+          // Initially plot annual lines on top of median line (to be moved later)
+
+          AvgPath = valueLineA(StatePathsEnter._groups[0][0].__data__.values)
+
+          console.log(valueLineA(StatePathsEnter._groups[0][0].__data__.values))
+
+          var PathsEnter = Paths.enter()
+                      .append("path")
+                      .attr("class", "line")
+                      .attr("d", AvgPath)
+                      .attr("opacity", 0)
+
+          d3.select(".y")
+                    .transition()
+                    .duration(1500)
+                    .call(d3.axisLeft(y)
+                      .ticks(5, "s")
+                      .tickSizeInner(0)
+                      .tickPadding(6)
+                      .tickSize(0, 0));
+
+      }
+
+
+      //////////////////////////////////////////////////////////////////////
+      ////////////////////// STATE UPDATE AVG FUNCTION /////////////////////
+      //////////////////////////////////////////////////////////////////////
+
+      var stateUpdateAvg = function(stateName){
+
+          var state = nestAStates.filter(function(d){
+              return d.key === stateName;
+            });
+
+          console.log(state)
+
+          t0 = svg.transition().duration(5000)
+          t0.selectAll("path.area").attr("d", function(d){ return areaFill(d.values) })
+
+            // Group the State-level data
+          /* var aState = svg.selectAll("path.area")
+                .data(state, function(d){
+                  return d ? d.key : this.key;
+                })*/
+
+                /*.transition()
+                .duration(5000)
+                .attr("d", function(d){
+                  return areaFill(d.values); })*/
+
+                
+                //console.log(aState.data())
+
+              /*var areaEnter = aState.selectAll(".areas")
+                //.datum(selectAvState)
+                .transition()
+                .duration(5000)
+                .attr("d", function(d){
+                  return areaFill(d.values); })
+ 
+console.log(d3.selectAll(".area").data())*/
+
+                //.transition()
+                //.duration(5000)
+
+               // console.log(aState)
+
+            /*aState.select("path.area")
+                .attr("d", function(d){
+                  return areaFill(d.values)
+                })*/
+
+               // console.log(aState._enter[0][0].__data__.values)
+
+            y.domain([d3.min(state[0].values, function(d) {
+              return +d.low
+            }), 
+            d3.max(state[0].values, function(d){ 
+              return +d.high
+            })]);
+
+          /*aState.select("path.area")
+            //.data(aState)
+            //.transition()
+              //.duration(2000)
+              .attr("d", function(d){
+                  return areaFill(d.values); })*/
+
+          d3.select(".y")
+                    .transition()
+                    .duration(1500)
+                    .call(d3.axisLeft(y)
+                      .ticks(5, "s")
+                      .tickSizeInner(0)
+                      .tickPadding(6)
+                      .tickSize(0, 0));
+
+      }
+
 
       //////////////////////////////////////////////////////////////////////
       /////////////////////// BANDED COUNTY FUNCTION ///////////////////////
@@ -1137,11 +1343,13 @@ function ready(error,
           //multiCounty(nested, 25025, 2005);
           //bandCounty(nestACounties, 6037)
 
-          multiState(nestMStates, "Maine")
-          bandState(nestAStates, "Maine")
-          d3.selectAll(".line").classed("hidden", true)
+         // multiState(nestMStates, "Maine")
+          //bandState(nestAStates, "Maine")
+          /*d3.selectAll(".line").classed("hidden", true)
           d3.select(".toggle.average").classed("active", true)
-          d3.select(".toggle.year").classed("active", false)
+          d3.select(".toggle.year").classed("active", false)*/
+
+          initialGraph("Maine")
 
           ///////////////////////////  STATE CHANGE  //////////////////////////
 
@@ -1154,8 +1362,9 @@ function ready(error,
                 selectedState = Slist.select("select").property("value")
 
   
+              stateUpdateAvg(selectedState);
 
-                /////////// RUNNING UPDATE BAND FUNCTION /////////
+                /*/////////// RUNNING UPDATE BAND FUNCTION /////////
                 bandState(nestAStates, selectedState);
 
                 ////////////  RUNNING UPDATE MULTI FUNCTION  ///////////  
@@ -1169,7 +1378,7 @@ function ready(error,
                     d3.selectAll(".area").classed("hidden", true);
                     d3.selectAll(".line2").classed("hidden", true);
                     d3.selectAll(".line").classed("hidden", false)
-                }
+                }*/
 
 
           });
@@ -1194,11 +1403,18 @@ function ready(error,
 
                   // If "All Counties" is selected, draw state-level chart
 
-                /////////// RUNNING UPDATE BAND FUNCTION /////////
-                bandState(nestAStates, selectedState);
 
-                ////////////  RUNNING UPDATE MULTI FUNCTION  ///////////  
-                multiState(nestMStates, selectedState);
+                  if (d3.selectAll(".toggle.average").classed("active") == true) {
+
+                    /////////// RUNNING UPDATE BAND FUNCTION /////////
+                    bandState(nestAStates, selectedState);
+
+                  } else {
+
+                    ////////////  RUNNING UPDATE MULTI FUNCTION  ///////////  
+                    multiState(nestMStates, selectedState);
+
+                  }
 
               } else {
 
@@ -1208,11 +1424,24 @@ function ready(error,
                   .select("select")
                   .property("value")
 
-              ////////////  RUNNING UPDATE MULTI FUNCTION  /////////// 
-              multiCounty(nested, selected, selectedYear)
+                ////////////  RUNNING UPDATE MULTI FUNCTION  /////////// 
+                multiCounty(nested, selected, selectedYear)
 
-              /////////// RUNNING UPDATE BAND FUNCTION /////////
-              bandCounty(nestACounties, selected)
+                /////////// RUNNING UPDATE BAND FUNCTION /////////
+                bandCounty(nestACounties, selected)
+
+                  console.log(d3.selectAll(".toggle.average").classed("active"))
+
+                if(d3.selectAll(".toggle.average").classed("active") == true){
+
+                    avgTransition();
+
+                } else {
+                
+                    yearTransition();
+
+                }
+
               }
 
 
