@@ -661,6 +661,183 @@ function ready(error,
 
 
       //////////////////////////////////////////////////////////////////////
+      /////////////////////// BANDED COUNTY FUNCTION ///////////////////////
+      //////////////////////////////////////////////////////////////////////
+
+            AvgLine = null;
+
+            var bandCounty = function(data, countyCode){
+
+            ////////////  DATA JOIN FOR MEDIAN  ///////////
+    
+            // Filter data to only include selected county
+            var selectACounty = data.filter(function(d){
+              return +d.key === +countyCode;
+            });
+
+            // Group the county-level data
+           var aCounty = svg.selectAll(".aCounty")
+                .data(selectACounty, function(d){
+                  return d ? d.key : this.key;
+                });
+
+            // Remove any lines that don't carry over between counties
+            aCounty.exit().remove();
+
+            /*y.domain([d3.min(selectACounty[0].values, function(d) {
+              return +d.low
+            }), 
+            d3.max(selectACounty[0].values, function(d){ 
+              return +d.high
+            })]);*/
+
+            ////////////  DATA JOIN FOR AREA  ///////////
+
+
+
+                svg.selectAll(".area").remove();
+                svg.selectAll(".line2").remove();
+
+              var areaEnter = aCounty.enter().append("path")
+                //.datum(selectAvState)
+                .attr("d", function(d){
+                  return areaFill(d.values); })
+                .attr("fill", "#B2C1E3")
+                .attr("opacity", 0)
+                .attr("class", "area");
+
+
+              // Add Median Line (later so on top of area)
+              var countyPathsEnter = aCounty.enter()
+                .append("path")
+                .attr("class", "line2")
+                .attr("d", function(d){
+                  return valueLineA(d.values);
+                })
+
+               AvgLine = countyPathsEnter;
+
+              // Reset the State dropdown based on the state of selected county
+                var stateDrop = Slist.selectAll("option")
+                  .property("selected", function(d){
+                  return d.key === countyMap.get(selectACounty[0].key).stateName;
+                })
+
+                // Print which state has been selected (for updating county dropdown)
+                selectedState = Slist.select("select").property("value")
+
+                // Print which county has been selected (for updating county dropdown)
+                selectedCounty = countyMap.get(selectACounty[0].key).County;
+
+                // Update county dropdown
+                updateCountyDrop(selectedCounty);
+
+
+                  ////////////  UPDATE Y AXIS  /////////// 
+
+                 /* d3.select(".y")
+                    .transition()
+                    .duration(1500)
+                    .call(d3.axisLeft(y)
+                      .ticks(5, "s")
+                      .tickSizeInner(0)
+                      .tickPadding(6)
+                      .tickSize(0, 0));*/
+            }
+
+
+
+      //////////////////////////////////////////////////////////////////////
+      /////////////////////// BANDED STATE FUNCTION ///////////////////////
+      //////////////////////////////////////////////////////////////////////
+
+            var bandState = function(data, stateName){
+
+
+            ////////////  DATA JOIN FOR MEDIAN  ///////////
+    
+            // Filter data to only include selected State
+            var state = data.filter(function(d){
+              return d.key === stateName;
+            });
+
+            // Group the State-level data
+           var aState = svg.selectAll(".aState")
+                .data(state, function(d){
+                  return d ? d.key : this.key;
+                });
+
+            // Remove any lines that don't carry over between counties
+            aState.exit().remove();
+
+            y.domain([d3.min(state[0].values, function(d) {
+              return +d.low
+            }), 
+            d3.max(state[0].values, function(d){ 
+              return +d.high
+            })]);
+
+            ////////////  DATA JOIN FOR AREA  ///////////
+
+              var areaFill = d3.area()
+                // Same x axis (could use .x0 and .x1 to set different ones)
+                .x(function(d) { return x(parseTimeMonth(d.month)); })
+                .y0(function(d, i) { return y(+d.low); })
+                .y1(function(d, i) { return y(+d.high); })
+                .curve(d3.curveCardinal);
+
+                svg.selectAll(".area").remove();
+                svg.selectAll(".line2").remove();
+
+              var areaEnter = aState.enter().append("path")
+                //.datum(selectAvState)
+                .attr("d", function(d){
+                  return areaFill(d.values); })
+                .attr("fill", "#B2C1E3")
+                .attr("opacity", 0.8)
+                .attr("class", "area");
+
+
+              // Add Median Line (later so on top of area)
+              var StatePathsEnter = aState.enter()
+                .append("path")
+                .attr("class", "line2")
+                .attr("d", function(d){
+                  return valueLineA(d.values);
+                })
+
+
+               // Reset the State dropdown based on the state of selected state
+                var stateDrop = Slist.selectAll("option")
+                  .property("selected", function(d){
+                  return d.key === state[0].key;
+                })
+
+                // Print which state has been selected (for updating county dropdown)
+                selectedState = Slist.select("select").property("value")
+
+                // Print which county has been selected (for updating county dropdown)
+                selectedCounty = stateMap.get(state[0].key).County;
+
+
+                // Update county dropdown
+                updateCountyDrop(selectedCounty);
+
+
+                  ////////////  UPDATE Y AXIS  /////////// 
+
+                  d3.select(".y")
+                    .transition()
+                    .duration(750)
+                    .call(d3.axisLeft(y)
+                      .ticks(5, "s")
+                      .tickSizeInner(0)
+                      .tickPadding(6)
+                      .tickSize(0, 0));
+            }
+
+
+      //////////////////////////////////////////////////////////////////////
       ///////////////////// MULTI LINE COUNTY FUNCTION /////////////////////
       //////////////////////////////////////////////////////////////////////
 
@@ -687,18 +864,21 @@ function ready(error,
                         y.domain(d.value.extent)
                       });
 
+
+
               var Paths = pickedCountyEnter.selectAll("path")
                       .data(function(d) {
                         return (d.value.years);
                       })
-        
-        console.log(AvgLine)
 
-        //AvgPath = valueLineA(AvgLine._groups[0][0].__data__.values)
+        var average = d3.selectAll(".line2")
+
+        AvgPath = valueLineA(average._groups[0][0].__data__.values)
 
 
               var PathsEnter = Paths.enter()
                       .append("path")
+                      //.attr("d", AvgPath)
                       .transition()
                             .delay(function(d, i){ return i * 50; })
                             .duration(400)
@@ -893,182 +1073,6 @@ function ready(error,
 
 
 
-      //////////////////////////////////////////////////////////////////////
-      /////////////////////// BANDED COUNTY FUNCTION ///////////////////////
-      //////////////////////////////////////////////////////////////////////
-
-            AvgLine = null;
-
-            var bandCounty = function(data, countyCode){
-
-            ////////////  DATA JOIN FOR MEDIAN  ///////////
-    
-            // Filter data to only include selected county
-            var selectACounty = data.filter(function(d){
-              return +d.key === +countyCode;
-            });
-
-            // Group the county-level data
-           var aCounty = svg.selectAll(".aCounty")
-                .data(selectACounty, function(d){
-                  return d ? d.key : this.key;
-                });
-
-            // Remove any lines that don't carry over between counties
-            aCounty.exit().remove();
-
-            y.domain([d3.min(selectACounty[0].values, function(d) {
-              return +d.low
-            }), 
-            d3.max(selectACounty[0].values, function(d){ 
-              return +d.high
-            })]);
-
-            ////////////  DATA JOIN FOR AREA  ///////////
-
-
-
-                svg.selectAll(".area").remove();
-                svg.selectAll(".line2").remove();
-
-              var areaEnter = aCounty.enter().append("path")
-                //.datum(selectAvState)
-                .attr("d", function(d){
-                  return areaFill(d.values); })
-                .attr("fill", "#B2C1E3")
-                .attr("opacity", 0)
-                .attr("class", "area");
-
-
-              // Add Median Line (later so on top of area)
-              var countyPathsEnter = aCounty.enter()
-                .append("path")
-                .attr("class", "line2")
-                .attr("d", function(d){
-                  return valueLineA(d.values);
-                })
-
-               AvgLine = countyPathsEnter;
-
-              // Reset the State dropdown based on the state of selected county
-                var stateDrop = Slist.selectAll("option")
-                  .property("selected", function(d){
-                  return d.key === countyMap.get(selectACounty[0].key).stateName;
-                })
-
-                // Print which state has been selected (for updating county dropdown)
-                selectedState = Slist.select("select").property("value")
-
-                // Print which county has been selected (for updating county dropdown)
-                selectedCounty = countyMap.get(selectACounty[0].key).County;
-
-                // Update county dropdown
-                updateCountyDrop(selectedCounty);
-
-
-                  ////////////  UPDATE Y AXIS  /////////// 
-
-                  d3.select(".y")
-                    .transition()
-                    .duration(1500)
-                    .call(d3.axisLeft(y)
-                      .ticks(5, "s")
-                      .tickSizeInner(0)
-                      .tickPadding(6)
-                      .tickSize(0, 0));
-            }
-
-
-
-      //////////////////////////////////////////////////////////////////////
-      /////////////////////// BANDED STATE FUNCTION ///////////////////////
-      //////////////////////////////////////////////////////////////////////
-
-            var bandState = function(data, stateName){
-
-
-            ////////////  DATA JOIN FOR MEDIAN  ///////////
-    
-            // Filter data to only include selected State
-            var state = data.filter(function(d){
-              return d.key === stateName;
-            });
-
-            // Group the State-level data
-           var aState = svg.selectAll(".aState")
-                .data(state, function(d){
-                  return d ? d.key : this.key;
-                });
-
-            // Remove any lines that don't carry over between counties
-            aState.exit().remove();
-
-            y.domain([d3.min(state[0].values, function(d) {
-              return +d.low
-            }), 
-            d3.max(state[0].values, function(d){ 
-              return +d.high
-            })]);
-
-            ////////////  DATA JOIN FOR AREA  ///////////
-
-              var areaFill = d3.area()
-                // Same x axis (could use .x0 and .x1 to set different ones)
-                .x(function(d) { return x(parseTimeMonth(d.month)); })
-                .y0(function(d, i) { return y(+d.low); })
-                .y1(function(d, i) { return y(+d.high); })
-                .curve(d3.curveCardinal);
-
-                svg.selectAll(".area").remove();
-                svg.selectAll(".line2").remove();
-
-              var areaEnter = aState.enter().append("path")
-                //.datum(selectAvState)
-                .attr("d", function(d){
-                  return areaFill(d.values); })
-                .attr("fill", "#B2C1E3")
-                .attr("opacity", 0.8)
-                .attr("class", "area");
-
-
-              // Add Median Line (later so on top of area)
-              var StatePathsEnter = aState.enter()
-                .append("path")
-                .attr("class", "line2")
-                .attr("d", function(d){
-                  return valueLineA(d.values);
-                })
-
-
-               // Reset the State dropdown based on the state of selected state
-                var stateDrop = Slist.selectAll("option")
-                  .property("selected", function(d){
-                  return d.key === state[0].key;
-                })
-
-                // Print which state has been selected (for updating county dropdown)
-                selectedState = Slist.select("select").property("value")
-
-                // Print which county has been selected (for updating county dropdown)
-                selectedCounty = stateMap.get(state[0].key).County;
-
-
-                // Update county dropdown
-                updateCountyDrop(selectedCounty);
-
-
-                  ////////////  UPDATE Y AXIS  /////////// 
-
-                  d3.select(".y")
-                    .transition()
-                    .duration(750)
-                    .call(d3.axisLeft(y)
-                      .ticks(5, "s")
-                      .tickSizeInner(0)
-                      .tickPadding(6)
-                      .tickSize(0, 0));
-            }
-
 
       //////////////////////////////////////////////////////////////////////
       ///////////////////// TRANSITION TO AVG FUNCTION /////////////////////
@@ -1089,9 +1093,15 @@ function ready(error,
 
           d3.selectAll(".area")
             .transition()
-            .delay(600)
+            .delay(800)
             .duration(1000)
             .attr("opacity", 0.8)
+
+          d3.selectAll(".line2")
+            .transition()
+            .delay(800)
+            .duration(1000)
+            .attr("opacity", 1)
 
       }
 
@@ -1100,12 +1110,21 @@ function ready(error,
       //////////////////////////////////////////////////////////////////////
 
       var yearTransition = function(){
-
-        console.log(yearLines._groups)
-
+        
         d3.selectAll(".line")
+          .transition()
+          .delay(function(d, i){ return i * 50})
+          .attr("d", function(d, i){ return valueLine(yearLines._groups[0][i].__data__.values )})
 
-          //.attr("d", valueLine(d))
+        d3.selectAll(".line2")
+          .transition()
+            .duration(500)
+            .attr("opacity", 0)
+
+        d3.selectAll(".area")
+          .transition()
+            .duration(500)
+            .attr("opacity", 0)
 
       }
 
@@ -1197,7 +1216,7 @@ function ready(error,
               }
 
 
-                if(d3.selectAll(".toggle.average").classed("active") == true){
+                /*if(d3.selectAll(".toggle.average").classed("active") == true){
                     d3.selectAll(".line").classed("hidden", true)
                     d3.selectAll(".area").classed("hidden", false)
                     d3.selectAll(".line2").classed("hidden", false)
@@ -1208,7 +1227,7 @@ function ready(error,
                     d3.selectAll(".line2").classed("hidden", true);
                     d3.selectAll(".line").classed("hidden", false)
 
-                }
+                }*/
                   
           });
 
