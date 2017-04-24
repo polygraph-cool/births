@@ -125,6 +125,17 @@
                 .y1(function(d, i) { return y(+d.high); })
                 .curve(d3.curveCardinal);
 
+    ///////////////////// FUNCTION TO MOVE TO FRONT //////////////////////
+
+    var moveToFront = function(){
+      var selected = svg.selectAll(".selected")
+
+      return selected.each(function(){
+        selected.parentNode.appendChild(selected);
+      })
+    }
+
+
 
 
     //////////////////////////////////////////////////////////////////////
@@ -1328,6 +1339,10 @@ console.log(selectCounty)
               })
               // Set class to selected for matching line
               .classed("selected", true)
+
+              // raise selected line to front
+              var lineToFront = svg.select(".selected").raise()
+
           })
 
 
@@ -1410,6 +1425,8 @@ console.log(selectCounty)
                 .delay(2000)
                 .duration(800)
                 .attr("r", 8)
+
+            var lineToFront = svg.select(".selected").raise()
                 
 
               //circle.exit().remove();
