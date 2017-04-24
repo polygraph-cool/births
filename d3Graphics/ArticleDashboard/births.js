@@ -800,46 +800,6 @@ console.log(d3.selectAll(".area").data())
               return d.key === stateName;
             });
 
-          console.log(state)
-
-          t0 = svg.transition().duration(5000)
-          t0.selectAll("path.area").attr("d", function(d){ return areaFill(d.values) })
-
-            // Group the State-level data
-          /* var aState = svg.selectAll("path.area")
-                .data(state, function(d){
-                  return d ? d.key : this.key;
-                })*/
-
-                /*.transition()
-                .duration(5000)
-                .attr("d", function(d){
-                  return areaFill(d.values); })*/
-
-                
-                //console.log(aState.data())
-
-              /*var areaEnter = aState.selectAll(".areas")
-                //.datum(selectAvState)
-                .transition()
-                .duration(5000)
-                .attr("d", function(d){
-                  return areaFill(d.values); })
- 
-console.log(d3.selectAll(".area").data())*/
-
-                //.transition()
-                //.duration(5000)
-
-               // console.log(aState)
-
-            /*aState.select("path.area")
-                .attr("d", function(d){
-                  return areaFill(d.values)
-                })*/
-
-               // console.log(aState._enter[0][0].__data__.values)
-
             y.domain([d3.min(state[0].values, function(d) {
               return +d.low
             }), 
@@ -847,12 +807,27 @@ console.log(d3.selectAll(".area").data())*/
               return +d.high
             })]);
 
-          /*aState.select("path.area")
-            //.data(aState)
-            //.transition()
-              //.duration(2000)
-              .attr("d", function(d){
-                  return areaFill(d.values); })*/
+          console.log(state)
+
+                    // Update circles
+                    svg.selectAll("path.area")
+                        .data(state)  // Update with new data
+                        .transition()  // Transition from old to new
+                        .duration(1000)  // Length of animation
+                        //.ease("linear")  // Transition easing - default 'variable' (i.e. has acceleration), also: 'circle', 'elastic', 'bounce', 'linear'
+                        .attr("d", function(d){
+                            return areaFill(d.values); })
+
+                    svg.selectAll(".line2")
+                        .data(state)
+                        .transition()
+                        .duration(1000)
+                        .attr("d", function(d){
+                            return valueLineA(d.values);
+                          })
+                        
+                
+
 
           d3.select(".y")
                     .transition()
