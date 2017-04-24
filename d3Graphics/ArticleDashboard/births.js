@@ -1002,6 +1002,14 @@ function ready(error,
               svg.selectAll(".annotation-group-cause").remove();
               svg.selectAll("circle").remove();
 
+
+          d3.selectAll(".selected-event").classed("selected-event", false)
+          d3.selectAll(".selected")
+            .attr("opacity", 1)
+            .transition()
+              .duration(300)
+              .attr("opacity", 0)
+
         var county = nestACounties.filter(function(d){
               return +d.key === +countyCode;
             });
@@ -1069,7 +1077,9 @@ function ready(error,
               // Remove any remnants from previous event
               svg.selectAll(".annotation-group-result").remove();
               svg.selectAll(".annotation-group-cause").remove();
-              svg.selectAll(".circle").remove();
+              svg.selectAll("circle").remove();
+
+              d3.selectAll(".selected-event").classed("selected-event", false)
 
           // Find the selected state
           var selectedState = Slist.select("select").property("value")
@@ -1102,7 +1112,6 @@ function ready(error,
                 .attr("opacity", 0)
 
             svg.selectAll(".line2")
-              .attr("opacity", 1)
               .transition()
                 .duration(1000)
                 .attr("opacity", 0)
