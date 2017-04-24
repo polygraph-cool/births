@@ -108,9 +108,10 @@ body {
   margin: 0 25px 0 50px;
   color: white;
   vertical-align: middle;
-  line-height: 40px;
+  line-height: 48px;
   display: inline-block;
   position: absolute;
+  font-size: .75em;
 }
 
 
@@ -213,6 +214,10 @@ body {
   padding-right: 30px;
 }
 
+#icon-a {
+  margin-left: 100px;
+}
+
 #icon-a svg,
 #icon-b svg,
 #icon-c svg,
@@ -221,7 +226,7 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  margin: -18px 0 0 25px;
+  margin: -16px 0 0 25px;
   pointer-events: none;
 }
 
@@ -362,6 +367,13 @@ option[value="NaN"][disabled] {
   font-weight: 300;
   font-size: .65em;
   color: #999999;
+  text-transform: uppercase;
+}
+
+.axis.label{
+  font-size: .75em;
+  font-weight: 400;
+  fill: #999999;
 }
 
 .axis path,

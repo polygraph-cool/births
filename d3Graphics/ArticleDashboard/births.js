@@ -582,6 +582,15 @@ console.log(selectCounty)
                     .tickPadding(6)
                     .tickSize(0, 0));
 
+            svg.append("text")
+                  .attr("transform", "rotate(-90)")
+                  .attr("y", 0 - margin.left)
+                  .attr("x", 0 - (height / 2))
+                  .attr("dy", "1em")
+                  .style("text-anchor", "middle")
+                  .text("Babies Born per Month")
+                  .attr("class", "y axis label");      
+
     //////////////////////////////////////////////////////////////////////
     ////////////////////////// EVENT ANNOTATIONS /////////////////////////
     //////////////////////////////////////////////////////////////////////
@@ -1296,6 +1305,8 @@ console.log(selectCounty)
               var selectedCounty = ClistG.select("select").property("value")
 
 
+
+
             if(selectedCounty == "All Counties"){
 
                 // if "All Counties" is selected then generate state average line
@@ -1309,6 +1320,8 @@ console.log(selectCounty)
                   console.log("county update ran!")
 
               }
+
+
 
           d3.select("#dropdown-c").classed("hiddendd", false)
 
