@@ -713,7 +713,6 @@ function ready(error,
                 .attr("opacity", 0.8)
                 .attr("class", "area");
 
-console.log(d3.selectAll(".area").data())
               // Add Median Line (later so on top of area)
               var StatePathsEnter = aStateEnter
                 .append("path")
@@ -721,7 +720,6 @@ console.log(d3.selectAll(".area").data())
                 .attr("d", function(d){
                   return valueLineA(d.values);
                 })
-
 
                // Reset the State dropdown based on the state of selected state
                 var stateDrop = Slist.selectAll("option")
@@ -738,8 +736,6 @@ console.log(d3.selectAll(".area").data())
 
                 // Update county dropdown
                 updateCountyDrop(selectedCounty);
-
-
 
 
           /////////// LINE GRAPH /////////////
@@ -786,6 +782,9 @@ console.log(d3.selectAll(".area").data())
                       .tickSizeInner(0)
                       .tickPadding(6)
                       .tickSize(0, 0));
+
+          // Set the "average" toggle to active
+          d3.selectAll(".toggle.average").classed("active", true)
 
       }
 
@@ -841,9 +840,6 @@ console.log(d3.selectAll(".area").data())
                       return valueLineA(medPathD);
                     })
                   .attr("opacity", 0)
-
-
-
 
             // Update Y Axis
             d3.select(".y")
@@ -1414,8 +1410,16 @@ console.log(d3.selectAll(".area").data())
                 // Print which state has been selected (for updating county dropdown)
                 selectedState = Slist.select("select").property("value")
 
-  
-              stateUpdateAvg(selectedState);
+                console.log()
+
+                if(d3.selectAll(".toggle.average").classed("active") == true){
+                  // If Average is toggled, then run avg update function
+                  stateUpdateAvg(selectedState);
+                } else {
+                  stateUpdateYear();
+                }
+
+              
 
                 /*/////////// RUNNING UPDATE BAND FUNCTION /////////
                 bandState(nestAStates, selectedState);
