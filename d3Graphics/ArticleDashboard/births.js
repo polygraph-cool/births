@@ -833,6 +833,19 @@ function ready(error,
 
       var stateUpdateAvg = function(stateName){
 
+              // Remove any remnants from previous event
+              svg.selectAll(".annotation-group-result").remove();
+              svg.selectAll(".annotation-group-cause").remove();
+              svg.selectAll("circle").remove();
+
+
+          d3.selectAll(".selected-event").classed("selected-event", false)
+          d3.selectAll(".selected")
+            .attr("opacity", 1)
+            .transition()
+              .duration(300)
+              .attr("opacity", 0)
+
           var state = nestAStates.filter(function(d){
               return d.key === stateName;
             });
@@ -908,6 +921,11 @@ function ready(error,
 
       var stateUpdateYear = function(selectedState){
 
+              // Remove any remnants from previous event
+              svg.selectAll(".annotation-group-result").remove();
+              svg.selectAll(".annotation-group-cause").remove();
+              svg.selectAll("circle").remove();
+
           // Find the selected state
           var selectedState = Slist.select("select").property("value")
 
@@ -978,6 +996,12 @@ function ready(error,
 
       var countyUpdateAvg = function(countyCode){
 
+
+              // Remove any remnants from previous event
+              svg.selectAll(".annotation-group-result").remove();
+              svg.selectAll(".annotation-group-cause").remove();
+              svg.selectAll("circle").remove();
+
         var county = nestACounties.filter(function(d){
               return +d.key === +countyCode;
             });
@@ -1040,6 +1064,12 @@ function ready(error,
       //////////////////////////////////////////////////////////////////////
 
       var countyUpdateYear = function(countyCode){
+
+
+              // Remove any remnants from previous event
+              svg.selectAll(".annotation-group-result").remove();
+              svg.selectAll(".annotation-group-cause").remove();
+              svg.selectAll(".circle").remove();
 
           // Find the selected state
           var selectedState = Slist.select("select").property("value")

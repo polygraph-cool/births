@@ -343,7 +343,6 @@ body {
   fill: none;
   stroke: #7D93CA;
   stroke-width: 4px;
-  opacity: 1;
   clip-path: url(#clip);
   transition: 0.5s;
 }
