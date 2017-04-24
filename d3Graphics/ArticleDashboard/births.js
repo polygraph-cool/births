@@ -800,6 +800,8 @@ console.log(d3.selectAll(".area").data())
               return d.key === stateName;
             });
 
+          console.log(state)
+
             y.domain([d3.min(state[0].values, function(d) {
               return +d.low
             }), 
@@ -807,29 +809,44 @@ console.log(d3.selectAll(".area").data())
               return +d.high
             })]);
 
-          console.log(state)
+            // Update paths
+            svg.selectAll("path.area")
+                .data(state)  
+                .transition()  
+                .delay(400)
+                .duration(1200) 
+                .attr("d", function(d){
+                    return areaFill(d.values); })
+                .attr("opacity", 0.8)
 
-                    // Update circles
-                    svg.selectAll("path.area")
-                        .data(state)  // Update with new data
-                        .transition()  // Transition from old to new
-                        .duration(1000)  // Length of animation
-                        //.ease("linear")  // Transition easing - default 'variable' (i.e. has acceleration), also: 'circle', 'elastic', 'bounce', 'linear'
-                        .attr("d", function(d){
-                            return areaFill(d.values); })
+            var medPath = svg.selectAll(".line2")
+                .data(state)
+                .transition()
+                .delay(400)
+                .duration(1200)
+                .attr("d", function(d){
+                    return valueLineA(d.values);
+                  })
+                .attr("opacity", 1)
 
-                    svg.selectAll(".line2")
-                        .data(state)
-                        .transition()
-                        .duration(1000)
-                        .attr("d", function(d){
-                            return valueLineA(d.values);
-                          })
-                        
-                
+            // Accessing path information from median line
+            var medPathD = medPath._groups[0][0].__data__.values
+
+            // Currently have other lines follow the median line
+            svg.selectAll("path.line")
+                .transition()
+                  .delay(function(d, i){ return i * 25; })
+                  .duration(800)
+                  .attr("d", function(d){
+                      return valueLineA(medPathD);
+                    })
+                  .attr("opacity", 0)
 
 
-          d3.select(".y")
+
+
+            // Update Y Axis
+            d3.select(".y")
                     .transition()
                     .duration(1500)
                     .call(d3.axisLeft(y)
@@ -839,6 +856,65 @@ console.log(d3.selectAll(".area").data())
                       .tickSize(0, 0));
 
       }
+
+      //////////////////////////////////////////////////////////////////////
+      ///////////////////// STATE UPDATE YEAR FUNCTION /////////////////////
+      //////////////////////////////////////////////////////////////////////
+
+      var stateUpdateYear = function(){
+
+          var selectedState = Slist.select("select").property("value")
+
+          var state = nestMStates.filter(function(d){
+              return d.key === selectedState;
+            });
+
+            // Update paths
+            svg.selectAll("path.area")  
+                .transition()  
+                .duration(1000) 
+                .attr("opacity", 0)
+
+            svg.selectAll(".line2")
+              .attr("opacity", 1)
+              .transition()
+                .duration(1000)
+                .attr("opacity", 0)
+
+            // update domain
+           var gData = svg.selectAll(".counties")
+              .data(state)
+              .each(function(d){
+                  y.domain(d.value.extent)
+                });
+
+
+            // Move paths from the median line to proper locations
+              gData.selectAll("path.line")
+                .data(function(d){
+                  return (d.value.years);
+                })
+                .transition()
+                  .delay(function(d, i){ return i * 50; })
+                  .duration(1000)
+                  .attr("d", function(d){
+                    return valueLineState(d.values)
+                  })
+                  .attr("opacity", 1)
+
+            // Update Y Axis
+            d3.select(".y")
+                    .transition()
+                    .duration(1500)
+                    .call(d3.axisLeft(y)
+                      .ticks(5, "s")
+                      .tickSizeInner(0)
+                      .tickPadding(6)
+                      .tickSize(0, 0));
+
+      }
+
+
 
 
       //////////////////////////////////////////////////////////////////////
@@ -1045,12 +1121,14 @@ console.log(d3.selectAll(".area").data())
                         y.domain(d.value.extent)
                       });
 
-
+                      console.log(pickedCountyEnter)
 
               var Paths = pickedCountyEnter.selectAll("path")
                       .data(function(d) {
                         return (d.value.years);
                       })
+
+                      console.log(Paths)
 
         var average = d3.selectAll(".line2")
 
@@ -1441,7 +1519,10 @@ console.log(d3.selectAll(".area").data())
         d3.selectAll(".toggle.average")
           .on('click', function(){
 
-            avgTransition();
+              var selectedState = Slist.select("select").property("value")
+
+            //avgTransition();
+            stateUpdateAvg(selectedState);
 
 
             d3.select("#dropdown-c").classed("hiddendd", true)
@@ -1461,7 +1542,9 @@ console.log(d3.selectAll(".area").data())
         d3.selectAll(".toggle.year")
           .on('click', function(){
 
-            yearTransition();
+           // yearTransition();
+
+           stateUpdateYear()
 
           d3.select("#dropdown-c").classed("hiddendd", false)
 
