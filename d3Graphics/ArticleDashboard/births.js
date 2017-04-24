@@ -446,7 +446,7 @@ function ready(error,
           // define Clist (county list) as outer variable
           var ClistG = null;
 
-          var updateCountyDrop = function(selectCounty){
+          var updateCountyDrop = function(selectCounty = "All"){
               // Figure out which state is displayed
               var selectedState = Slist.select("select").property("value")
 
@@ -463,15 +463,14 @@ function ready(error,
                 return d.key;
               })
 
+              console.log(selectedCounties2)
+
               // Add an "All" option
               selectedCounties2.push("001")
 
               selectedCounties2.sort()
-              console.log(selectedCounties2)
-
 
               var Clist = d3.select("#counties")
-
 
               var selection = Clist.selectAll("select");
                 if (selection.empty()) {
@@ -485,6 +484,7 @@ function ready(error,
 
               selection.exit().remove();
 
+console.log(selectCounty)
 
               selection.enter().append("option")
                   .attr("value", function(d){
@@ -494,7 +494,7 @@ function ready(error,
                     if (d != "001"){return countyMap.get(d).County_Name;} else {return "All Counties"}
                   })
                   .property("selected", function(d){
-                    return d ==  selectCounty; 
+                    return +d == +selectCounty; 
                   })
                   .property("disabled", function(d){
                     return d == "NaN";
@@ -773,7 +773,7 @@ function ready(error,
 
 
                 // Update county dropdown
-                updateCountyDrop("All");
+                updateCountyDrop();
 
 
           /////////// LINE GRAPH /////////////
@@ -841,7 +841,7 @@ function ready(error,
 
           d3.selectAll(".selected-event").classed("selected-event", false)
           d3.selectAll(".selected")
-            .attr("opacity", 1)
+            //.attr("opacity", 1)
             .transition()
               .duration(300)
               .attr("opacity", 0)
@@ -858,10 +858,23 @@ function ready(error,
           })
 
           // Print which county has been selected (for updating county dropdown)
-          //selectedCounty = stateMap.get(state[0].key).County;
+         // selectedCounty = stateMap.get(state[0].key).County;
 
           // Update county dropdown
-          updateCountyDrop("All");
+          updateCountyDrop();
+
+          // For updating domain to match year lines
+
+          /*var stateDomain = nestMStates.filter(function(d){
+              return d.key === stateName;
+            });
+
+           // update domain
+           var gData = svg.selectAll(".counties")
+              .data(stateDomain)
+              .each(function(d){
+                  y.domain(d.value.extent)
+                });*/
 
             y.domain([d3.min(state[0].values, function(d) {
               return +d.low
@@ -926,6 +939,8 @@ function ready(error,
               svg.selectAll(".annotation-group-cause").remove();
               svg.selectAll("circle").remove();
 
+          d3.selectAll(".selected-event").classed("selected-event", false)
+
           // Find the selected state
           var selectedState = Slist.select("select").property("value")
 
@@ -938,10 +953,10 @@ function ready(error,
 
 
           // Print which county has been selected (for updating county dropdown)
-          //selectedCounty = stateMap.get(state[0].key).County;
+          selectedCounty = stateMap.get(state[0].key).County;
 
           // Update county dropdown
-          updateCountyDrop("All");
+          updateCountyDrop();
 
             // Update paths
             svg.selectAll("path.area")  
@@ -1005,7 +1020,7 @@ function ready(error,
 
           d3.selectAll(".selected-event").classed("selected-event", false)
           d3.selectAll(".selected")
-            .attr("opacity", 1)
+            //.attr("opacity", 1)
             .transition()
               .duration(300)
               .attr("opacity", 0)
@@ -1014,13 +1029,17 @@ function ready(error,
               return +d.key === +countyCode;
             });
 
+        // Set domain for area chart to same as for line chart
+        var countyDomain = nested.filter(function(d){
+              return +d.key === +countyCode;
+            });
 
-            y.domain([d3.min(county[0].values, function(d) {
-              return +d.low
-            }), 
-            d3.max(county[0].values, function(d){ 
-              return +d.high
-            })]);
+          // update domain
+           var gData = svg.selectAll(".counties")
+              .data(countyDomain)
+              .each(function(d){
+                  y.domain(d.value.extent)
+                });
 
             // Update paths
             svg.selectAll("path.area")
@@ -1097,9 +1116,10 @@ function ready(error,
             return d.key === countyMap.get(county[0].key).stateName;
           })
 
-
           // Print which county has been selected (for updating county dropdown)
           selectedCounty = countyMap.get(county[0].key).County;
+
+          console.log(selectedCounty)
 
           // Update county dropdown
           updateCountyDrop(selectedCounty);  
@@ -1329,8 +1349,14 @@ function ready(error,
               // Determine the year of the selected event's births
               var selectedYear = eventMap.get(selected).year
 
+
               // Update lines for county/year/event
               countyUpdateYear(selectedEvent)
+/*
+              ClistG.selectAll("option")
+                  .property("selected", function(d){
+                    return d.key === 
+                  })*/
 
               // Updating the year list to match the year of event
               var yearSel = yList.selectAll("option")
