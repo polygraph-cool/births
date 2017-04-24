@@ -1328,6 +1328,20 @@ console.log(selectCounty)
           d3.selectAll(".toggle.average").classed("active", false)
           d3.selectAll(".toggle.year").classed("active", true)
 
+                        var selectedYear = yList.select("select").property("value")
+
+            // select all paths and select one that the year matches
+            var selLine = svg.selectAll(".line")
+              // de-select all the lines
+              .classed("selected", false)
+              .filter(function(d) {
+                  return +d.key === +selectedYear
+              })
+              // Set class to selected for matching line
+              .classed("selected", true)
+
+              svg.selectAll(".selected").raise();
+
 
         })
 
@@ -1374,10 +1388,12 @@ console.log(selectCounty)
               // Determine the county of the selected event
               var selectedEvent = eventMap.get(eventName).county
 
+              console.log(selectedEvent)
+
               // Determine the year of the selected event's births
               var selectedYear = eventMap.get(selected).year
 
-
+              console.log(selectedYear)
               // Update lines for county/year/event
               countyUpdateYear(selectedEvent)
 /*
@@ -1409,7 +1425,9 @@ console.log(selectCounty)
               // Unhide year list
               d3.select("#dropdown-c").classed("hiddendd", false)
 
-              var selectedLine = d3.selectAll(".selected")
+              var selectedLine = d3.selectAll(".line.selected")
+
+              console.log(selectedLine)
 
               var selectedLineData = selectedLine._groups[0][0].__data__.values
 
