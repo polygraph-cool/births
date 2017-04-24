@@ -494,7 +494,7 @@ function ready(error,
                     if (d != "001"){return countyMap.get(d).County_Name;} else {return "All Counties"}
                   })
                   .property("selected", function(d){
-                    return d ===  selectCounty; 
+                    return d ==  selectCounty; 
                   })
                   .property("disabled", function(d){
                     return d == "NaN";
@@ -711,12 +711,9 @@ function ready(error,
                 // Print which state has been selected (for updating county dropdown)
                 selectedState = Slist.select("select").property("value")
 
-                // Print which county has been selected (for updating county dropdown)
-                selectedCounty = stateMap.get(state[0].key).County;
-
 
                 // Update county dropdown
-                updateCountyDrop(selectedCounty);
+                updateCountyDrop("All");
 
 
           /////////// LINE GRAPH /////////////
@@ -788,10 +785,10 @@ function ready(error,
           })
 
           // Print which county has been selected (for updating county dropdown)
-          selectedCounty = stateMap.get(state[0].key).County;
+          //selectedCounty = stateMap.get(state[0].key).County;
 
           // Update county dropdown
-          updateCountyDrop(selectedCounty);
+          updateCountyDrop("All");
 
             y.domain([d3.min(state[0].values, function(d) {
               return +d.low
@@ -863,10 +860,10 @@ function ready(error,
 
 
           // Print which county has been selected (for updating county dropdown)
-          selectedCounty = stateMap.get(state[0].key).County;
+          //selectedCounty = stateMap.get(state[0].key).County;
 
           // Update county dropdown
-          updateCountyDrop(selectedCounty);
+          updateCountyDrop("All");
 
             // Update paths
             svg.selectAll("path.area")  
@@ -994,6 +991,21 @@ function ready(error,
           var county = nested.filter(function(d){
               return +d.key === +countyCode;
             });
+
+          // Reset the State dropdown based on the state of selected county
+          var stateDrop = Slist.selectAll("option")
+            .property("selected", function(d){
+            return d.key === countyMap.get(county[0].key).stateName;
+          })
+
+
+          // Print which county has been selected (for updating county dropdown)
+          selectedCounty = countyMap.get(county[0].key).County;
+
+          console.log(selectedCounty)
+
+          // Update county dropdown
+          updateCountyDrop(selectedCounty);  
 
 
             // Update paths
@@ -1208,22 +1220,21 @@ function ready(error,
 
             var eventDisplay = function(eventName){
 
-              // Remove any banded graphics that may still be present
-              svg.selectAll(".area").remove();
-              svg.selectAll(".line2").remove();
-
-              // Determine which event was selected from dropdown
+              // Determine which event was clicked
               var selected = eventName
-
-              console.log(selected)
 
               // Determine the county of the selected event
               var selectedEvent = eventMap.get(eventName).county
 
-              console.log(selectedEvent)
-
               // Determine the year of the selected event's births
               var selectedYear = eventMap.get(selected).year
+
+              // find the line that matches the year on the dropdown
+              // make it class "selected"
+              var yearSel = yList.selectAll("option")
+                  .property("selected", function(d){
+                    return +d.key === +year;
+                  })
 
               // Determine the months of the selected event's births
               var selectedMonths = eventMap.get(selected).months
@@ -1231,17 +1242,11 @@ function ready(error,
               // Unhide year list
               d3.select("#dropdown-c").classed("hiddendd", false)
 
-
-              ////////////  RUNNING UPDATE BAND FUNCTION  /////////// 
-              bandCounty(nestACounties, selectedEvent)
-              // and hiding the new elements (in case people toggle the data view)
-              d3.selectAll(".area").classed("hidden", true)
-              d3.selectAll(".line2").classed("hidden", true)
-
-              ////////////  RUNNING UPDATE MULTI FUNCTION  /////////// 
-              multiCounty(nested, selectedEvent, selectedYear)
+              countyUpdateYear(selectedEvent)
 
               var selectedLine = d3.selectAll(".selected")
+
+              console.log(selectedLine)
 
               var selectedLineData = selectedLine._groups[0][0].__data__.values
 
