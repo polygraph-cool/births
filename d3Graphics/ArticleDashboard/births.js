@@ -709,7 +709,7 @@ function ready(error,
                 //.datum(selectAvState)
                 .attr("d", function(d){
                   return areaFill(d.values); })
-                .attr("fill", "#B2C1E3")
+                .attr("fill", "#E3C0DB")
                 .attr("opacity", 0.8)
                 .attr("class", "area");
 
@@ -720,6 +720,8 @@ function ready(error,
                 .attr("d", function(d){
                   return valueLineA(d.values);
                 })
+
+
 
                // Reset the State dropdown based on the state of selected state
                 var stateDrop = Slist.selectAll("option")
@@ -799,7 +801,11 @@ function ready(error,
               return d.key === stateName;
             });
 
-          console.log(state)
+          // Print which county has been selected (for updating county dropdown)
+          selectedCounty = stateMap.get(state[0].key).County;
+
+          // Update county dropdown
+          updateCountyDrop(selectedCounty);
 
             y.domain([d3.min(state[0].values, function(d) {
               return +d.low
@@ -826,7 +832,7 @@ function ready(error,
                 .attr("d", function(d){
                     return valueLineA(d.values);
                   })
-                .attr("opacity", 1)
+                .attr("opacity", 0.8)
 
             // Accessing path information from median line
             var medPathD = medPath._groups[0][0].__data__.values
@@ -857,13 +863,24 @@ function ready(error,
       ///////////////////// STATE UPDATE YEAR FUNCTION /////////////////////
       //////////////////////////////////////////////////////////////////////
 
-      var stateUpdateYear = function(){
+      var stateUpdateYear = function(selectedState){
 
+          // Find the selected state
           var selectedState = Slist.select("select").property("value")
+
+          // Find the selected year
+          var selectedYear = yList.select("select").property("value")
 
           var state = nestMStates.filter(function(d){
               return d.key === selectedState;
             });
+
+
+          // Print which county has been selected (for updating county dropdown)
+          selectedCounty = stateMap.get(state[0].key).County;
+
+          // Update county dropdown
+          updateCountyDrop(selectedCounty);
 
             // Update paths
             svg.selectAll("path.area")  
@@ -898,6 +915,7 @@ function ready(error,
                   })
                   .attr("opacity", 1)
 
+
             // Update Y Axis
             d3.select(".y")
                     .transition()
@@ -909,6 +927,19 @@ function ready(error,
                       .tickSize(0, 0));
 
       }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -955,7 +986,7 @@ function ready(error,
                 //.datum(selectAvState)
                 .attr("d", function(d){
                   return areaFill(d.values); })
-                .attr("fill", "#B2C1E3")
+                .attr("fill", "#E3C0DB")
                 .attr("opacity", 0)
                 .attr("class", "area");
 
@@ -1407,10 +1438,6 @@ function ready(error,
                 .select("select")
                 .property("value")
 
-                // Print which state has been selected (for updating county dropdown)
-                selectedState = Slist.select("select").property("value")
-
-                console.log()
 
                 if(d3.selectAll(".toggle.average").classed("active") == true){
                   // If Average is toggled, then run avg update function
@@ -1524,6 +1551,9 @@ function ready(error,
           .on('click', function(){
 
               var selectedState = Slist.select("select").property("value")
+
+              // deselect all the lines
+              svg.selectAll(".line").classed("selected", false)
 
             //avgTransition();
             stateUpdateAvg(selectedState);

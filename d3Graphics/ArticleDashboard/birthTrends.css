@@ -333,8 +333,10 @@ body {
 
 .line2 {
   fill: none;
-  stroke: #7D93CA;
-  stroke-width: 3px;
+  stroke: #E87ED0;
+  stroke-width: 2px;
+  stroke-miterlimit: 10;
+  stroke-linecap: round;
 }
 
 .selected {
