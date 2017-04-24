@@ -930,9 +930,129 @@ function ready(error,
 
 
 
+      //////////////////////////////////////////////////////////////////////
+      ////////////////////// COUNTY UPDATE AVG FUNCTION /////////////////////
+      //////////////////////////////////////////////////////////////////////
+
+      var countyUpdateAvg = function(countyCode){
+
+        var county = nestACounties.filter(function(d){
+              return +d.key === +countyCode;
+            });
 
 
+            y.domain([d3.min(county[0].values, function(d) {
+              return +d.low
+            }), 
+            d3.max(county[0].values, function(d){ 
+              return +d.high
+            })]);
 
+            // Update paths
+            svg.selectAll("path.area")
+                .data(county)  
+                .transition()  
+                .delay(400)
+                .duration(1200) 
+                .attr("d", function(d){
+                    return areaFill(d.values); })
+                .attr("opacity", 0.8)
+
+            var medPath = svg.selectAll(".line2")
+                .data(county)
+                .transition()
+                .delay(400)
+                .duration(1200)
+                .attr("d", function(d){
+                    return valueLineA(d.values);
+                  })
+                .attr("opacity", 0.8)
+
+            // Accessing path information from median line
+            var medPathD = medPath._groups[0][0].__data__.values
+
+            // Currently have other lines follow the median line
+            svg.selectAll("path.line")
+                .transition()
+                  .delay(function(d, i){ return i * 25; })
+                  .duration(800)
+                  .attr("d", function(d){
+                      return valueLineA(medPathD);
+                    })
+                  .attr("opacity", 0)
+
+            // Update Y Axis
+            d3.select(".y")
+                    .transition()
+                    .duration(1500)
+                    .call(d3.axisLeft(y)
+                      .ticks(5, "s")
+                      .tickSizeInner(0)
+                      .tickPadding(6)
+                      .tickSize(0, 0));
+
+      }
+
+      //////////////////////////////////////////////////////////////////////
+      ///////////////////// COUNTY UPDATE YEAR FUNCTION ////////////////////
+      //////////////////////////////////////////////////////////////////////
+
+      var countyUpdateYear = function(countyCode){
+
+          // Find the selected state
+          var selectedState = Slist.select("select").property("value")
+
+          // Find the selected year
+          var selectedYear = yList.select("select").property("value")
+
+          var county = nested.filter(function(d){
+              return +d.key === +countyCode;
+            });
+
+
+            // Update paths
+            svg.selectAll("path.area")  
+                .transition()  
+                .duration(1000) 
+                .attr("opacity", 0)
+
+            svg.selectAll(".line2")
+              .attr("opacity", 1)
+              .transition()
+                .duration(1000)
+                .attr("opacity", 0)
+
+            // update domain
+           var gData = svg.selectAll(".counties")
+              .data(county)
+              .each(function(d){
+                  y.domain(d.value.extent)
+                });
+
+            // Move paths from the median line to proper locations
+              gData.selectAll("path.line")
+                .data(function(d){
+                  return (d.value.years);
+                })
+                .transition()
+                  .delay(function(d, i){ return i * 50; })
+                  .duration(1000)
+                  .attr("d", function(d){
+                    return valueLine(d.values)
+                  })
+                  .attr("opacity", 1)
+
+            // Update Y Axis
+            d3.select(".y")
+                    .transition()
+                    .duration(1500)
+                    .call(d3.axisLeft(y)
+                      .ticks(5, "s")
+                      .tickSizeInner(0)
+                      .tickPadding(6)
+                      .tickSize(0, 0));
+
+      }
 
 
 
@@ -1125,7 +1245,7 @@ function ready(error,
       ///////////////////// MULTI LINE COUNTY FUNCTION /////////////////////
       //////////////////////////////////////////////////////////////////////
 
-         var yearLines = null;
+        /* var yearLines = null;
 
           var multiCounty = function(data, countyCode, year, transition){
 
@@ -1246,7 +1366,7 @@ function ready(error,
                   .duration(1500)
                   .call(yAxis)
 
-            };
+            };*/
 
       //////////////////////////////////////////////////////////////////////
       ////////////////////// MULTI LINE STATE FUNCTION /////////////////////
@@ -1477,8 +1597,9 @@ function ready(error,
               // Detecting what year is present on the year dropdown menu
               selectedYear = yList.select("select").property("value")
 
-              // Print which state has been selected (for updating county dropdown)
-              selectedState = Slist.select("select").property("value")
+              var selected = d3.select(this)
+                  .select("select")
+                  .property("value")
 
 
               // Determine which county was selected from dropdown
@@ -1490,13 +1611,12 @@ function ready(error,
 
                   if (d3.selectAll(".toggle.average").classed("active") == true) {
 
-                    /////////// RUNNING UPDATE BAND FUNCTION /////////
-                    bandState(nestAStates, selectedState);
+                    stateUpdateAvg(selectedState);
 
                   } else {
 
                     ////////////  RUNNING UPDATE MULTI FUNCTION  ///////////  
-                    multiState(nestMStates, selectedState);
+                    stateUpdateYear();
 
                   }
 
@@ -1504,43 +1624,16 @@ function ready(error,
 
                 // if any county other than "All Counties" is selected, draw county-level
 
-                 var selected = d3.select(this)
-                  .select("select")
-                  .property("value")
+                if (d3.selectAll(".toggle.average").classed("active") == true){
 
-                ////////////  RUNNING UPDATE MULTI FUNCTION  /////////// 
-                multiCounty(nested, selected, selectedYear)
-
-                /////////// RUNNING UPDATE BAND FUNCTION /////////
-                bandCounty(nestACounties, selected)
-
-                  console.log(d3.selectAll(".toggle.average").classed("active"))
-
-                if(d3.selectAll(".toggle.average").classed("active") == true){
-
-                    avgTransition();
+                     countyUpdateAvg(selected);
 
                 } else {
-                
-                    yearTransition();
 
-                }
-
+                    countyUpdateYear(selected);
               }
 
-
-                /*if(d3.selectAll(".toggle.average").classed("active") == true){
-                    d3.selectAll(".line").classed("hidden", true)
-                    d3.selectAll(".area").classed("hidden", false)
-                    d3.selectAll(".line2").classed("hidden", false)
-                    
-
-                } else {
-                    d3.selectAll(".area").classed("hidden", true);
-                    d3.selectAll(".line2").classed("hidden", true);
-                    d3.selectAll(".line").classed("hidden", false)
-
-                }*/
+            }
                   
           });
 
@@ -1552,11 +1645,19 @@ function ready(error,
 
               var selectedState = Slist.select("select").property("value")
 
-              // deselect all the lines
-              svg.selectAll(".line").classed("selected", false)
+              var selectedCounty = ClistG.select("select").property("value")
 
-            //avgTransition();
-            stateUpdateAvg(selectedState);
+              if(selectedCounty == "All Counties"){
+
+                // if "All Counties" is selected then generate state average line
+                  stateUpdateAvg(selectedState);
+
+              } else {
+
+                // if any other county selected then generate county average line
+                  countyUpdateAvg(selectedCounty)
+
+              }
 
 
             d3.select("#dropdown-c").classed("hiddendd", true)
@@ -1576,9 +1677,24 @@ function ready(error,
         d3.selectAll(".toggle.year")
           .on('click', function(){
 
-           // yearTransition();
+              var selectedState = Slist.select("select").property("value")
 
-           stateUpdateYear()
+              var selectedCounty = ClistG.select("select").property("value")
+
+
+            if(selectedCounty == "All Counties"){
+
+                // if "All Counties" is selected then generate state average line
+                  stateUpdateYear(selectedState);
+                  console.log("state update ran!")
+
+              } else {
+
+                // if any other county selected then generate county average line
+                  countyUpdateYear(selectedCounty)
+                  console.log("county update ran!")
+
+              }
 
           d3.select("#dropdown-c").classed("hiddendd", false)
 
