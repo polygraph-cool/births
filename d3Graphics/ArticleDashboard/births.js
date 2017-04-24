@@ -576,13 +576,13 @@ function ready(error,
     //////////////////////////////////////////////////////////////////////
 
     var eventAnnotationCause = function(title, label, x, y, dy, dx){  
-      const type = d3.annotationCustomType(
+      var type = d3.annotationCustomType(
         d3.annotationCallout, 
         {"className":"custom",
           "note":{"lineType":"vertical"}})
       
 
-      const annotations = [
+      var annotations = [
         {
           note: {
             label: label,
@@ -594,17 +594,23 @@ function ready(error,
           dx: dx
         }]
 
-        const makeAnnotations = d3.annotation()
+        var makeAnnotations = d3.annotation()
           .textWrap(250)
           .notePadding(15)
           .type(type)
           .annotations(annotations)
 
         svg.append("g")
-          .attr("class", "annotation-group")
+          .attr("class", "annotation-group-cause")
           .call(makeAnnotations)
 
+        svg.selectAll(".annotation-group-cause")
+          .attr("opacity", 0)
+          .transition()
+            .duration(800)
+            .attr("opacity", 1)
     }
+
           
 
     var eventAnnotationResult = function(title, label, month, births, dx, dy){
@@ -640,9 +646,63 @@ function ready(error,
           })
           .annotations(annotations)
 
+
           svg.append("g")
-            .attr("class", "annotation-group")
+            .attr("class", "annotation-group-result")
             .call(makeAnnotations)
+
+        svg.selectAll(".annotation-group-result g.annotation-note-content")
+          .attr("opacity", 0)
+          .transition()
+            .delay(3000)
+            .duration(3000)
+            .attr("opacity", 1)
+
+        var annotationPath = svg.selectAll(".annotation-group-result path.connector")
+
+        var totalLength = annotationPath.node().getTotalLength()
+
+        annotationPath
+          .attr("stroke-dasharray", totalLength + " " + totalLength)
+          .attr("stroke-dashoffset", totalLength)
+          .transition()
+            .delay(3000)
+            .duration(totalLength * 3)
+            .ease(d3.easeLinear)
+            .attr("stroke-dashoffset", 0);
+
+        console.log(annotationPath.node().getTotalLength())
+
+
+
+        var notePath = svg.selectAll(".annotation-group-result path.note-line")
+        var totalLengthNote = notePath.node().getTotalLength()
+
+       
+       if (dy > 0){
+
+        notePath
+          .attr("stroke-dasharray", totalLengthNote + " " + totalLengthNote)
+          .attr("stroke-dashoffset", totalLengthNote)
+          .transition()
+            .delay((totalLength * 3) + 3000)
+            .duration(totalLengthNote * 3)
+            .ease(d3.easeLinear)
+            .attr("stroke-dashoffset", 0)
+
+        } else {
+
+        notePath
+          .attr("stroke-dasharray", totalLengthNote + " " + totalLengthNote)
+          .attr("stroke-dashoffset", -totalLengthNote)
+          .transition()
+            .delay((totalLength * 3) + 3000)
+            .duration(totalLengthNote * 3)
+            .ease(d3.easeLinear)
+            .attr("stroke-dashoffset", 0)
+        }
+
+
 
   }
 
@@ -872,7 +932,6 @@ function ready(error,
                 .attr("opacity", 0)
 
             svg.selectAll(".line2")
-              .attr("opacity", 1)
               .transition()
                 .duration(1000)
                 .attr("opacity", 0)
@@ -1002,8 +1061,6 @@ function ready(error,
           // Print which county has been selected (for updating county dropdown)
           selectedCounty = countyMap.get(county[0].key).County;
 
-          console.log(selectedCounty)
-
           // Update county dropdown
           updateCountyDrop(selectedCounty);  
 
@@ -1029,7 +1086,7 @@ function ready(error,
 
             // Move paths from the median line to proper locations
               gData.selectAll("path.line")
-                .data(function(d){
+               .data(function(d){
                   return (d.value.years);
                 })
                 .transition()
@@ -1220,6 +1277,10 @@ function ready(error,
 
             var eventDisplay = function(eventName){
 
+              // Remove any remnants from previous event
+              svg.selectAll(".annotation-group-result").remove();
+              svg.selectAll(".annotation-group-cause").remove();
+
               // Determine which event was clicked
               var selected = eventName
 
@@ -1229,12 +1290,25 @@ function ready(error,
               // Determine the year of the selected event's births
               var selectedYear = eventMap.get(selected).year
 
-              // find the line that matches the year on the dropdown
-              // make it class "selected"
+              // Update lines for county/year/event
+              countyUpdateYear(selectedEvent)
+
+              // Updating the year list to match the year of event
               var yearSel = yList.selectAll("option")
                   .property("selected", function(d){
-                    return +d.key === +year;
+                    return +d.key === +selectedYear;
                   })
+
+              var selLine = svg.selectAll(".line")
+                  .classed("selected-event", false)
+                  // de-select all the lines
+                  .classed("selected", false)
+                  .filter(function(d) {
+                      return +d.key === +selectedYear
+                  })
+                  // Set class to selected for matching line
+                  .classed("selected", true)
+
 
               // Determine the months of the selected event's births
               var selectedMonths = eventMap.get(selected).months
@@ -1242,11 +1316,7 @@ function ready(error,
               // Unhide year list
               d3.select("#dropdown-c").classed("hiddendd", false)
 
-              countyUpdateYear(selectedEvent)
-
               var selectedLine = d3.selectAll(".selected")
-
-              console.log(selectedLine)
 
               var selectedLineData = selectedLine._groups[0][0].__data__.values
 
@@ -1258,19 +1328,26 @@ function ready(error,
               // Generate array of data for only the two months necessary
               var selectedMonthsArray = [eventMonthMap.get(selectedMonths[0]), eventMonthMap.get(selectedMonths[1])]
 
+              svg.selectAll("circle").remove();
+
               // Add circles to lines
               var circle = svg.append("g").selectAll("circle")
                 .data(selectedMonthsArray, function(d){ return d.values; })
                 .enter()
                 .append("circle")
-                .attr("r", 8)
                 .attr("cx", function(d){ return x(parseTimeMonth(d.month))})
                 .attr("cy", function(d){ return y(d.Births)})
                 .attr("fill", "#EF445B")
                 .attr("stroke", "#FFFFFF")
                 .attr("stroke-width", 3)
+                .attr("r", 0)
+                .transition()
+                .delay(2000)
+                .duration(800)
+                .attr("r", 8)
+                
 
-              circle.exit().remove();
+              //circle.exit().remove();
 
               // update gradient for line
               gradientUpdate(selectedMonths);
@@ -1291,6 +1368,8 @@ function ready(error,
               var selecteddX = eventMap.get(selected).causedX
 
               var selecteddY = eventMap.get(selected).causedY
+
+              // generate cause annotation
 
               eventAnnotationCause(selectedCauseTitle, selectedCauseLabel, selectedX, selectedY, selecteddX, selecteddY)
                   
