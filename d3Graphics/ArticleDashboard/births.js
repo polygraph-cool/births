@@ -1348,9 +1348,6 @@ console.log(Clist.select("select").property("value"))
               // Set class to selected for matching line
               .classed("selected", true)
 
-              
-
-
         })
 
 
@@ -1360,6 +1357,13 @@ console.log(Clist.select("select").property("value"))
 
           // Select year from dropdown
           yList.on('change', function(){
+
+          // Remove remnants of event annotations
+          svg.selectAll(".annotation-group-result").remove();
+          svg.selectAll(".annotation-group-cause").remove();
+          svg.selectAll("circle").remove();
+
+          d3.selectAll(".selected-event").classed("selected-event", false)
             var selectedYear = d3.select(this)
                 .select("select")
                 .property("value")
@@ -1387,8 +1391,15 @@ console.log(Clist.select("select").property("value"))
             var eventDisplay = function(eventName){
 
               // Remove any remnants from previous event
-              svg.selectAll(".annotation-group-result").remove();
-              svg.selectAll(".annotation-group-cause").remove();
+              svg.selectAll(".annotation-group-result")
+                .attr("opacity", 1)
+                .transition()
+                  .duration(500)
+                  .attr("opacity", 0)
+                  .remove();
+
+
+              svg.selectAll(".annotation-group-cause").attr("opacity", 1).transition().duration(500).attr("opacity", 0).remove();
 
               // Determine which event was clicked
               var selected = eventName
@@ -1418,7 +1429,14 @@ console.log(Clist.select("select").property("value"))
                     return +d.key === +selectedYear;
                   })
 
-                  svg.selectAll(".selected-event").transition().duration(200).attr("opacity", 0)
+              svg.selectAll(".selected-event")
+                .attr("opacity", 1)
+                .transition()
+                .duration(500)
+                .attr("opacity", 0)
+                .on("end", function(){
+                  svg.selectAll(".selected-event").classed("selected-event", false)
+                })
 
               var selLine = svg.selectAll(".line")
                   .classed("selected-event", false)

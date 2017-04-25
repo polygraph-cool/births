@@ -597,10 +597,10 @@ option[value="NaN"][disabled] {
 
 
 .intro-prose {
-    font-size: .95rem;
+    font-size: 1rem;
     color: black;
     font-weight: 100;
-    line-height: 1.5;
+    line-height: 1.7;
     margin-bottom: 1.5rem;
 }
 
@@ -611,8 +611,8 @@ option[value="NaN"][disabled] {
 }
 
 .right-column-prose {
-    font-size: .9rem;
+    font-size: 1rem;
     margin-bottom: 1rem;
-    line-height: 1.5;
+    line-height: 1.7;
 }
 
