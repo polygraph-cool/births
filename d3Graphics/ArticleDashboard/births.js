@@ -457,7 +457,12 @@ function ready(error,
           // define Clist (county list) as outer variable
           var ClistG = null;
 
-          var updateCountyDrop = function(selectCounty = "All"){
+          var updateCountyDrop = function(selectCounty){
+              // Setting "All Counties" to default
+                  if (selectCounty === undefined) {
+                      selectCounty = "All";
+                  }
+
               // Figure out which state is displayed
               var selectedState = Slist.select("select").property("value")
 
@@ -506,8 +511,8 @@ function ready(error,
                     return d == "NaN";
                   })
 
-              // Setting selected property equal to the selected county
-              selection.property("selected", function(d){
+                  Clist.selectAll("option")
+                  .property("selected", function(d){
                     return +d == +selectCounty; 
                   })
 
@@ -735,100 +740,91 @@ console.log(Clist.select("select").property("value"))
       // The rest of the figure, these elements will just be transitioned
 
 
-      var initialGraph = function(stateName){
+      var initialGraph = function(countyCode){
+
+          /////////// LINE GRAPH /////////////
+
+         var county = nested.filter(function(d){
+                return +d.key == +countyCode;
+              })
+
+
+          var pickedCounty = svg.selectAll(".counties")
+                  .data(county, function(d){
+                    return d ? d.key : this.key;
+                  })
+
+          var pickedCountyEnter = pickedCounty.enter()
+                      .append("g")
+                      .attr("class", "counties")
+                      .each(function(d){
+                        y.domain(d.value.extent)
+                      });
+
+          var Paths = pickedCountyEnter.selectAll("path")
+                      .data(function(d) {
+                        return (d.value.years);
+                      })
+
+
+          // Plot all lines in appropriate places
+
+          var PathsEnter = Paths.enter()
+                      .append("path")
+                      .attr("class", "line")
+                      .attr("d", function(d){
+                          return valueLine(d.values)
+                      })
+                      .attr("opacity", 0.8)
+
+
 
           //////////////   AREA GRAPH    ///////////////
 
-            // Filter data to only include selected State
-            var state = nestAStates.filter(function(d){
-              return d.key === stateName;
+            // Filter data to only include selected county
+            var countyArea = nestACounties.filter(function(d){
+              return +d.key === +countyCode;
             });
 
-            // Group the State-level data
-           var aState = svg.selectAll(".areas")
-                .data(state, function(d){
+
+            // Group the county-level data
+           var aCounty = svg.selectAll(".areas")
+                .data(countyArea, function(d){
                   return d ? d.key : this.key;
                 });
 
-            var aStateEnter = aState.enter()
+            var aCountyEnter = aCounty.enter()
                 .append("g")
                 .attr("class", "areas")
 
-
-            y.domain([d3.min(state[0].values, function(d) {
-              return +d.low
-            }), 
-            d3.max(state[0].values, function(d){ 
-              return +d.high
-            })]);
-
             ////////////  DATA JOIN FOR AREA  ///////////
 
-              aStateEnter.append("path")
+            // Generate path and median line but set opacity to 0
+
+              aCountyEnter.append("path")
                 //.datum(selectAvState)
                 .attr("d", function(d){
                   return areaFill(d.values); })
                 .attr("fill", "#E3C0DB")
-                .attr("opacity", 0.8)
+                .attr("opacity", 0)
                 .attr("class", "area");
 
               // Add Median Line (later so on top of area)
-              var StatePathsEnter = aStateEnter
+              var countyPathsEnter = aCountyEnter
                 .append("path")
                 .attr("class", "line2")
                 .attr("d", function(d){
                   return valueLineA(d.values);
                 })
-
+                .attr("opacity", 0)
 
 
                // Reset the State dropdown based on the state of selected state
                 var stateDrop = Slist.selectAll("option")
                   .property("selected", function(d){
-                  return d.key === state[0].key;
+                  return d.key === countyMap.get(county[0].key).stateName;
                 })
 
-                // Print which state has been selected (for updating county dropdown)
-                selectedState = Slist.select("select").property("value")
-
-
-                // Update county dropdown to default to "All Counties"
-                updateCountyDrop("All");
-
-
-          /////////// LINE GRAPH /////////////
-
-         var state = nestMStates.filter(function(d){
-                return d.key == stateName;
-              })
-
-
-          var pickedstate = svg.selectAll(".counties")
-                  .data(state, function(d){
-                    return d ? d.key : this.key;
-                  })
-
-          var pickedstateEnter = pickedstate.enter()
-                      .append("g")
-                      .attr("class", "counties")
-                      /*.each(function(d){
-                        y.domain(d.value.extent)
-                      });*/
-
-          var Paths = pickedstateEnter.selectAll("path")
-                      .data(function(d) {
-                        return (d.value.years);
-                      })
-
-          // Initially plot annual lines on top of median line (to be moved later)
-
-          AvgPath = valueLineA(StatePathsEnter._groups[0][0].__data__.values)
-
-          var PathsEnter = Paths.enter()
-                      .append("path")
-                      .attr("class", "line")
-                      .attr("d", AvgPath)
-                      .attr("opacity", 0)
 
           d3.select(".y")
                     .transition()
@@ -840,7 +836,14 @@ console.log(Clist.select("select").property("value"))
                       .tickSize(0, 0));
 
           // Set the "average" toggle to active
-          d3.selectAll(".toggle.average").classed("active", true)
+          d3.selectAll(".toggle.year").classed("active", true)
+
+          // Reset dropdowns
+          selectedCounty = countyMap.get(county[0].key).County;
+          console.log(selectedCounty)
+
+          updateCountyDrop(countyCode)
+
 
       }
 
@@ -1207,8 +1210,8 @@ console.log(Clist.select("select").property("value"))
           ///////////////////////////  CALL TO INITIAL GRAPH  //////////////////////////
 
           // Call function to create initial figure
-          // currently set to the state of Maine
-          initialGraph("Maine")
+          // currently set to the county of Suffolk, NY (Hurricane Sandy)
+          initialGraph(36103)
 
           ///////////////////////////  STATE CHANGE  //////////////////////////
 
