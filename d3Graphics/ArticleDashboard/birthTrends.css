@@ -43,6 +43,31 @@ body {
   margin-top: 100px;
 }
 
+.logo {
+    margin: 0 auto;
+    padding-top: 10px;
+    width: 10rem;
+}
+
+.logo-alt{
+    margin: 0 auto;
+    padding-top: 10px;
+    width: 8rem;
+}
+
+.logo-alt svg {
+    width: 100%;
+}
+
+.logo svg {
+    width: 100%;
+}
+
+.headline-section{
+    max-width: 640px;
+    margin: 0 auto;
+}
+
 p.headline-big {
 
     text-align: center;
@@ -55,7 +80,7 @@ p.headline-big {
 }
 
 p.headline-small {
-    font-size: 18px;
+    font-size: 16px;
     text-align: center;
     font-family: 'Canela Web';
     margin: 0px;
@@ -74,6 +99,21 @@ p.headline-small {
     /* -webkit-font-smoothing: antialiased; */
     color: rgba(0,0,0,.90);
 }
+
+.byline {
+    font-size: .75rem;
+    text-align: center;
+    font-family: 'Atlas Grotesk Web';
+    font-weight: 400;
+    /* text-transform: uppercase; */
+    letter-spacing: .05rem;
+    margin-bottom: 40px;
+}
+
+.byline-section {
+    margin-top: 90px;
+}
+
 
 
 /*//////////////////////////////////////////*/
