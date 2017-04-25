@@ -43,6 +43,37 @@ body {
   margin-top: 100px;
 }
 
+p.headline-big {
+
+    text-align: center;
+    font-family: 'Canela Web';
+    margin: 0px;
+    font-size: 84px;
+    font-weight: 400;
+    margin-top: 130px;
+
+}
+
+p.headline-small {
+    font-size: 18px;
+    text-align: center;
+    font-family: 'Canela Web';
+    margin: 0px;
+    font-size: 29px;
+    font-weight: 100;
+    margin-top: 10px;
+}  
+
+.section-title {
+    font-family: 'Atlas Grotesk Web';
+    font-weight: 100;
+    font-size: 1.6em;
+    max-width: 40rem;
+    margin: 0 auto;
+    letter-spacing: -.02em;
+    /* -webkit-font-smoothing: antialiased; */
+    color: rgba(0,0,0,.90);
+}
 
 
 /*//////////////////////////////////////////*/
@@ -333,7 +364,6 @@ body {
   stroke: #D9D9D9;
   stroke-width: 1px;
   /*opacity: 0.7;*/
-  clip-path: url(#clip);
 }
 
 .line2 {
@@ -348,8 +378,6 @@ body {
   fill: none;
   stroke: #7D93CA;
   stroke-width: 4px;
-  clip-path: url(#clip);
-  transition: 0.5s;
 }
 
 option[value="NaN"][disabled] {

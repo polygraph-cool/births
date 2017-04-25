@@ -495,8 +495,6 @@ function ready(error,
 
               selection.exit().remove();
 
-console.log(selectCounty)
-
               selection.enter().append("option")
                   .attr("value", function(d){
                     if (d == "001"){"All"} else {return countyMap.get(d).County;}
@@ -505,7 +503,7 @@ console.log(selectCounty)
                     if (d != "001"){return countyMap.get(d).County_Name;} else {return "All Counties"}
                   })
                   .property("selected", function(d){
-                    return +d == +selectCounty; 
+                    return +d === selectCounty; 
                   })
                   .property("disabled", function(d){
                     return d == "NaN";
@@ -513,10 +511,7 @@ console.log(selectCounty)
 
                   /*.property("selected", function(d){
                   return +d === selectCounty; })*/
-
-
-                console.log(selection)
-
+              console.log(selection)
 
               ClistG = Clist; 
               
@@ -792,8 +787,8 @@ console.log(selectCounty)
                 selectedState = Slist.select("select").property("value")
 
 
-                // Update county dropdown
-                updateCountyDrop();
+                // Update county dropdown to default to "All Counties"
+                updateCountyDrop("All");
 
 
           /////////// LINE GRAPH /////////////
@@ -823,8 +818,6 @@ console.log(selectCounty)
           // Initially plot annual lines on top of median line (to be moved later)
 
           AvgPath = valueLineA(StatePathsEnter._groups[0][0].__data__.values)
-
-          console.log(valueLineA(StatePathsEnter._groups[0][0].__data__.values))
 
           var PathsEnter = Paths.enter()
                       .append("path")
@@ -866,6 +859,7 @@ console.log(selectCounty)
               .duration(300)
               .attr("opacity", 0)
 
+
           var state = nestAStates.filter(function(d){
               return d.key === stateName;
             });
@@ -880,7 +874,7 @@ console.log(selectCounty)
           // Print which county has been selected (for updating county dropdown)
          // selectedCounty = stateMap.get(state[0].key).County;
 
-          // Update county dropdown
+          // Update county dropdown to default to "All Counties"
           updateCountyDrop();
 
           // For updating domain to match year lines
@@ -975,8 +969,10 @@ console.log(selectCounty)
           // Print which county has been selected (for updating county dropdown)
           selectedCounty = stateMap.get(state[0].key).County;
 
+          console.log(selectedCounty)
+
           // Update county dropdown
-          updateCountyDrop();
+          updateCountyDrop(selectedCounty);
 
             // Update paths
             svg.selectAll("path.area")  
@@ -1008,7 +1004,8 @@ console.log(selectCounty)
                   .attr("d", function(d){
                     return valueLineState(d.values)
                   })
-                  .attr("opacity", 1)
+                  .attr("opacity", 0.8);
+
 
 
             // Update Y Axis
@@ -1045,9 +1042,18 @@ console.log(selectCounty)
               .duration(300)
               .attr("opacity", 0)
 
+
         var county = nestACounties.filter(function(d){
               return +d.key === +countyCode;
             });
+
+        selectedCounty = countyMap.get(county[0].key).County;
+
+          console.log(selectedCounty)
+
+          // Update county dropdown
+          updateCountyDrop(selectedCounty);  
+
 
         // Set domain for area chart to same as for line chart
         var countyDomain = nested.filter(function(d){
@@ -1113,12 +1119,12 @@ console.log(selectCounty)
       var countyUpdateYear = function(countyCode){
 
 
-              // Remove any remnants from previous event
-              svg.selectAll(".annotation-group-result").remove();
-              svg.selectAll(".annotation-group-cause").remove();
-              svg.selectAll("circle").remove();
+          // Remove any remnants from previous event
+          svg.selectAll(".annotation-group-result").remove();
+          svg.selectAll(".annotation-group-cause").remove();
+          svg.selectAll("circle").remove();
 
-              d3.selectAll(".selected-event").classed("selected-event", false)
+          d3.selectAll(".selected-event").classed("selected-event", false)
 
           // Find the selected state
           var selectedState = Slist.select("select").property("value")
@@ -1139,11 +1145,8 @@ console.log(selectCounty)
           // Print which county has been selected (for updating county dropdown)
           selectedCounty = countyMap.get(county[0].key).County;
 
-          console.log(selectedCounty)
-
           // Update county dropdown
           updateCountyDrop(selectedCounty);  
-
 
             // Update paths
             svg.selectAll("path.area")  
@@ -1174,7 +1177,7 @@ console.log(selectCounty)
                   .attr("d", function(d){
                     return valueLine(d.values)
                   })
-                  .attr("opacity", 1)
+                  .attr("opacity", 0.8)
 
             // Update Y Axis
             d3.select(".y")
@@ -1340,7 +1343,7 @@ console.log(selectCounty)
               // Set class to selected for matching line
               .classed("selected", true)
 
-              svg.selectAll(".selected").raise();
+              
 
 
         })
@@ -1408,6 +1411,8 @@ console.log(selectCounty)
                     return +d.key === +selectedYear;
                   })
 
+                  svg.selectAll(".selected-event").transition().duration(200).attr("opacity", 0)
+
               var selLine = svg.selectAll(".line")
                   .classed("selected-event", false)
                   // de-select all the lines
@@ -1418,6 +1423,8 @@ console.log(selectCounty)
                   // Set class to selected for matching line
                   .classed("selected", true)
 
+              var lineToFront = svg.select(".selected").raise()
+
 
               // Determine the months of the selected event's births
               var selectedMonths = eventMap.get(selected).months
@@ -1426,8 +1433,6 @@ console.log(selectCounty)
               d3.select("#dropdown-c").classed("hiddendd", false)
 
               var selectedLine = d3.selectAll(".line.selected")
-
-              console.log(selectedLine)
 
               var selectedLineData = selectedLine._groups[0][0].__data__.values
 
@@ -1457,7 +1462,7 @@ console.log(selectCounty)
                 .duration(800)
                 .attr("r", 8)
 
-            var lineToFront = svg.select(".selected").raise()
+            
                 
 
               //circle.exit().remove();
