@@ -502,13 +502,18 @@ function ready(error,
                   .text(function(d){
                     if (d != "001"){return countyMap.get(d).County_Name;} else {return "All Counties"}
                   })
-                  .property("selected", function(d){
-                    return +d === selectCounty; 
-                  })
                   .property("disabled", function(d){
                     return d == "NaN";
                   })
 
+              // Setting selected property equal to the selected county
+              selection.property("selected", function(d){
+                    return +d == +selectCounty; 
+                  })
+
+                  console.log(selectCounty)
+
+console.log(Clist.select("select").property("value"))
                   /*.property("selected", function(d){
                   return +d === selectCounty; })*/
               console.log(selection)
@@ -1399,6 +1404,8 @@ function ready(error,
               console.log(selectedYear)
               // Update lines for county/year/event
               countyUpdateYear(selectedEvent)
+
+              updateCountyDrop(selectedEvent)
 /*
               ClistG.selectAll("option")
                   .property("selected", function(d){
