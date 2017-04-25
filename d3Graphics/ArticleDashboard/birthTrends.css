@@ -160,6 +160,7 @@ p.headline-small {
   color: #7D93CA;
   background-color: white;
   border: none;
+  cursor: pointer;
 }
 
 #dropdown-c.hiddendd {

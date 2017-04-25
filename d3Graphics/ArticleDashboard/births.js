@@ -977,7 +977,7 @@ console.log(Clist.select("select").property("value"))
           console.log(selectedCounty)
 
           // Update county dropdown
-          updateCountyDrop(selectedCounty);
+          updateCountyDrop();
 
             // Update paths
             svg.selectAll("path.area")  
@@ -1289,7 +1289,7 @@ console.log(Clist.select("select").property("value"))
               } else {
 
                 // if any other county selected then generate county average line
-                  countyUpdateAvg("All")
+                  countyUpdateAvg(selectedCounty)
 
               }
 
@@ -1311,8 +1311,6 @@ console.log(Clist.select("select").property("value"))
               var selectedState = Slist.select("select").property("value")
 
               var selectedCounty = ClistG.select("select").property("value")
-
-
 
 
             if(selectedCounty == "All Counties"){
