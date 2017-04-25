@@ -480,7 +480,7 @@ function ready(error,
               // Setting "All Counties" to default
                   if (selectCounty === undefined) {
                       selectCounty = "All";
-                  }
+                  } else { +selectCounty }
 
               // Figure out which state is displayed
               var selectedState = Slist.select("select").property("value")
@@ -520,6 +520,9 @@ function ready(error,
               selection.exit().remove();
 
               selection.enter().append("option")
+                  .property("selected", function(d){
+                    return d == selectCounty; 
+                  })
                   .attr("value", function(d){
                     if (d == "001"){"All"} else {return countyMap.get(d).County;}
                   })
@@ -530,10 +533,6 @@ function ready(error,
                     return d == "NaN";
                   })
 
-                  Clist.selectAll("option")
-                  .property("selected", function(d){
-                    return +d == +selectCounty; 
-                  })
 
                   console.log(selectCounty)
 
@@ -994,11 +993,11 @@ console.log(Clist.select("select").property("value"))
               return d.key === selectedState;
             });
 
-        var stateDrop = Slist.selectAll("option")
+       /* var stateDrop = Slist.selectAll("option")
             .property("selected", function(d){
             return d.key === selectedState[0].key;
           })
-
+*/
 
           // Print which county has been selected (for updating county dropdown)
           selectedCounty = stateMap.get(state[0].key).County;
@@ -1083,14 +1082,7 @@ console.log(Clist.select("select").property("value"))
             });
 
 
-        selectedCounty = countyMap.get(county[0].key).County;
 
-          console.log(selectedCounty)
-
-
-
-          // Update county dropdown
-          updateCountyDrop(selectedCounty);  
 
 
         // Set domain for area chart to same as for line chart
@@ -1142,6 +1134,13 @@ console.log(Clist.select("select").property("value"))
             .property("selected", function(d){
             return d.key === countyMap.get(county[0].key).stateName;
           })
+
+          selectedCounty = countyMap.get(county[0].key).County;
+
+          console.log(selectedCounty)
+
+          // Update county dropdown
+          updateCountyDrop(countyCode);  
 
             // Update Y Axis
             d3.select(".y")
