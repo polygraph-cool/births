@@ -408,6 +408,25 @@ function ready(error,
         resultdX: -.005,
         resultdY: 60,
 
+      },
+      {
+        type: "terror",
+        year: 1996,
+        months: ["Jan", "Feb"],
+        title: "Oklahoma City Bombing",
+        state: "Oklahoma",
+        county: 40109,
+        causeTitle: "Oklahoma City Bombing",
+        causelabel: "In 1995, Oklahoma City was home to a domestic terror attack. Did residents respond to the violence with a population increase?",
+        causeX: 20,
+        causeY: -20,
+        causedX: 0,
+        causedY: 0,
+        resultTitle: "Extra Babies?",
+        resultlabel: "It doesn't look like it. While the early months tend to have low birth counts in this area, 9 months after the attack saw the lowest.",
+        resultdX: 0,
+        resultdY: -90,
+
       }
 
     ];
@@ -975,6 +994,11 @@ console.log(Clist.select("select").property("value"))
               return d.key === selectedState;
             });
 
+        var stateDrop = Slist.selectAll("option")
+            .property("selected", function(d){
+            return d.key === selectedState[0].key;
+          })
+
 
           // Print which county has been selected (for updating county dropdown)
           selectedCounty = stateMap.get(state[0].key).County;
@@ -1113,6 +1137,11 @@ console.log(Clist.select("select").property("value"))
                       return valueLineA(medPathD);
                     })
                   .attr("opacity", 0)
+
+           var stateDrop = Slist.selectAll("option")
+            .property("selected", function(d){
+            return d.key === countyMap.get(county[0].key).stateName;
+          })
 
             // Update Y Axis
             d3.select(".y")
@@ -1591,6 +1620,21 @@ console.log(Clist.select("select").property("value"))
               .classed("current", true)
           })
 
+        d3.select("#icon-f")
+          .on("click", function(){
+            eventDisplay("Oklahoma City Bombing")
+          d3.selectAll(".icons")
+              .classed("current", false)
+            d3.select(this)
+              .classed("current", true)
+          })
+
+          ////////// STYLE INITIAL CHART /////////
+          eventDisplay("Hurricane Sandy")
+          d3.selectAll("g.annotation-group-cause").remove();
+          d3.selectAll(".annotation-note-label").remove();
+          d3.selectAll(".annotation-note-bg").remove();
+
 
 
     //////////////////////////////////////////////////////////////////////
@@ -1630,8 +1674,8 @@ console.log(Clist.select("select").property("value"))
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 0,
-            duration:400
+            offset: 100,
+            duration:500
           })
           .addIndicators({name: "first trigger"}) // add indicators (requires plugin)
           .addTo(controller)
@@ -1639,14 +1683,37 @@ console.log(Clist.select("select").property("value"))
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
             }
             else{
-                stateUpdateAvg("Florida")
+                
+                eventDisplay("Red Sox World Series Win")
+                  d3.selectAll("g.annotation-group-cause").remove();
+                  d3.selectAll(".annotation-note-label").remove();
+                  d3.selectAll(".annotation-note-bg").remove();
+                  d3.selectAll(".icons")
+                    .classed("current", false)
+                  d3.selectAll(".icons#icon-e")
+                    .classed("current", true)
+
+                d3.selectAll("#Sports").classed("highlighted", true)
 
             }
           })
           .on("leave",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
 
-                stateUpdateAvg("Maine")
+                  d3.selectAll(".highlighted").classed("highlighted", false)
+                  d3.selectAll(".selected-event").classed("selected-event", false)
+                  d3.selectAll(".selected").classed("selected", false)
+
+                  //initialGraph(36103)
+                  eventDisplay("Hurricane Sandy")
+
+                  d3.selectAll("g.annotation-group-cause").remove();
+                  d3.selectAll(".annotation-note-label").remove();
+                  d3.selectAll(".annotation-note-bg").remove();
+                  d3.selectAll(".icons")
+                    .classed("current", false)
+                  d3.selectAll(".icons#icon-a")
+                    .classed("current", true)
 
             }
             else{
@@ -1658,8 +1725,8 @@ console.log(Clist.select("select").property("value"))
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 400,
-            duration:800
+            offset: 600,
+            duration:300
           })
           .addIndicators({name: "second trigger"}) // add indicators (requires plugin)
           .addTo(controller)
@@ -1667,15 +1734,149 @@ console.log(Clist.select("select").property("value"))
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
             }
             else{
+                d3.selectAll(".highlighted").classed("highlighted", false)
+                d3.selectAll("#Terror").classed("highlighted", true)
 
-                stateUpdateAvg("California")
+                eventDisplay("Oklahoma City Bombing")
+                  d3.selectAll("g.annotation-group-cause").remove();
+                  d3.selectAll(".annotation-note-label").remove();
+                  d3.selectAll(".annotation-note-bg").remove();
+                  d3.selectAll(".icons")
+                    .classed("current", false)
+                  d3.selectAll(".icons#icon-f")
+                    .classed("current", true)
+               
 
             }
           })
           .on("leave",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
+
+              d3.selectAll(".highlighted").classed("highlighted", false)
                
-               stateUpdateAvg("Florida")
+                eventDisplay("Red Sox World Series Win")
+                  d3.selectAll("g.annotation-group-cause").remove();
+                  d3.selectAll(".annotation-note-label").remove();
+                  d3.selectAll(".annotation-note-bg").remove();
+                  d3.selectAll(".icons")
+                    .classed("current", false)
+                  d3.selectAll(".icons#icon-e")
+                    .classed("current", true)
+
+                d3.selectAll("#Sports").classed("highlighted", true)
+            }
+            else{
+            }
+          })
+          ;
+
+          var thirdTrigger = new ScrollMagic.Scene({
+            // triggerElement: ".third-chart-wrapper",
+            triggerElement: "#right-column",
+            triggerHook:0,
+            offset: 900,
+            duration:300
+          })
+          .addIndicators({name: "third trigger"}) // add indicators (requires plugin)
+          .addTo(controller)
+          .on("enter",function(e){
+            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+            }
+            else{
+
+                  countyUpdateAvg(40109)
+                  d3.selectAll("#Season").classed("highlighted", true)
+                  d3.selectAll(".toggle.year").classed("active", false)
+                  d3.selectAll(".toggle.average").classed("active", true)
+               
+
+            }
+          })
+          .on("leave",function(e){
+            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+
+                d3.selectAll(".highlighted").classed("highlighted", false)
+                d3.selectAll("#Terror").classed("highlighted", true)
+
+                eventDisplay("Oklahoma City Bombing")
+                  d3.selectAll("g.annotation-group-cause").remove();
+                  d3.selectAll(".annotation-note-label").remove();
+                  d3.selectAll(".annotation-note-bg").remove();
+                  d3.selectAll(".icons")
+                    .classed("current", false)
+                  d3.selectAll(".icons#icon-f")
+                    .classed("current", true)
+
+                  d3.selectAll(".toggle.year").classed("active", true)
+                  d3.selectAll(".toggle.average").classed("active", false)
+               
+            }
+            else{
+            }
+          })
+          ;
+
+          var fourthTrigger = new ScrollMagic.Scene({
+            // triggerElement: ".third-chart-wrapper",
+            triggerElement: "#right-column",
+            triggerHook:0,
+            offset: 1300,
+            duration:200
+          })
+          .addIndicators({name: "fourth trigger"}) // add indicators (requires plugin)
+          .addTo(controller)
+          .on("enter",function(e){
+            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+            }
+            else{
+
+                  stateUpdateAvg("Florida")
+                  d3.selectAll("#Florida").classed("highlighted", true)
+
+               
+
+            }
+          })
+          .on("leave",function(e){
+            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+
+                  countyUpdateAvg(40109)
+                  d3.selectAll("#Florida").classed("highlighted", false)
+               
+            }
+            else{
+            }
+          })
+          ;
+
+        var fifthTrigger = new ScrollMagic.Scene({
+            // triggerElement: ".third-chart-wrapper",
+            triggerElement: "#right-column",
+            triggerHook:0,
+            offset: 1500,
+            duration:200
+          })
+          .addIndicators({name: "fifth trigger"}) // add indicators (requires plugin)
+          .addTo(controller)
+          .on("enter",function(e){
+            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+            }
+            else{
+
+                  stateUpdateAvg("Maine")
+                  d3.selectAll("#Maine").classed("highlighted", true)
+                  d3.selectAll("#Florida").classed("highlighted", false)
+               
+
+            }
+          })
+          .on("leave",function(e){
+            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+
+                  stateUpdateAvg("Florida")
+                  d3.selectAll("#Florida").classed("highlighted", true)
+                  d3.selectAll("#Maine").classed("highlighted", false)
+               
             }
             else{
             }

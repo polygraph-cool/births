@@ -283,7 +283,8 @@ p.headline-small {
 #icon-b,
 #icon-c,
 #icon-d, 
-#icon-e {
+#icon-e,
+#icon-f {
   display: inline-block;
   position: relative;
   width: 48px;
@@ -300,7 +301,8 @@ p.headline-small {
 #icon-b svg,
 #icon-c svg,
 #icon-d svg,
-#icon-e svg {
+#icon-e svg,
+#icon-f svg {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -313,7 +315,8 @@ p.headline-small {
 #icon-hurricane,
 #icon-snow,
 #icon-football,
-#icon-baseball {
+#icon-baseball,
+#icon-terrorism {
   position: absolute;
   fill: none;
   stroke: #FFFFFF;
@@ -327,7 +330,8 @@ p.headline-small {
 #icon-b:hover #icon-hurricane,
 #icon-c:hover #icon-snow,
 #icon-d:hover #icon-football,
-#icon-e:hover #icon-baseball {
+#icon-e:hover #icon-baseball,
+#icon-f:hover #icon-terrorism {
   position: absolute;
   fill: none;
   stroke: white;
@@ -340,7 +344,8 @@ p.headline-small {
 #icon-b:hover,
 #icon-c:hover,
 #icon-d:hover,
-#icon-e:hover  {
+#icon-e:hover,
+#icon-f:hover  {
   background-color: #B2C1E3;
   cursor: pointer;
 }
@@ -349,7 +354,8 @@ p.headline-small {
 #icon-b.current,
 #icon-c.current,
 #icon-d.current,
-#icon-e.current {
+#icon-e.current,
+#icon-f.current {
   /*border-bottom: 4px solid #7D93CA;
   margin-bottom: 0;*/
   background-color: #B2C1E3;
@@ -362,10 +368,6 @@ p.headline-small {
   stroke: white;
   stroke-width: 2;
   stroke-miterlimit: 10;
-}
-
-#icon-a .current{
-
 }
 
 #icon-dropdown {
@@ -676,6 +678,13 @@ option[value="NaN"][disabled] {
     font-size: 1rem;
     margin-bottom: 1rem;
     line-height: 1.7;
+}
+
+.highlighted{
+  background-color: #B2C1E3;
+  transition: 1000ms;
+  padding: 5px;
+
 }
 
 .right-column-prose.note{
