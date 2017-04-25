@@ -1055,9 +1055,12 @@ console.log(Clist.select("select").property("value"))
               return +d.key === +countyCode;
             });
 
+
         selectedCounty = countyMap.get(county[0].key).County;
 
           console.log(selectedCounty)
+
+
 
           // Update county dropdown
           updateCountyDrop(selectedCounty);  
@@ -1285,7 +1288,9 @@ console.log(Clist.select("select").property("value"))
 
               var selectedCounty = ClistG.select("select").property("value")
 
-              if(selectedCounty == "All"){
+
+
+              if(selectedCounty == "All Counties"){
 
                 // if "All Counties" is selected then generate state average line
                   stateUpdateAvg(selectedState);
@@ -1315,6 +1320,7 @@ console.log(Clist.select("select").property("value"))
               var selectedState = Slist.select("select").property("value")
 
               var selectedCounty = ClistG.select("select").property("value")
+              console.log(selectedCounty)
 
 
             if(selectedCounty == "All Counties"){
