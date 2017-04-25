@@ -11,7 +11,6 @@ html, body, div, h1, h2, h3, a, p, img, dl, dt, dd, ul, li {
 
 body {
 	background-size: 100% 100%;
-
 	background-color: white;
 	font-family: 'Publico Text Web';
 	font-size: 1rem;
@@ -38,6 +37,12 @@ body {
   position: relative;
   flex-grow: 1;
 }
+
+#conclusion{
+    max-width: 640px;
+    margin: 0 auto;
+    margin-top: 70px;
+  }
 
 #graph svg{
   margin-top: 100px;
@@ -91,13 +96,14 @@ p.headline-small {
 
 .section-title {
     font-family: 'Atlas Grotesk Web';
-    font-weight: 100;
-    font-size: 1.6em;
+    font-weight: 600;
+    font-size: 1.0em;
     max-width: 40rem;
     margin: 0 auto;
-    letter-spacing: -.02em;
+    /* letter-spacing: -.02em; */
     /* -webkit-font-smoothing: antialiased; */
     color: rgba(0,0,0,.90);
+    text-transform: uppercase;
 }
 
 .byline {
@@ -649,7 +655,8 @@ option[value="NaN"][disabled] {
 
 
 
-.intro-prose {
+.intro-prose,
+.conclusion-prose {
     font-size: 1rem;
     color: black;
     font-weight: 100;
@@ -663,9 +670,18 @@ option[value="NaN"][disabled] {
     margin-top: 70px;
 }
 
+
+
 .right-column-prose {
     font-size: 1rem;
     margin-bottom: 1rem;
     line-height: 1.7;
 }
+
+.right-column-prose.note{
+    font-size: .65rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
 

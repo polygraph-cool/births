@@ -1599,7 +1599,7 @@ console.log(Clist.select("select").property("value"))
       				triggerElement: "#container",
       				triggerHook:0,
       				offset: -100,
-      				duration:600
+      				duration:1800
       			})
       			.addIndicators({name: "pin chart"}) // add indicators (requires plugin)
       			.setPin("#graph", {pushFollowers: true})
