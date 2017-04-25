@@ -1281,7 +1281,7 @@ console.log(Clist.select("select").property("value"))
 
               var selectedCounty = ClistG.select("select").property("value")
 
-              if(selectedCounty == "All Counties"){
+              if(selectedCounty == "All"){
 
                 // if "All Counties" is selected then generate state average line
                   stateUpdateAvg(selectedState);
@@ -1289,7 +1289,7 @@ console.log(Clist.select("select").property("value"))
               } else {
 
                 // if any other county selected then generate county average line
-                  countyUpdateAvg(selectedCounty)
+                  countyUpdateAvg("All")
 
               }
 
