@@ -855,6 +855,7 @@ console.log(Clist.select("select").property("value"))
               svg.selectAll(".annotation-group-result").remove();
               svg.selectAll(".annotation-group-cause").remove();
               svg.selectAll("circle").remove();
+              d3.selectAll(".icons").classed("current", false)
 
 
           d3.selectAll(".selected-event").classed("selected-event", false)
@@ -957,6 +958,7 @@ console.log(Clist.select("select").property("value"))
               svg.selectAll(".annotation-group-result").remove();
               svg.selectAll(".annotation-group-cause").remove();
               svg.selectAll("circle").remove();
+              d3.selectAll(".icons").classed("current", false)
 
           d3.selectAll(".selected-event").classed("selected-event", false)
 
@@ -1038,6 +1040,7 @@ console.log(Clist.select("select").property("value"))
               svg.selectAll(".annotation-group-result").remove();
               svg.selectAll(".annotation-group-cause").remove();
               svg.selectAll("circle").remove();
+              d3.selectAll(".icons").classed("current", false)
 
 
           d3.selectAll(".selected-event").classed("selected-event", false)
@@ -1128,6 +1131,7 @@ console.log(Clist.select("select").property("value"))
           svg.selectAll(".annotation-group-result").remove();
           svg.selectAll(".annotation-group-cause").remove();
           svg.selectAll("circle").remove();
+          d3.selectAll(".icons").classed("current", false)
 
           d3.selectAll(".selected-event").classed("selected-event", false)
 
@@ -1533,33 +1537,49 @@ console.log(Clist.select("select").property("value"))
         }
 
 
-        d3.select("#icon-storms")
+        d3.select("#icon-a")
           .on("click", function(){
             eventDisplay("Hurricane Sandy");
-            d3.selectAll("icons")
-              .classed("selected", false)
-            d3.select("#icon-a")
-              .classed("selected", true)
+            d3.selectAll(".icons")
+              .classed("current", false)
+            d3.select(this)
+              .classed("current", true)
           })
 
-        d3.select("#icon-hurricane")
+        d3.select("#icon-b")
           .on("click", function(){
             eventDisplay("Hurricane Katrina")
+            d3.selectAll(".icons")
+              .classed("current", false)
+            d3.select(this)
+              .classed("current", true)
           })
 
-        d3.select("#icon-snow")
+        d3.select("#icon-c")
           .on("click", function(){
             eventDisplay("Blizzard of 1996")
+            d3.selectAll(".icons")
+              .classed("current", false)
+            d3.select(this)
+              .classed("current", true)
           })
 
-        d3.select("#icon-football")
+        d3.select("#icon-d")
           .on("click", function(){
             eventDisplay("Seahawks Superbowl Win")
+            d3.selectAll(".icons")
+              .classed("current", false)
+            d3.select(this)
+              .classed("current", true)
           })
 
-        d3.select("#icon-baseball")
+        d3.select("#icon-e")
           .on("click", function(){
             eventDisplay("Red Sox World Series Win")
+          d3.selectAll(".icons")
+              .classed("current", false)
+            d3.select(this)
+              .classed("current", true)
           })
 
 

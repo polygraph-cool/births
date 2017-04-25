@@ -284,8 +284,8 @@ p.headline-small {
 #icon-e:hover #icon-baseball {
   position: absolute;
   fill: none;
-  stroke: #B2C1E3;
-  stroke-width: 1;
+  stroke: white;
+  stroke-width: 2;
   stroke-miterlimit: 10;
   stroke-linecap: round;
 }
@@ -295,28 +295,31 @@ p.headline-small {
 #icon-c:hover,
 #icon-d:hover,
 #icon-e:hover  {
-  background-color: black;
+  background-color: #B2C1E3;
   cursor: pointer;
 }
 
 #icon-a.current,
 #icon-b.current,
-#icon-c.current {
-  border-bottom: 4px solid #7D93CA;
-  margin-bottom: 0;
+#icon-c.current,
+#icon-d.current,
+#icon-e.current {
+  /*border-bottom: 4px solid #7D93CA;
+  margin-bottom: 0;*/
+  background-color: #B2C1E3;
 }
 
 #icons .current #icon-storms,
 #icons .current #icon-sports,
 #icons .current #icon-terrorism {
   fill: none;
-  stroke: #7D93CA;
+  stroke: white;
   stroke-width: 2;
   stroke-miterlimit: 10;
 }
 
-#icon-a .selected{
-  fill: white;
+#icon-a .current{
+
 }
 
 #icon-dropdown {
