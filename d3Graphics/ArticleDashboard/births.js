@@ -495,9 +495,10 @@ function ready(error,
 
           var updateCountyDrop = function(selectCounty){
               // Setting "All Counties" to default
-                  /*if (selectCounty === undefined) {
+                  if (selectCounty === undefined) {
+                    console.log("selectCounty was undefined")
                       selectCounty == "All";
-                  } */
+                  } else { console.log("selectCounty was defined")}
 
               // Figure out which state is displayed
               var selectedState = Slist.select("select").property("value")
@@ -540,7 +541,7 @@ function ready(error,
 
               selection.enter().append("option")
                   .property("value", function(d){
-                    if (d != "001"){return countyMap.get(d).County;} else { return "All"}
+                    if (d != "001"){return countyMap.get(d).County;} else { return 001}
                   })
                   .text(function(d){
                     if (d != "001"){return countyMap.get(d).County_Name;} else {return "All Counties"}
@@ -553,9 +554,10 @@ function ready(error,
                   console.log(selection)
                   console.log(Slist.selectAll("option"))
 
-                  selection
+              // Setting selected property equal to the selected county
+                Clist.selectAll("option")
                   .property("selected", function(d){
-                    return +d == +selectCounty;
+                    return +d == +selectCounty; 
                   })
 
                   // Fixes county drop 
