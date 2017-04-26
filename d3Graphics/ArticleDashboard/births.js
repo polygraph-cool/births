@@ -495,12 +495,14 @@ function ready(error,
 
           var updateCountyDrop = function(selectCounty){
               // Setting "All Counties" to default
-                  if (selectCounty === undefined) {
-                      selectCounty = "All";
-                  } else { +selectCounty }
+                  /*if (selectCounty === undefined) {
+                      selectCounty == "All";
+                  } */
 
               // Figure out which state is displayed
               var selectedState = Slist.select("select").property("value")
+
+              console.log(selectedState)
 
               // Filter for that state
               var selectedStateG = nestedStates.filter(function(d){
@@ -514,8 +516,6 @@ function ready(error,
               var selectedCounties2 = selectedCounties[0].map(function(d){
                 return d.key;
               })
-
-              console.log(selectedCounties2)
 
               // Add an "All" option
               selectedCounties2.push("001")
@@ -534,14 +534,13 @@ function ready(error,
                     return d;
                   })
 
+              console.log(selection)
+
               selection.exit().remove();
 
               selection.enter().append("option")
-                  .property("selected", function(d){
-                    return d == selectCounty; 
-                  })
-                  .attr("value", function(d){
-                    if (d == "001"){"All"} else {return countyMap.get(d).County;}
+                  .property("value", function(d){
+                    if (d != "001"){return countyMap.get(d).County;} else { return "All"}
                   })
                   .text(function(d){
                     if (d != "001"){return countyMap.get(d).County_Name;} else {return "All Counties"}
@@ -549,6 +548,34 @@ function ready(error,
                   .property("disabled", function(d){
                     return d == "NaN";
                   })
+                  
+                  console.log(Clist.selectAll("option"))
+                  console.log(selection)
+                  console.log(Slist.selectAll("option"))
+
+                  selection
+                  .property("selected", function(d){
+                    return +d == +selectCounty;
+                  })
+
+                  // Fixes county drop 
+                  /*selection
+                  .property("selected", function(d){
+                    return d == selectCounty; 
+                  })
+
+                  selection
+                    .property("selected", function(d){
+                    })*/
+
+                console.log("County dropdown updated")
+
+                  var property = Clist.select("select").property("value")
+
+                 /* if (+selectCounty != +property){
+                    selection.property("selected", function(d){ return d == selectCounty})
+                    console.log("NOT EQUAL!")
+                  }*/
 
 
                   console.log(selectCounty)
@@ -861,6 +888,7 @@ console.log(Clist.select("select").property("value"))
                 })
 
 
+
           d3.select(".y")
                     .transition()
                     .duration(1500)
@@ -872,10 +900,6 @@ console.log(Clist.select("select").property("value"))
 
           // Set the "average" toggle to active
           d3.selectAll(".toggle.year").classed("active", true)
-
-          // Reset dropdowns
-          selectedCounty = countyMap.get(county[0].key).County;
-          console.log(selectedCounty)
 
           updateCountyDrop(countyCode)
 
@@ -961,6 +985,8 @@ console.log(Clist.select("select").property("value"))
                   })
                 .attr("opacity", 0.8)
 
+                console.log("State Avg Update Ran")
+
             // Accessing path information from median line
             var medPathD = medPath._groups[0][0].__data__.values
 
@@ -1042,6 +1068,7 @@ console.log(Clist.select("select").property("value"))
                   y.domain(d.value.extent)
                 });
 
+console.log("State Year Update Ran")
 
             // Move paths from the median line to proper locations
               gData.selectAll("path.line")
@@ -1099,9 +1126,6 @@ console.log(Clist.select("select").property("value"))
             });
 
 
-
-
-
         // Set domain for area chart to same as for line chart
         var countyDomain = nested.filter(function(d){
               return +d.key === +countyCode;
@@ -1147,7 +1171,9 @@ console.log(Clist.select("select").property("value"))
                     })
                   .attr("opacity", 0)
 
-           var stateDrop = Slist.selectAll("option")
+                  console.log("County Avg Update Ran")
+
+          var stateDrop = Slist.selectAll("option")
             .property("selected", function(d){
             return d.key === countyMap.get(county[0].key).stateName;
           })
@@ -1206,7 +1232,9 @@ console.log(Clist.select("select").property("value"))
           selectedCounty = countyMap.get(county[0].key).County;
 
           // Update county dropdown
-          updateCountyDrop(selectedCounty);  
+          updateCountyDrop(countyCode);  
+
+          console.log("County Year Update Ran")
 
             // Update paths
             svg.selectAll("path.area")  
@@ -1291,6 +1319,7 @@ console.log(Clist.select("select").property("value"))
                   .property("value")
 
 
+
               // Determine which county was selected from dropdown
 
                 if(d3.select(this).select("select").property("value") == "All Counties"){
@@ -1338,7 +1367,7 @@ console.log(Clist.select("select").property("value"))
 
 
 
-              if(selectedCounty == "All Counties"){
+              if(selectedCounty == "All"){
 
                 // if "All Counties" is selected then generate state average line
                   stateUpdateAvg(selectedState);
@@ -1371,7 +1400,7 @@ console.log(Clist.select("select").property("value"))
               console.log(selectedCounty)
 
 
-            if(selectedCounty == "All Counties"){
+            if(selectedCounty == "All"){
 
                 // if "All Counties" is selected then generate state average line
                   stateUpdateYear(selectedState);
@@ -1455,7 +1484,12 @@ console.log(Clist.select("select").property("value"))
                   .remove();
 
 
-              svg.selectAll(".annotation-group-cause").attr("opacity", 1).transition().duration(500).attr("opacity", 0).remove();
+              svg.selectAll(".annotation-group-cause")
+                .attr("opacity", 1)
+                .transition()
+                  .duration(500)
+                  .attr("opacity", 0)
+                .remove();
 
               // Determine which event was clicked
               var selected = eventName
@@ -1472,7 +1506,7 @@ console.log(Clist.select("select").property("value"))
               // Update lines for county/year/event
               countyUpdateYear(selectedEvent)
 
-              updateCountyDrop(selectedEvent)
+              //updateCountyDrop(selectedEvent)
 /*
               ClistG.selectAll("option")
                   .property("selected", function(d){
