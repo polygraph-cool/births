@@ -1031,8 +1031,6 @@ console.log(Clist.select("select").property("value"))
           // Find the selected state
           var selectedState = Slist.select("select").property("value")
 
-          // Find the selected year
-          var selectedYear = yList.select("select").property("value")
 
           var state = nestMStates.filter(function(d){
               return d.key === selectedState;
@@ -1084,6 +1082,20 @@ console.log("State Year Update Ran")
                     return valueLineState(d.values)
                   })
                   .attr("opacity", 0.8);
+
+
+            var selectedYear = yList.select("select").property("value")
+
+            // select all paths and select one that the year matches
+            var selLine = svg.selectAll(".line")
+              // de-select all the lines
+              .classed("selected", false)
+              .filter(function(d) {
+                  return +d.key === +selectedYear
+              })
+              // Set class to selected for matching line
+              .classed("selected", true)
+              .raise();
 
 
 
@@ -1217,9 +1229,6 @@ console.log("State Year Update Ran")
           // Find the selected state
           var selectedState = Slist.select("select").property("value")
 
-          // Find the selected year
-          var selectedYear = yList.select("select").property("value")
-
           var county = nested.filter(function(d){
               return +d.key === +countyCode;
             });
@@ -1269,6 +1278,19 @@ console.log("State Year Update Ran")
                   })
                   .attr("opacity", 0.8)
 
+            var selectedYear = yList.select("select").property("value")
+
+            // select all paths and select one that the year matches
+            var selLine = svg.selectAll(".line")
+              // de-select all the lines
+              .classed("selected", false)
+              .filter(function(d) {
+                  return +d.key === +selectedYear
+              })
+              // Set class to selected for matching line
+              .classed("selected", true)
+              .raise();
+
             // Update Y Axis
             d3.select(".y")
                     .transition()
@@ -1315,6 +1337,7 @@ console.log("State Year Update Ran")
 
               // Detecting what year is present on the year dropdown menu
               selectedYear = yList.select("select").property("value")
+
 
               var selected = d3.select(this)
                   .select("select")
@@ -1423,7 +1446,7 @@ console.log("State Year Update Ran")
           d3.selectAll(".toggle.average").classed("active", false)
           d3.selectAll(".toggle.year").classed("active", true)
 
-                        var selectedYear = yList.select("select").property("value")
+            var selectedYear = yList.select("select").property("value")
 
             // select all paths and select one that the year matches
             var selLine = svg.selectAll(".line")
