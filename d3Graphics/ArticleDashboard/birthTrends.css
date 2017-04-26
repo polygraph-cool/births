@@ -284,17 +284,17 @@ p.headline-small {
 #icon-c,
 #icon-d, 
 #icon-e,
-#icon-f {
+#icon-f,
+#icon-g {
   display: inline-block;
   position: relative;
-  width: 48px;
+  width: 56px;
   height: 48px;
   /*margin: 0 48px 4px 0px;*/
-  margin-right: 30px;
 }
 
 #icon-a {
-  margin-left: 150px;
+  margin-left: 130px;
 }
 
 #icon-a svg,
@@ -302,7 +302,8 @@ p.headline-small {
 #icon-c svg,
 #icon-d svg,
 #icon-e svg,
-#icon-f svg {
+#icon-f svg,
+#icon-g svg {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -316,7 +317,8 @@ p.headline-small {
 #icon-snow,
 #icon-football,
 #icon-baseball,
-#icon-terrorism {
+#icon-terrorism,
+#icon-money {
   position: absolute;
   fill: none;
   stroke: #FFFFFF;
@@ -326,12 +328,13 @@ p.headline-small {
   pointer-events: all;
 }
 
-#icon-a:hover #icon-storms,
-#icon-b:hover #icon-hurricane,
-#icon-c:hover #icon-snow,
-#icon-d:hover #icon-football,
-#icon-e:hover #icon-baseball,
-#icon-f:hover #icon-terrorism {
+#icon-a.current #icon-storms,
+#icon-b.current #icon-hurricane,
+#icon-c.current #icon-snow,
+#icon-d.current #icon-football,
+#icon-e.current #icon-baseball,
+#icon-f.current #icon-terrorism,
+#icon-g.current #icon-money {
   position: absolute;
   fill: none;
   stroke: white;
@@ -345,7 +348,8 @@ p.headline-small {
 #icon-c:hover,
 #icon-d:hover,
 #icon-e:hover,
-#icon-f:hover  {
+#icon-f:hover,
+#icon-g:hover  {
   background-color: #B2C1E3;
   cursor: pointer;
 }
@@ -355,7 +359,8 @@ p.headline-small {
 #icon-c.current,
 #icon-d.current,
 #icon-e.current,
-#icon-f.current {
+#icon-f.current,
+#icon-g.current{
   /*border-bottom: 4px solid #7D93CA;
   margin-bottom: 0;*/
   background-color: #B2C1E3;
