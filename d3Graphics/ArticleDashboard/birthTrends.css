@@ -79,7 +79,7 @@ p.headline-big {
     font-family: 'Canela Web';
     margin: 0px;
     font-size: 84px;
-    font-weight: 400;
+    font-weight: 700;
     margin-top: 130px;
 
 }
@@ -90,7 +90,7 @@ p.headline-small {
     font-family: 'Canela Web';
     margin: 0px;
     font-size: 29px;
-    font-weight: 100;
+    font-weight: 300;
     margin-top: 10px;
 }  
 
@@ -120,6 +120,11 @@ p.headline-small {
     margin-top: 90px;
 }
 
+#Wayne {
+  margin: auto;
+  display: block;
+  margin-bottom: 50px;
+}
 
 
 /*//////////////////////////////////////////*/
@@ -443,6 +448,12 @@ p.headline-small {
 .selected {
   fill: none;
   stroke: #7D93CA;
+  stroke-width: 4px;
+}
+
+.hovered {
+  fill: none;
+  stroke: red;
   stroke-width: 4px;
 }
 

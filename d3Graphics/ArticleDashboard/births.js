@@ -835,11 +835,13 @@ console.log(Clist.select("select").property("value"))
 
           var PathsEnter = Paths.enter()
                       .append("path")
-                      .attr("class", "line")
                       .attr("d", function(d){
+                          d.line = this;
                           return valueLine(d.values)
                       })
                       .attr("opacity", 0.8)
+                      // Setting individual classes for each line (for voronoi)
+                      .attr("class", function(d,i) { return "line " + d.key; })
 
 
 
@@ -889,6 +891,59 @@ console.log(Clist.select("select").property("value"))
                   return d.key === countyMap.get(county[0].key).stateName;
                 })
 
+            // Adding Voronoi
+            // Code examples from Nadieh Bremer (https://www.visualcinnamon.com/2015/07/voronoi.html)
+            var voronoi = d3.voronoi()
+              .x(function(d) { return x(parseTimeMonth(d.month)); })
+              .y(function(d) { return y(+d.Births); })
+              .extent([[0, 0], [width, height]]);
+
+            var voronoiGroup = svg.append("g").attr("class", "voronoi");
+
+            console.log(Paths)
+            var voronoiData = county[0].value.years
+            console.log(d3.merge(voronoiData.map(function(d){return d.values;})))
+              //Create the Voronoi grid
+            voronoiGroup.selectAll("path")
+              //.data(voronoi(voronoiData, function(d){ return d.values }))
+              .data(voronoi.polygons(d3.merge(voronoiData.map(function(d) { return d.values; }))))
+              .enter().append("path")
+              .attr("class", "voronoi")
+              .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; })
+              //.style("stroke", "#2074A0") //If you want to look at the cells
+              .style("fill", "none")
+              .style("pointer-events", "all")
+              .on("mouseover", function(d) {
+                console.log('Hello World!');
+
+                //var element = svg.selectAll(".counties.line " +d.year).classed("hovered", true);
+
+                    d3.select(d.data.counties.line).classed("hovered", true);
+                    d.data.counties.line.parentNode.appendChild(d.data.counties.line);
+
+                //console.log(element)
+
+                d3.select(this).classed("hovered", true)}) // What do I change this to?
+            
+              //.on("mouseout",  removeTooltip);
+
+             // console.log(d3.select(d.data.counties.line))
+
+             console.log(voronoiGroup)
+
+              var mouseover = function(d) {
+                var element = d3.selectAll(".countries."+d.CountryCode);
+
+                console.log(element)
+                //svg.select(d.data.counties.line).classed("hovered", true);
+                //d.data.counties.line.parentNode.appendChild(d.data.counties.line);
+                /*focus.attr("transform", "translate(" + x(d.data.month) + "," + y(d.data.value) + ")");
+                focus.select("text").text(d.data.counties.year);*/
+              }
+
+              var mouseout = function(d){
+                d3.select(d.data.counties.line).classed("hovered", false);
+              }
 
 
           d3.select(".y")
@@ -904,6 +959,9 @@ console.log(Clist.select("select").property("value"))
           d3.selectAll(".toggle.year").classed("active", true)
 
           updateCountyDrop(countyCode)
+
+
+
 
 
       }
@@ -1300,6 +1358,9 @@ console.log("State Year Update Ran")
                       .tickSizeInner(0)
                       .tickPadding(6)
                       .tickSize(0, 0));
+
+
+
 
       }
 
