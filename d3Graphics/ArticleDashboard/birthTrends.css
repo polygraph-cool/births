@@ -439,10 +439,11 @@ p.headline-small {
 
 .line2 {
   fill: none;
-  stroke: #CC6699;
-  stroke-width: 2px;
+  stroke: #999999;
+  stroke-width: 4px;
   stroke-miterlimit: 10;
   stroke-linecap: round;
+  stroke-dasharray: 10;
 }
 
 .selected {
@@ -453,8 +454,8 @@ p.headline-small {
 
 .hovered {
   fill: none;
-  stroke: red;
-  stroke-width: 4px;
+  stroke: #B2C1E3;
+  stroke-width: 2px;
 }
 
 option[value="NaN"][disabled] {

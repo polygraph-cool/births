@@ -882,7 +882,7 @@ console.log(Clist.select("select").property("value"))
                 .attr("d", function(d){
                   return valueLineA(d.values);
                 })
-                .attr("opacity", 0)
+                .attr("opacity", 1)
 
 
                // Reset the State dropdown based on the state of selected state
@@ -893,6 +893,7 @@ console.log(Clist.select("select").property("value"))
 
             // Adding Voronoi
             // Code examples from Nadieh Bremer (https://www.visualcinnamon.com/2015/07/voronoi.html)
+            // and Mike Bostock (https://bl.ocks.org/mbostock/8033015)
             var voronoi = d3.voronoi()
               .x(function(d) { return x(parseTimeMonth(d.month)); })
               .y(function(d) { return y(+d.Births); })
@@ -905,7 +906,6 @@ console.log(Clist.select("select").property("value"))
             console.log(d3.merge(voronoiData.map(function(d){return d.values;})))
               //Create the Voronoi grid
             voronoiGroup.selectAll("path")
-              //.data(voronoi(voronoiData, function(d){ return d.values }))
               .data(voronoi.polygons(d3.merge(voronoiData.map(function(d) { return d.values; }))))
               .enter().append("path")
               .attr("class", "voronoi")
@@ -914,22 +914,54 @@ console.log(Clist.select("select").property("value"))
               .style("fill", "none")
               .style("pointer-events", "all")
               .on("mouseover", function(d) {
-                console.log('Hello World!');
+                // determine the year of the polygon being hovered
+                var yearSelected = d.data.year;
 
-                //var element = svg.selectAll(".counties.line " +d.year).classed("hovered", true);
+                // select annual lines
+                d3.selectAll(".line").classed("hovered",function(d){
+                  if(d.key == +yearSelected){
+                    return true
+                  }
+                  return false;
+                })
+              })
+              .on("click", function(d){
+                // remove remnants from event annotations
+                svg.selectAll(".annotation-group-result").remove();
+                svg.selectAll(".annotation-group-cause").remove();
+                svg.selectAll("circle").remove();
+                d3.selectAll(".icons").classed("current", false)
 
-                    d3.select(d.data.counties.line).classed("hovered", true);
-                    d.data.counties.line.parentNode.appendChild(d.data.counties.line);
+                var yearSelected = d.data.year;
+                // de-select other lines
+                d3.selectAll(".line").classed("selected", false)
+                d3.selectAll(".line").classed("selected-event", false)
+                // select annual lines
+                d3.selectAll(".line").classed("selected", function(d){
+                  if(d.key == +yearSelected){
+                    return true
+                  }
+                  return false;
+                })
 
-                //console.log(element)
+                // Bring selected line to top
+                d3.selectAll(".selected").raise();
 
-                d3.select(this).classed("hovered", true)}) // What do I change this to?
+                // reset year dropdown to reflect clicked year
+                var yearSel = yList.selectAll("option")
+                  .property("selected", function(d){
+                    return +d.key === +yearSelected;
+                  })
+
+
+
+              })
             
               //.on("mouseout",  removeTooltip);
 
              // console.log(d3.select(d.data.counties.line))
 
-             console.log(voronoiGroup)
+             /*console.log(voronoiGroup)
 
               var mouseover = function(d) {
                 var element = d3.selectAll(".countries."+d.CountryCode);
@@ -939,7 +971,7 @@ console.log(Clist.select("select").property("value"))
                 //d.data.counties.line.parentNode.appendChild(d.data.counties.line);
                 /*focus.attr("transform", "translate(" + x(d.data.month) + "," + y(d.data.value) + ")");
                 focus.select("text").text(d.data.counties.year);*/
-              }
+              //}
 
               var mouseout = function(d){
                 d3.select(d.data.counties.line).classed("hovered", false);
@@ -1117,7 +1149,7 @@ console.log(Clist.select("select").property("value"))
             svg.selectAll(".line2")
               .transition()
                 .duration(1000)
-                .attr("opacity", 0)
+                .attr("opacity", 1)
 
             // update domain
            var gData = svg.selectAll(".counties")
@@ -1314,7 +1346,7 @@ console.log("State Year Update Ran")
             svg.selectAll(".line2")
               .transition()
                 .duration(1000)
-                .attr("opacity", 0)
+                .attr("opacity", 1)
 
             // update domain
            var gData = svg.selectAll(".counties")
