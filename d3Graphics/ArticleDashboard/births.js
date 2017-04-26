@@ -426,7 +426,24 @@ function ready(error,
         resultlabel: "It doesn't look like it. While the early months tend to have low birth counts in this area, 9 months after the attack saw the lowest.",
         resultdX: 0,
         resultdY: -90,
-
+      },
+      {
+        type: "other",
+        year: 2014,
+        months: ["Apr", "May"],
+        title: "Detroit Bankruptcy",
+        state: "Michigan",
+        county: 26163,
+        causeTitle: "Detroit Bankruptcy",
+        causelabel: "In July 2013, the city of Detroit filed for bankruptcy. Did this impact the number of babies born in the city 9 months later?",
+        causeX: 20,
+        causeY: -20,
+        causedX: 0,
+        causedY: 0,
+        resultTitle: "Bankruptcy Babies?",
+        resultlabel: "It's hard to tell. 2013 was a low year for Detroit births in general.",
+        resultdX: 0,
+        resultdY: -90,
       }
 
     ];
@@ -1628,6 +1645,15 @@ console.log(Clist.select("select").property("value"))
               .classed("current", true)
           })
 
+        d3.select("#icon-g")
+          .on("click", function(){
+            eventDisplay("Detroit Bankruptcy")
+          d3.selectAll(".icons")
+              .classed("current", false)
+            d3.select(this)
+              .classed("current", true)
+          })
+
           ////////// STYLE INITIAL CHART /////////
           eventDisplay("Hurricane Sandy")
           d3.selectAll("g.annotation-group-cause").remove();
@@ -1645,7 +1671,7 @@ console.log(Clist.select("select").property("value"))
       				triggerElement: "#container",
       				triggerHook:0,
       				offset: -100,
-      				duration:1800
+      				duration:2500
       			})
       			.addIndicators({name: "pin chart"}) // add indicators (requires plugin)
       			.setPin("#graph", {pushFollowers: true})
@@ -1769,12 +1795,12 @@ console.log(Clist.select("select").property("value"))
           })
           ;
 
-          var thirdTrigger = new ScrollMagic.Scene({
+    var thirdTrigger = new ScrollMagic.Scene({
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
             offset: 900,
-            duration:300
+            duration:600
           })
           .addIndicators({name: "third trigger"}) // add indicators (requires plugin)
           .addTo(controller)
@@ -1783,10 +1809,22 @@ console.log(Clist.select("select").property("value"))
             }
             else{
 
-                  countyUpdateAvg(40109)
-                  d3.selectAll("#Season").classed("highlighted", true)
-                  d3.selectAll(".toggle.year").classed("active", false)
-                  d3.selectAll(".toggle.average").classed("active", true)
+                d3.selectAll(".highlighted").classed("highlighted", false)
+                d3.selectAll("#Money").classed("highlighted", true)
+
+                eventDisplay("Detroit Bankruptcy")
+                  d3.selectAll("g.annotation-group-cause").remove();
+                  d3.selectAll(".annotation-note-label").remove();
+                  d3.selectAll(".annotation-note-bg").remove();
+                  d3.selectAll(".icons")
+                    .classed("current", false)
+                  d3.selectAll(".icons#icon-f")
+                    .classed("current", true)
+
+                  d3.selectAll(".toggle.year").classed("active", true)
+                  d3.selectAll(".toggle.average").classed("active", false)
+
+
                
 
             }
@@ -1815,14 +1853,66 @@ console.log(Clist.select("select").property("value"))
           })
           ;
 
+
+
+
+
+
+
           var fourthTrigger = new ScrollMagic.Scene({
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 1300,
-            duration:200
+            offset: 1500,
+            duration:400
           })
           .addIndicators({name: "fourth trigger"}) // add indicators (requires plugin)
+          .addTo(controller)
+          .on("enter",function(e){
+            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+            }
+            else{
+
+                  countyUpdateAvg(26163)
+                  d3.selectAll("#Season").classed("highlighted", true)
+                  d3.selectAll(".toggle.year").classed("active", false)
+                  d3.selectAll(".toggle.average").classed("active", true)
+               
+
+            }
+          })
+          .on("leave",function(e){
+            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+
+                d3.selectAll(".highlighted").classed("highlighted", false)
+                d3.selectAll("#Money").classed("highlighted", true)
+
+                eventDisplay("Detroit Bankruptcy")
+                  d3.selectAll("g.annotation-group-cause").remove();
+                  d3.selectAll(".annotation-note-label").remove();
+                  d3.selectAll(".annotation-note-bg").remove();
+                  d3.selectAll(".icons")
+                    .classed("current", false)
+                  d3.selectAll(".icons#icon-f")
+                    .classed("current", true)
+
+                  d3.selectAll(".toggle.year").classed("active", true)
+                  d3.selectAll(".toggle.average").classed("active", false)
+               
+            }
+            else{
+            }
+          })
+          ;
+
+          var fifthTrigger = new ScrollMagic.Scene({
+            // triggerElement: ".third-chart-wrapper",
+            triggerElement: "#right-column",
+            triggerHook:0,
+            offset: 1900,
+            duration:200
+          })
+          .addIndicators({name: "fifth trigger"}) // add indicators (requires plugin)
           .addTo(controller)
           .on("enter",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
@@ -1848,14 +1938,14 @@ console.log(Clist.select("select").property("value"))
           })
           ;
 
-        var fifthTrigger = new ScrollMagic.Scene({
+        var sixthTrigger = new ScrollMagic.Scene({
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 1500,
+            offset: 2100,
             duration:200
           })
-          .addIndicators({name: "fifth trigger"}) // add indicators (requires plugin)
+          .addIndicators({name: "sixth trigger"}) // add indicators (requires plugin)
           .addTo(controller)
           .on("enter",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
