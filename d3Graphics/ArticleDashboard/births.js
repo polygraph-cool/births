@@ -888,7 +888,6 @@ function ready(error,
                 .attr("transform", function(d) { return "translate(" + x(parseTimeMonth(d.values[11].month)) + "," + y(d.values[11].Births) + ")"; })
                 .attr("x", 3)
                 .attr("dy", "0.35em")
-                .style("font", "10px sans-serif")
                 .text(function(d) { return d.key; })
                 .classed("text-labels", true)
                 .attr("opacity", 0)
@@ -1245,7 +1244,6 @@ function ready(error,
                   .attr("transform", function(d) { return "translate(" + x(parseTimeMonth(d.values[11].month)) + "," + y(d.values[11].stateBirths) + ")"; })
                   .attr("x", 3)
                   .attr("dy", "0.35em")
-                  .style("font", "10px sans-serif")
                   .text(function(d) { return d.key; })
                   //.classed("text-labels", true)
                   .attr("opacity", 0)
@@ -1598,7 +1596,6 @@ function ready(error,
                   .attr("transform", function(d) { return "translate(" + x(parseTimeMonth(d.values[11].month)) + "," + y(d.values[11].Births) + ")"; })
                   .attr("x", 3)
                   .attr("dy", "0.35em")
-                  .style("font", "10px sans-serif")
                   .text(function(d) { return d.key; })
                   //.classed("text-labels", true)
                   .attr("opacity", 0)
@@ -1959,6 +1956,13 @@ function ready(error,
               // Set class to selected for matching line
               .classed("selected", true)
               .raise()
+
+              d3.selectAll(".text-labels").classed("event-show",function(d){
+                  if(d.key == +selectedYear){
+                    return true;
+                  }
+                  return false;
+                })
 
           })
 

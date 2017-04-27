@@ -496,6 +496,13 @@ width: auto;
   stroke-width: 4px;
 }
 
+.text-labels{
+  font-family: 'Atlas Grotesk Web';
+  font-weight: 400;
+  font-size: .65em;
+  color: #999999;
+}
+
 .hovered {
   fill: none;
   stroke: #B2C1E3;
@@ -516,6 +523,8 @@ width: auto;
   font-weight: bold;
   background-color: white;
 }
+
+
 
 .medianLabel {
   fill: #999999;
