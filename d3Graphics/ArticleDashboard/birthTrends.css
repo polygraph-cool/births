@@ -445,7 +445,7 @@ p.headline-small {
   stroke-width: 3px;
   stroke-miterlimit: 10;
   /*stroke-linecap: round;*/
-  stroke-dasharray: 12, 8;
+  stroke-dasharray: 11, 8;
   opacity: .8;
 }
 
@@ -464,6 +464,22 @@ p.headline-small {
 .showing {
   fill: #B2C1E3;
   opacity: 1;
+}
+
+.event-show {
+  fill: #7D93CA;
+  opacity: 1;
+  font-weight: bold;
+}
+
+.medianLabel {
+  fill: #999999;
+  opacity: .8;
+  font-family: 'Atlas Grotesk Web';
+  font-weight: bold;
+  font-size: .65em;
+  text-transform: uppercase;
+  padding-left: 5px;
 }
 
 option[value="NaN"][disabled] {

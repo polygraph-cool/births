@@ -550,32 +550,7 @@ function ready(error,
                     return +d == +selectCounty; 
                   })
 
-                  // Fixes county drop 
-                  /*selection
-                  .property("selected", function(d){
-                    return d == selectCounty; 
-                  })
-
-                  selection
-                    .property("selected", function(d){
-                    })*/
-
-                console.log("County dropdown updated")
-
                   var property = Clist.select("select").property("value")
-
-                 /* if (+selectCounty != +property){
-                    selection.property("selected", function(d){ return d == selectCounty})
-                    console.log("NOT EQUAL!")
-                  }*/
-
-
-                  console.log(selectCounty)
-
-console.log(Clist.select("select").property("value"))
-                  /*.property("selected", function(d){
-                  return +d === selectCounty; })*/
-              console.log(selection)
 
               ClistG = Clist; 
               
@@ -858,7 +833,6 @@ console.log(Clist.select("select").property("value"))
             // Generate path and median line but set opacity to 0
 
               aCountyEnter.append("path")
-                //.datum(selectAvState)
                 .attr("d", function(d){
                   return areaFill(d.values); })
                 .attr("fill", "#E3C0DB")
@@ -901,6 +875,20 @@ console.log(Clist.select("select").property("value"))
                 .classed("text-labels", true)
                 .attr("opacity", 0)
 
+                var MedianLabel = aCounty.enter()
+                  .append("g")
+                  .attr("class", "areas")
+
+                // Adding special label for median line
+                var MedianText = MedianLabel
+                .append("text")
+                .attr("class", "medianLabel")
+                .attr("transform", function(d) { return "translate(" + x(parseTimeMonth(d.values[11].month)) + "," + y(d.values[11].median) + ")"; })
+                .text("Average")
+
+
+
+
 
             ////////////  ADDING VORONOI  ///////////
 
@@ -919,11 +907,10 @@ console.log(Clist.select("select").property("value"))
             var voronoiGroup = svg.append("g").attr("class", "voronoi");
 
 
-
-
             voronoiGroup.exit().remove();
 
-              //Create the Voronoi grid
+
+            //Create the Voronoi grid
             voronoiGroup.selectAll("path")
               .data(voronoi.polygons(d3.merge(voronoiData.map(function(d) { return d.values; }))))
               .enter().append("path")
@@ -951,6 +938,7 @@ console.log(Clist.select("select").property("value"))
                 })
               })
               .on("click", function(d){
+
                 // remove remnants from event annotations
                 svg.selectAll(".annotation-group-result").remove();
                 svg.selectAll(".annotation-group-cause").remove();
@@ -961,6 +949,10 @@ console.log(Clist.select("select").property("value"))
                 // de-select other lines
                 d3.selectAll(".line").classed("selected", false)
                 d3.selectAll(".line").classed("selected-event", false)
+
+                // de-select other labels
+                d3.selectAll(".text-labels").classed("event-show", false)
+
                 // select annual lines
                 d3.selectAll(".line").classed("selected", function(d){
                   if(d.key == +yearSelected){
@@ -978,9 +970,20 @@ console.log(Clist.select("select").property("value"))
                     return +d.key === +yearSelected;
                   })
 
+                var year = yList.select("select").property("value")
+                console.log(year)
+
+                d3.selectAll(".text-labels").classed("event-show",function(d){
+                  if(d.key == +year){
+                    return true;
+                  }
+                  return false;
+                })
+
               })
               .on("mouseout", function(d){
-                              d3.selectAll(".line").classed("hovered", false)
+                  d3.selectAll(".line").classed("hovered", false)
+                  d3.selectAll(".text-labels").classed("showing", false)
               })
             
 
