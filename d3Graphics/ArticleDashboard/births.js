@@ -885,9 +885,7 @@ function ready(error,
                 .attr("class", "medianLabel")
                 .attr("transform", function(d) { return "translate(" + x(parseTimeMonth(d.values[11].month)) + "," + y(d.values[11].median) + ")"; })
                 .text("Average")
-
-
-
+                .lower();
 
 
             ////////////  ADDING VORONOI  ///////////
@@ -1197,6 +1195,99 @@ console.log("State Year Update Ran")
               .classed("selected", true)
               .raise();
 
+            // New voronois
+
+            // Remove old voronoi
+            d3.selectAll(".voronoi").remove();
+            var voronoiData = state[0].value.years
+
+            var voronoi = d3.voronoi()
+              .x(function(d) { return x(parseTimeMonth(d.month)); })
+              .y(function(d) { return y(+d.stateBirths); })
+              .extent([[0, 0], [width, height]]);
+
+            var voronoiGroup = svg.append("g").attr("class", "voronoi");
+
+
+            voronoiGroup.exit().remove();
+
+
+            //Create the Voronoi grid
+            voronoiGroup.selectAll("path")
+              .data(voronoi.polygons(d3.merge(voronoiData.map(function(d) { return d.values; }))))
+              .enter().append("path")
+              .attr("class", "voronoi")
+              .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; })
+              //.style("stroke", "#2074A0") //If you want to look at the cells
+              .style("fill", "none")
+              .style("pointer-events", "all")
+              .on("mouseover", function(d) {
+                // determine the year of the polygon being hovered
+                var yearSelected = d.data.year;
+
+                // select annual lines
+                d3.selectAll(".line").classed("hovered",function(d){
+                  if(d.key == +yearSelected){
+                    return true;
+                  }
+                  return false;
+                })
+                d3.selectAll(".text-labels").classed("showing",function(d){
+                  if(d.key == +yearSelected){
+                    return true;
+                  }
+                  return false;
+                })
+              })
+              .on("click", function(d){
+
+                // remove remnants from event annotations
+                svg.selectAll(".annotation-group-result").remove();
+                svg.selectAll(".annotation-group-cause").remove();
+                svg.selectAll("circle").remove();
+                d3.selectAll(".icons").classed("current", false)
+
+                var yearSelected = d.data.year;
+                // de-select other lines
+                d3.selectAll(".line").classed("selected", false)
+                d3.selectAll(".line").classed("selected-event", false)
+
+                // de-select other labels
+                d3.selectAll(".text-labels").classed("event-show", false)
+
+                // select annual lines
+                d3.selectAll(".line").classed("selected", function(d){
+                  if(d.key == +yearSelected){
+                    return true
+                  }
+                  return false;
+                })
+
+                // Bring selected line to top
+                d3.selectAll(".selected").raise();
+
+                // reset year dropdown to reflect clicked year
+                var yearSel = yList.selectAll("option")
+                  .property("selected", function(d){
+                    return +d.key === +yearSelected;
+                  })
+
+                var year = yList.select("select").property("value")
+                console.log(year)
+
+                d3.selectAll(".text-labels").classed("event-show",function(d){
+                  if(d.key == +year){
+                    return true;
+                  }
+                  return false;
+                })
+
+              })
+              .on("mouseout", function(d){
+                  d3.selectAll(".line").classed("hovered", false)
+                  d3.selectAll(".text-labels").classed("showing", false)
+              })
+
 
 
             // Update Y Axis
@@ -1390,6 +1481,163 @@ console.log("State Year Update Ran")
               // Set class to selected for matching line
               .classed("selected", true)
               .raise();
+
+
+              //////////// ADDING LABEL TO END OF LINES ///////////
+
+              var gText = svg.selectAll(".labels")
+              .data(county)
+
+              gText.selectAll(".text-labels")
+                .data(function(d) {
+                        return (d.value.years);
+                      })
+                .transition()
+                  .delay(function(d, i){ return i * 50; })
+                  .duration(1000)
+                  .attr("transform", function(d) { return "translate(" + x(parseTimeMonth(d.values[11].month)) + "," + y(d.values[11].Births) + ")"; })
+                  .attr("x", 3)
+                  .attr("dy", "0.35em")
+                  .style("font", "10px sans-serif")
+                  .text(function(d) { return d.key; })
+                  //.classed("text-labels", true)
+                  .attr("opacity", 0)
+
+
+
+              // Fixing median line
+
+              var countyMed = nestACounties.filter(function(d){
+              return +d.key === +countyCode;
+            });
+
+
+            // Set domain for area chart to same as for line chart
+            var countyMedD = nested.filter(function(d){
+                  return +d.key === +countyCode;
+                });
+
+            var medPath = svg.selectAll(".line2")
+                .data(countyMed)
+                .transition()
+                .delay(400)
+                .duration(1200)
+                .attr("d", function(d){
+                    return valueLineA(d.values);
+                  })
+                .attr("opacity", 0.8)
+
+
+        
+                
+                // Adding special label for median line
+                var MedianText = svg.selectAll(".medianLabel")
+                .data(countyMed)
+                  .transition()
+                  .delay(400)
+                  .duration(1200)
+                  .attr("transform", function(d) { return "translate(" + x(parseTimeMonth(d.values[11].month)) + "," + y(d.values[11].median) + ")"; })
+                  .text("Average")
+                  //.lower();
+
+
+
+
+
+
+            // New voronois
+
+            // Remove old voronoi
+            d3.selectAll(".voronoi").remove();
+            var voronoiData = county[0].value.years
+
+            var voronoi = d3.voronoi()
+              .x(function(d) { return x(parseTimeMonth(d.month)); })
+              .y(function(d) { return y(+d.Births); })
+              .extent([[0, 0], [width, height]]);
+
+            var voronoiGroup = svg.append("g").attr("class", "voronoi");
+
+
+            voronoiGroup.exit().remove();
+
+
+            //Create the Voronoi grid
+            voronoiGroup.selectAll("path")
+              .data(voronoi.polygons(d3.merge(voronoiData.map(function(d) { return d.values; }))))
+              .enter().append("path")
+              .attr("class", "voronoi")
+              .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; })
+              //.style("stroke", "#2074A0") //If you want to look at the cells
+              .style("fill", "none")
+              .style("pointer-events", "all")
+              .on("mouseover", function(d) {
+                // determine the year of the polygon being hovered
+                var yearSelected = d.data.year;
+
+                // select annual lines
+                d3.selectAll(".line").classed("hovered",function(d){
+                  if(d.key == +yearSelected){
+                    return true;
+                  }
+                  return false;
+                })
+                d3.selectAll(".text-labels").classed("showing",function(d){
+                  if(d.key == +yearSelected){
+                    return true;
+                  }
+                  return false;
+                })
+              })
+              .on("click", function(d){
+
+                // remove remnants from event annotations
+                svg.selectAll(".annotation-group-result").remove();
+                svg.selectAll(".annotation-group-cause").remove();
+                svg.selectAll("circle").remove();
+                d3.selectAll(".icons").classed("current", false)
+
+                var yearSelected = d.data.year;
+                // de-select other lines
+                d3.selectAll(".line").classed("selected", false)
+                d3.selectAll(".line").classed("selected-event", false)
+
+                // de-select other labels
+                d3.selectAll(".text-labels").classed("event-show", false)
+
+                // select annual lines
+                d3.selectAll(".line").classed("selected", function(d){
+                  if(d.key == +yearSelected){
+                    return true
+                  }
+                  return false;
+                })
+
+                // Bring selected line to top
+                d3.selectAll(".selected").raise();
+
+                // reset year dropdown to reflect clicked year
+                var yearSel = yList.selectAll("option")
+                  .property("selected", function(d){
+                    return +d.key === +yearSelected;
+                  })
+
+                var year = yList.select("select").property("value")
+                console.log(year)
+
+                d3.selectAll(".text-labels").classed("event-show",function(d){
+                  if(d.key == +year){
+                    return true;
+                  }
+                  return false;
+                })
+
+              })
+              .on("mouseout", function(d){
+                  d3.selectAll(".line").classed("hovered", false)
+                  d3.selectAll(".text-labels").classed("showing", false)
+              })
+            
 
             // Update Y Axis
             d3.select(".y")

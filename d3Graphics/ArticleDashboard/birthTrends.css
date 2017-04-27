@@ -459,17 +459,21 @@ p.headline-small {
   fill: none;
   stroke: #B2C1E3;
   stroke-width: 2px;
+
+
 }
 
 .showing {
   fill: #B2C1E3;
   opacity: 1;
+  background-color: white;
 }
 
 .event-show {
   fill: #7D93CA;
   opacity: 1;
   font-weight: bold;
+  background-color: white;
 }
 
 .medianLabel {
