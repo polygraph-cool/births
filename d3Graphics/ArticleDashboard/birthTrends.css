@@ -802,7 +802,7 @@ option[value="NaN"][disabled] {
 
 .highlighted{
   transition: 500ms;
-  color: #97a8d4;
+  color: #7D93CA;
   /* text-decoration: underline; */
 }
 
@@ -810,6 +810,7 @@ option[value="NaN"][disabled] {
   background-color: rgba(206, 214, 237, 0.4);
   padding: 8px;
   border-radius: 10px;
+  transition: 500ms;
 }
 
 .right-column-prose.note{

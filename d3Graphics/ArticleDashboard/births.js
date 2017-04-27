@@ -1036,6 +1036,7 @@ function ready(error,
               svg.selectAll("circle").remove();
               d3.selectAll(".icons").classed("current", false)
               d3.selectAll(".event-show").classed("event-show", false)
+              d3.selectAll(".text-labels").classed("showing", false)
               d3.selectAll(".voronoi").remove();
 
 
@@ -1397,6 +1398,7 @@ function ready(error,
               svg.selectAll("circle").remove();
               d3.selectAll(".icons").classed("current", false)
               d3.selectAll(".event-show").classed("event-show", false)
+              d3.selectAll(".text-labels").classed("showing", false)
               d3.selectAll(".voronoi").remove();
 
           d3.selectAll(".selected-event").classed("selected-event", false)
@@ -2330,6 +2332,7 @@ function ready(error,
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
 
               d3.selectAll(".highlighted").classed("highlighted", false)
+              d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
                 d3.selectAll("#Sports").classed("highlighted", true)
                 d3.selectAll(".sports-prose").classed("prose-highlighted", true)
                
