@@ -459,6 +459,11 @@ p.headline-small {
   stroke-width: 2px;
 }
 
+.showing {
+  fill: #B2C1E3;
+  opacity: 1;
+}
+
 option[value="NaN"][disabled] {
   display: none;
 }

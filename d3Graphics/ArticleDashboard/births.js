@@ -10,7 +10,7 @@
     DS = {}
 
     // set the dimensions and margins of the graph
-    var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    var margin = {top: 20, right: 80, bottom: 30, left: 50},
       width = 850 - margin.left - margin.right,
       height = 370 - margin.top - margin.bottom;
 
@@ -124,16 +124,6 @@
                 .y0(function(d, i) { return y(+d.low); })
                 .y1(function(d, i) { return y(+d.high); })
                 .curve(d3.curveCardinal);
-
-    ///////////////////// FUNCTION TO MOVE TO FRONT //////////////////////
-
-    var moveToFront = function(){
-      var selected = svg.selectAll(".selected")
-
-      return selected.each(function(){
-        selected.parentNode.appendChild(selected);
-      })
-    }
 
 
 
@@ -891,9 +881,36 @@ console.log(Clist.select("select").property("value"))
                   return d.key === countyMap.get(county[0].key).stateName;
                 })
 
+            //////////// ADDING LABEL TO END OF LINES ///////////
+              var labelsEnter = pickedCounty.enter()
+                      .append("g")
+                      .attr("class", "labels")
+
+              var PathText = labelsEnter.selectAll("text")
+                .data(function(d) {
+                        return (d.value.years);
+                      })
+
+                var LabelText = PathText.enter()
+                .append("text") 
+                .attr("transform", function(d) { return "translate(" + x(parseTimeMonth(d.values[11].month)) + "," + y(d.values[11].Births) + ")"; })
+                .attr("x", 3)
+                .attr("dy", "0.35em")
+                .style("font", "10px sans-serif")
+                .text(function(d) { return d.key; })
+                .classed("text-labels", true)
+                .attr("opacity", 0)
+
+
+            ////////////  ADDING VORONOI  ///////////
+
+
             // Adding Voronoi
             // Code examples from Nadieh Bremer (https://www.visualcinnamon.com/2015/07/voronoi.html)
             // and Mike Bostock (https://bl.ocks.org/mbostock/8033015)
+
+            var voronoiData = county[0].value.years
+
             var voronoi = d3.voronoi()
               .x(function(d) { return x(parseTimeMonth(d.month)); })
               .y(function(d) { return y(+d.Births); })
@@ -901,9 +918,11 @@ console.log(Clist.select("select").property("value"))
 
             var voronoiGroup = svg.append("g").attr("class", "voronoi");
 
-            console.log(Paths)
-            var voronoiData = county[0].value.years
-            console.log(d3.merge(voronoiData.map(function(d){return d.values;})))
+
+
+
+            voronoiGroup.exit().remove();
+
               //Create the Voronoi grid
             voronoiGroup.selectAll("path")
               .data(voronoi.polygons(d3.merge(voronoiData.map(function(d) { return d.values; }))))
@@ -920,7 +939,13 @@ console.log(Clist.select("select").property("value"))
                 // select annual lines
                 d3.selectAll(".line").classed("hovered",function(d){
                   if(d.key == +yearSelected){
-                    return true
+                    return true;
+                  }
+                  return false;
+                })
+                d3.selectAll(".text-labels").classed("showing",function(d){
+                  if(d.key == +yearSelected){
+                    return true;
                   }
                   return false;
                 })
@@ -943,7 +968,6 @@ console.log(Clist.select("select").property("value"))
                   }
                   return false;
                 })
-              
 
                 // Bring selected line to top
                 d3.selectAll(".selected").raise();
@@ -957,27 +981,8 @@ console.log(Clist.select("select").property("value"))
               })
               .on("mouseout", function(d){
                               d3.selectAll(".line").classed("hovered", false)
-                            })
+              })
             
-              //.on("mouseout",  removeTooltip);
-
-             // console.log(d3.select(d.data.counties.line))
-
-             /*console.log(voronoiGroup)
-
-              var mouseover = function(d) {
-                var element = d3.selectAll(".countries."+d.CountryCode);
-
-                console.log(element)
-                //svg.select(d.data.counties.line).classed("hovered", true);
-                //d.data.counties.line.parentNode.appendChild(d.data.counties.line);
-                /*focus.attr("transform", "translate(" + x(d.data.month) + "," + y(d.data.value) + ")");
-                focus.select("text").text(d.data.counties.year);*/
-              //}
-
-              var mouseout = function(d){
-                d3.select(d.data.counties.line).classed("hovered", false);
-              }
 
 
           d3.select(".y")
