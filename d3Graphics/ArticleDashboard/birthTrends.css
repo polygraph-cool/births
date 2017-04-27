@@ -346,15 +346,13 @@ button.toggle.year {
 #icon-e,
 #icon-f,
 #icon-g {
-  height: 48px;
+  height: 36px;
   /*margin: 0 48px 4px 0px;*/
   position: relative;
   width: 48px;
   margin-right: 20px;
 }
 
-#icon-a {
-}
 
 #icon-a svg,
 #icon-b svg,
@@ -363,7 +361,7 @@ button.toggle.year {
 #icon-e svg,
 #icon-f svg,
 #icon-g svg {
-  margin: -16px 0 0 -16px;
+  margin: -10px 0 0 -14px;
   pointer-events: none;
   position: absolute;
   top: 50%;
@@ -411,8 +409,9 @@ button.toggle.year {
 #icon-e:hover,
 #icon-f:hover,
 #icon-g:hover  {
-  background-color: #B2C1E3;
+  border-bottom: 4px solid #7D93CA;
   cursor: pointer;
+  opacity: .6;
 }
 
 #icon-a.current,
@@ -422,10 +421,11 @@ button.toggle.year {
 #icon-e.current,
 #icon-f.current,
 #icon-g.current{
-  /*border-bottom: 4px solid #7D93CA;
-  margin-bottom: 0;*/
-  background-color: #B2C1E3;
-  background: white;
+  border-bottom: 4px solid #7D93CA;
+  margin-bottom: 0;
+  opacity: .8;
+  /*background-color: #B2C1E3;
+  background: white;*/
 }
 
 #icons .current #icon-storms,
@@ -460,6 +460,10 @@ button.toggle.year {
   top: 50%;
   left: 50%;
   margin: -18px 0 0 -18px;
+}
+
+.icons {
+    opacity: .3;
 }
 
 .dd2 select{
@@ -810,6 +814,3 @@ option[value="NaN"][disabled] {
 
 
 
-.icons {
-    opacity: .3;
-    
