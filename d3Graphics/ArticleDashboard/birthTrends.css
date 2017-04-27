@@ -444,9 +444,8 @@ p.headline-small {
   stroke: #999999;
   stroke-width: 3px;
   stroke-miterlimit: 10;
-  /*stroke-linecap: round;*/
-  stroke-dasharray: 11, 8;
-  opacity: .8;
+  stroke-linecap: round;
+
 }
 
 .selected {

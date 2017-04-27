@@ -846,7 +846,7 @@ function ready(error,
                 .attr("d", function(d){
                   return valueLineA(d.values);
                 })
-                .attr("opacity", 1)
+                .attr("opacity", 0)
 
 
                // Reset the State dropdown based on the state of selected state
@@ -875,7 +875,7 @@ function ready(error,
                 .classed("text-labels", true)
                 .attr("opacity", 0)
 
-                var MedianLabel = aCounty.enter()
+                /*var MedianLabel = aCounty.enter()
                   .append("g")
                   .attr("class", "areas")
 
@@ -883,9 +883,9 @@ function ready(error,
                 var MedianText = MedianLabel
                 .append("text")
                 .attr("class", "medianLabel")
-                .attr("transform", function(d) { return "translate(" + x(parseTimeMonth(d.values[11].month)) + "," + y(d.values[11].median) + ")"; })
+                .attr("transform", function(d) { return "translate(" + (width + 8) + "," + y(d.values[11].median) + ")"; })
                 .text("Average")
-                .lower();
+                .lower();*/
 
 
             ////////////  ADDING VORONOI  ///////////
@@ -1073,7 +1073,7 @@ function ready(error,
                 .duration(1200) 
                 .attr("d", function(d){
                     return areaFill(d.values); })
-                .attr("opacity", 0.8)
+                .attr("opacity", 0.4)
 
             var medPath = svg.selectAll(".line2")
                 .data(state)
@@ -1143,7 +1143,6 @@ function ready(error,
           // Print which county has been selected (for updating county dropdown)
           selectedCounty = stateMap.get(state[0].key).County;
 
-          console.log(selectedCounty)
 
           // Update county dropdown
           updateCountyDrop();
@@ -1154,10 +1153,10 @@ function ready(error,
                 .duration(1000) 
                 .attr("opacity", 0)
 
-            svg.selectAll(".line2")
+            svg.selectAll("path.line2")
               .transition()
                 .duration(1000)
-                .attr("opacity", 1)
+                .attr("opacity", 0)
 
             // update domain
            var gData = svg.selectAll(".counties")
@@ -1166,12 +1165,13 @@ function ready(error,
                   y.domain(d.value.extent)
                 });
 
-console.log("State Year Update Ran")
 
             // Move paths from the median line to proper locations
               gData.selectAll("path.line")
                 .data(function(d){
                   return (d.value.years);
+                }, function(d){
+                  return d.key
                 })
                 .transition()
                   .delay(function(d, i){ return i * 50; })
@@ -1194,6 +1194,37 @@ console.log("State Year Update Ran")
               // Set class to selected for matching line
               .classed("selected", true)
               .raise();
+
+
+            // Adding labels to end of lines
+            //////////// ADDING LABEL TO END OF LINES ///////////
+
+              var gText = svg.selectAll(".labels")
+              .data(state)
+
+              gText.selectAll(".text-labels")
+                .data(function(d) {
+                        return (d.value.years);
+                      })
+                .transition()
+                  .delay(function(d, i){ return i * 50; })
+                  .duration(1000)
+                  .attr("transform", function(d) { return "translate(" + x(parseTimeMonth(d.values[11].month)) + "," + y(d.values[11].stateBirths) + ")"; })
+                  .attr("x", 3)
+                  .attr("dy", "0.35em")
+                  .style("font", "10px sans-serif")
+                  .text(function(d) { return d.key; })
+                  //.classed("text-labels", true)
+                  .attr("opacity", 0)
+
+              d3.selectAll(".text-labels").classed("event-show",function(d){
+                  if(d.key == +selectedYear){
+                    return true;
+                  }
+                  return false;
+                })
+
+
 
             // New voronois
 
@@ -1351,7 +1382,7 @@ console.log("State Year Update Ran")
                 .duration(1200) 
                 .attr("d", function(d){
                     return areaFill(d.values); })
-                .attr("opacity", 0.8)
+                .attr("opacity", 0.4)
 
             var medPath = svg.selectAll(".line2")
                 .data(county)
@@ -1447,7 +1478,7 @@ console.log("State Year Update Ran")
             svg.selectAll(".line2")
               .transition()
                 .duration(1000)
-                .attr("opacity", 1)
+                .attr("opacity", 0)
 
             // update domain
            var gData = svg.selectAll(".counties")
@@ -1460,6 +1491,8 @@ console.log("State Year Update Ran")
               gData.selectAll("path.line")
                .data(function(d){
                   return (d.value.years);
+                }, function(d){
+                  return d.key
                 })
                 .transition()
                   .delay(function(d, i){ return i * 50; })
@@ -1507,7 +1540,7 @@ console.log("State Year Update Ran")
 
               // Fixing median line
 
-              var countyMed = nestACounties.filter(function(d){
+           /*   var countyMed = nestACounties.filter(function(d){
               return +d.key === +countyCode;
             });
 
@@ -1525,7 +1558,7 @@ console.log("State Year Update Ran")
                 .attr("d", function(d){
                     return valueLineA(d.values);
                   })
-                .attr("opacity", 0.8)
+                .attr("opacity", 0)
 
 
         
@@ -1536,9 +1569,9 @@ console.log("State Year Update Ran")
                   .transition()
                   .delay(400)
                   .duration(1200)
-                  .attr("transform", function(d) { return "translate(" + x(parseTimeMonth(d.values[11].month)) + "," + y(d.values[11].median) + ")"; })
+                  .attr("transform", function(d) { return "translate(" + (width + 8) + "," + y(d.values[11].median) + ")"; })
                   .text("Average")
-                  //.lower();
+                  //.lower();*/
 
 
 
@@ -1614,6 +1647,7 @@ console.log("State Year Update Ran")
                 })
 
                 // Bring selected line to top
+                // This currently causes a transition glitch
                 d3.selectAll(".selected").raise();
 
                 // reset year dropdown to reflect clicked year
@@ -1839,9 +1873,7 @@ console.log("State Year Update Ran")
               })
               // Set class to selected for matching line
               .classed("selected", true)
-
-              // raise selected line to front
-              var lineToFront = svg.select(".selected").raise()
+              .raise()
 
           })
 
@@ -1914,7 +1946,7 @@ console.log("State Year Update Ran")
                   // Set class to selected for matching line
                   .classed("selected", true)
 
-              var lineToFront = svg.select(".selected").raise()
+              
 
 
               // Determine the months of the selected event's births
@@ -1963,6 +1995,7 @@ console.log("State Year Update Ran")
 
               var selectedGradient = d3.selectAll(".selected")
                   .classed("selected-event", true)
+                  .raise()
 
               // pull variables needed for annotations
 
