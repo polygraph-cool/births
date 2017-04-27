@@ -863,6 +863,8 @@ function ready(error,
               var PathText = labelsEnter.selectAll("text")
                 .data(function(d) {
                         return (d.value.years);
+                      }, function(d){
+                        return d.key
                       })
 
                 var LabelText = PathText.enter()
@@ -1205,6 +1207,8 @@ function ready(error,
               gText.selectAll(".text-labels")
                 .data(function(d) {
                         return (d.value.years);
+                      }, function(d){
+                        return d.key
                       })
                 .transition()
                   .delay(function(d, i){ return i * 50; })
@@ -1732,7 +1736,7 @@ function ready(error,
 
               // Determine which county was selected from dropdown
 
-                if(d3.select(this).select("select").property("value") == "All Counties"){
+                if(d3.select(this).select("select").property("value") == 1){
 
                   // If "All Counties" is selected, draw state-level chart
 
@@ -1777,7 +1781,7 @@ function ready(error,
 
 
 
-              if(selectedCounty == "All"){
+              if(selectedCounty == "1"){
 
                 // if "All Counties" is selected then generate state average line
                   stateUpdateAvg(selectedState);
@@ -1810,7 +1814,7 @@ function ready(error,
               console.log(selectedCounty)
 
 
-            if(selectedCounty == "All"){
+            if(selectedCounty == "1"){
 
                 // if "All Counties" is selected then generate state average line
                   stateUpdateYear(selectedState);
