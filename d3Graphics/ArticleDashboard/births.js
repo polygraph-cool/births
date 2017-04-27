@@ -839,7 +839,7 @@ console.log(Clist.select("select").property("value"))
                           d.line = this;
                           return valueLine(d.values)
                       })
-                      .attr("opacity", 0.8)
+                      .attr("opacity", 0.6)
                       // Setting individual classes for each line (for voronoi)
                       .attr("class", function(d,i) { return "line " + d.key; })
 
@@ -943,6 +943,7 @@ console.log(Clist.select("select").property("value"))
                   }
                   return false;
                 })
+              
 
                 // Bring selected line to top
                 d3.selectAll(".selected").raise();
@@ -953,9 +954,10 @@ console.log(Clist.select("select").property("value"))
                     return +d.key === +yearSelected;
                   })
 
-
-
               })
+              .on("mouseout", function(d){
+                              d3.selectAll(".line").classed("hovered", false)
+                            })
             
               //.on("mouseout",  removeTooltip);
 
@@ -1171,7 +1173,7 @@ console.log("State Year Update Ran")
                   .attr("d", function(d){
                     return valueLineState(d.values)
                   })
-                  .attr("opacity", 0.8);
+                  .attr("opacity", 0.6);
 
 
             var selectedYear = yList.select("select").property("value")
