@@ -244,13 +244,14 @@ width: auto;
   background-color: white;
   border: none;
   cursor: pointer;
+  cursor: hand;
 }
 
 #dropdown-c.hiddendd {
   display: none;
 }
 
-.toggle.average {
+button.toggle.average {
   border-bottom-left-radius: 5px;
   border-top-left-radius: 5px;
   font-family: 'Atlas Grotesk Web';
@@ -259,9 +260,11 @@ width: auto;
   background-color: white;
   border: 1px solid rgba(127, 125, 156, 0.54);
   width: 75px;
+  cursor: pointer;
+  cursor: hand;
 }
 
-.toggle.year {
+button.toggle.year {
   border-bottom-right-radius: 5px;
   border-top-right-radius: 5px;
   font-family: 'Atlas Grotesk Web';
@@ -284,6 +287,13 @@ width: auto;
   cursor: hand;
 }
 
+.toggle.active:hover,
+.toggle.year:hover,
+.toggle.average:hover{
+  cursor: pointer;
+  cursor: hand;
+}
+
 .toggle:focus{
   outline: 0;
 }
@@ -299,6 +309,10 @@ width: auto;
   position: relative;
 }
 
+.voronoi{
+  cursor: pointer;
+  cursor: hand;
+}
 
 .select__arrow.long{
   position: absolute;
