@@ -20,7 +20,6 @@ body {
 #right-column {
   width: 300px;
   height: 1000px;
-  background: #fdfdfd;
   padding: 2rem;
 }
 
@@ -73,41 +72,35 @@ body {
     margin: 0 auto;
 }
 
-p.headline-big {
-
-    text-align: center;
-    font-family: 'Canela Web';
-    margin: 0px;
-    font-size: 84px;
-    font-weight: 700;
-    margin-top: 130px;
-
-}
+p.headline-big {text-align: center;font-family: 'Canela Web';margin: 0px;font-size: 84px;font-weight: 700;margin-top: 130px;display: none;}
 
 p.headline-small {
     font-size: 16px;
     text-align: center;
     font-family: 'Canela Web';
     margin: 0px;
-    font-size: 29px;
-    font-weight: 300;
-    margin-top: 10px;
+    font-size: 61px;
+    font-weight: 600;
+    margin-top: 90px;
+    text-align: left;
 }  
 
 .section-title {
     font-family: 'Atlas Grotesk Web';
-    font-weight: 600;
-    font-size: 1.0em;
+    font-weight: 100;
+    font-size: 2rem;
     max-width: 40rem;
     margin: 0 auto;
     /* letter-spacing: -.02em; */
     /* -webkit-font-smoothing: antialiased; */
     color: rgba(0,0,0,.90);
-    text-transform: uppercase;
+    text-transform: capitalize;
+    margin-bottom: 1rem;
+    margin-top: 4rem;
 }
 
 .byline {
-    font-size: .75rem;
+    font-size: .8rem;
     text-align: center;
     font-family: 'Atlas Grotesk Web';
     font-weight: 400;
@@ -123,7 +116,8 @@ p.headline-small {
 #Wayne {
   margin: auto;
   display: block;
-  margin-bottom: 50px;
+  margin-bottom: 70px;
+  margin-top: 50px;
 }
 
 
@@ -133,40 +127,38 @@ p.headline-small {
 
 
 #dropdowns {
-  width: 800px;
-  height: 100px;
   position: absolute;
-  top: 0;
+  top: 22px;
   left: 20px;
-  /*display: none*/;
+  /*display: none*/
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-start;
+  border-bottom: 1px solid #dadada;
+  padding-bottom: 13px;
+  /* border-top: 1px solid #dadada; */
+  /* padding-top: 11px; */
+  margin-left: 30px;
+  padding-right: 70px;
 }
 
-#dropdown-a {
-  display: inline-block;
-  width: 250px;
-  height: 100px;
-  margin-right: 10px;
-}
+#dropdown-a {position: relative;width: auto;}
 
 #dropdown-b{
-  display: inline-block;
   width: 200px;
-  height: 100px;
-  margin-right: 10px;
 }
 
 #toggleouter {
-  display: inline-block;
-  width: 200px;
-  height: 100px;
-  margin-right: 10px;
+  margin-right: 30px;
   z-index: 100;
 }
 
 #dropdown-c {
   display: inline-block;
-  width: 110px;
-  height: 100px;
+  text-align: center;
 }
 
 .dd-title {
@@ -175,25 +167,25 @@ p.headline-small {
   font-family: 'Atlas Grotesk Web';
   font-weight: 300;
   font-size: .65em;
-  margin-left: 34px;
   letter-spacing: .25px;
   text-transform: uppercase;
+  margin-bottom: 4px;
 }
 
 #toggleouter .dd-title {
-  margin-left: 32px;
   text-align: center;
   width: 150px;
 }
 
 .dd-title.events{
-  margin: 0 25px 0 50px;
   color: white;
   vertical-align: middle;
   line-height: 48px;
-  display: inline-block;
-  position: absolute;
-  font-size: .75em;
+  font-size: .65rem;
+  color: #7b7b7b;
+  font-weight: 500;
+  margin-right: 17px;
+  /* text-decoration: underline; */
 }
 
 
@@ -202,13 +194,11 @@ p.headline-small {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  display: block;
-  padding: 0.5em 1em 0.5em 0;
-  margin: 0 0 0 34px;
+  /* padding: 0.5em 1em 0.5em 0; */
   font-family: 'Atlas Grotesk Web';
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: #7D93CA;
+  font-size: 1rem;
+  font-weight: 500;
+  color: black;
   background-color: white;
   border: none;
   cursor: pointer;
@@ -223,32 +213,33 @@ p.headline-small {
   border-top-left-radius: 5px;
   font-family: 'Atlas Grotesk Web';
   font-size: .75rem;
-  color: #7D93CA;
+  color: #6f6f6f;
   background-color: white;
   border: 1px solid rgba(127, 125, 156, 0.54);
   width: 75px;
-  margin-left: 32px;
-  margin-top: 14px;
 }
 
 .toggle.year {
   border-bottom-right-radius: 5px;
   border-top-right-radius: 5px;
-    font-family: 'Atlas Grotesk Web';
+  font-family: 'Atlas Grotesk Web';
   font-size: .75rem;
   color: #7D93CA;
   background-color: white;
-    border: 1px solid rgba(127, 125, 156, 0.54);
-    width: 75px;
-    margin-top: 14px;
+  border: 1px solid rgba(127, 125, 156, 0.54);
+  width: 75px;
+  cursor: pointer;
+  cursor: hand;
 }
 
 .toggle.active{
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 5px inset;
-  border-color: rgb(173, 173, 173);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 5px inset;
+  border-color: rgba(14, 14, 14, 0.24);
   font-weight: 600;
   background-color: #EEE;
-  color: #666666;
+  color: #587ddc;
+  cursor: pointer;
+  cursor: hand;
 }
 
 .toggle:focus{
@@ -259,29 +250,37 @@ p.headline-small {
 #states,
 #year {
   position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  position: relative;
 }
 
 
 .select__arrow.long{
   position: absolute;
   top: 50%;
-  left: 0;
-  width: 0;
   height: 0;
-  margin: -4px 0 0 10px;
   pointer-events: none;
   border-width: 8px 5px 0 5px;
   border-style: solid;
-  border-color: #7D93CA transparent transparent transparent;
+  border-color: #cecece transparent transparent transparent;
+  top: -14px;
+  left: 58px;
 }
 
 #icons {
-  width: 850px;
   height: 48px;
   position: absolute;
   bottom: 0;
-  background-color: #7D93CA;
+  /* background-color: #7D93CA; */
   /*display: none;*/
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  padding-left: 50px;
 }
 
 #icon-a,
@@ -291,15 +290,14 @@ p.headline-small {
 #icon-e,
 #icon-f,
 #icon-g {
-  display: inline-block;
-  position: relative;
-  width: 56px;
   height: 48px;
   /*margin: 0 48px 4px 0px;*/
+  position: relative;
+  width: 48px;
+  margin-right: 20px;
 }
 
 #icon-a {
-  margin-left: 130px;
 }
 
 #icon-a svg,
@@ -309,11 +307,11 @@ p.headline-small {
 #icon-e svg,
 #icon-f svg,
 #icon-g svg {
+  margin: -16px 0 0 -16px;
+  pointer-events: none;
   position: absolute;
   top: 50%;
   left: 50%;
-  margin: -16px 0 0 -16px;
-  pointer-events: none;
 }
 
 
@@ -331,6 +329,7 @@ p.headline-small {
   stroke-miterlimit: 10;
   stroke-linecap: round;
   pointer-events: all;
+  stroke: black;
 }
 
 #icon-a.current #icon-storms,
@@ -343,9 +342,10 @@ p.headline-small {
   position: absolute;
   fill: none;
   stroke: white;
-  stroke-width: 2;
+  stroke-width: 1;
   stroke-miterlimit: 10;
   stroke-linecap: round;
+  stroke: black;
 }
 
 #icon-a:hover,
@@ -369,6 +369,7 @@ p.headline-small {
   /*border-bottom: 4px solid #7D93CA;
   margin-bottom: 0;*/
   background-color: #B2C1E3;
+  background: white;
 }
 
 #icons .current #icon-storms,
@@ -376,8 +377,9 @@ p.headline-small {
 #icons .current #icon-terrorism {
   fill: none;
   stroke: white;
-  stroke-width: 2;
+  stroke-width: 1;
   stroke-miterlimit: 10;
+  stroke: black;
 }
 
 #icon-dropdown {
@@ -485,19 +487,22 @@ option[value="NaN"][disabled] {
 .axis.label{
   font-size: .75em;
   font-weight: 400;
-  fill: #999999;
+  fill: black;
+  text-transform: capitalize;
 }
 
 .axis path,
 .axis line{
   fill: none;
-  stroke-width: 1.5px;
-  stroke: #999999;
+  stroke-width: 1px;
+  stroke: #000000;
   shape-rendering: crispEdges;
 }
 
 .axis text{
-  fill: #999999;
+  fill: #000000;
+  font-weight: 600;
+  font-size: 10px;
 }
 
 .hidden {
@@ -524,10 +529,11 @@ option[value="NaN"][disabled] {
 }
 
 .annotation-note .annotation-note-title, text.title {
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 500;
   fill: #EF445B;
-  font-family: 'Canela Web';
+  font-family: 'Atlas Grotesk Web';
+  text-shadow: -2px 0 rgba(253, 252, 255,0.77), 0 2px rgba(253, 252, 255,0.77), 2px 0 rgba(253, 252, 255,0.77), 0 -2px rgba(253, 252, 255,0.77);
 }
 
 
@@ -682,38 +688,44 @@ option[value="NaN"][disabled] {
 
 .intro-prose,
 .conclusion-prose {
-    font-size: 1rem;
+    font-size: 1.12rem;
     color: black;
     font-weight: 100;
-    line-height: 1.7;
+    line-height: 2;
+    max-width: 36rem;
+    margin: 0 auto;
     margin-bottom: 1.5rem;
 }
 
 .intro-section {
-    max-width: 640px;
     margin: 0 auto;
-    margin-top: 70px;
+    background: #fcfcfc;
+    margin-bottom: 50px;
+    padding-bottom: 30px;
 }
 
 
 
 .right-column-prose {
-    font-size: 1rem;
+    font-size: .92rem;
     margin-bottom: 1rem;
     line-height: 1.7;
 }
 
 .highlighted{
-  background-color: #B2C1E3;
-  transition: 1000ms;
-  padding: 5px;
-
+  transition: 500ms;
+  color: #97a8d4;
+  /* text-decoration: underline; */
 }
 
 .right-column-prose.note{
-    font-size: .65rem;
+    font-size: .8rem;
     margin-bottom: 1rem;
-    line-height: 1.2;
+    line-height: 1.5;
 }
 
 
+
+.icons {
+    opacity: .3;
+    
