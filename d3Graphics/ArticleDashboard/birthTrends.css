@@ -806,6 +806,12 @@ option[value="NaN"][disabled] {
   /* text-decoration: underline; */
 }
 
+.prose-highlighted {
+  background-color: rgba(206, 214, 237, 0.4);
+  padding: 8px;
+  border-radius: 10px;
+}
+
 .right-column-prose.note{
     font-size: .8rem;
     margin-bottom: 1rem;

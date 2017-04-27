@@ -2258,6 +2258,7 @@ function ready(error,
                     .classed("current", true)
 
                 d3.selectAll("#Sports").classed("highlighted", true)
+                d3.selectAll(".sports-prose").classed("prose-highlighted", true)
 
             }
           })
@@ -2265,6 +2266,7 @@ function ready(error,
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
 
                   d3.selectAll(".highlighted").classed("highlighted", false)
+                  d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
                   d3.selectAll(".selected-event").classed("selected-event", false)
                   d3.selectAll(".selected").classed("selected", false)
 
@@ -2299,7 +2301,9 @@ function ready(error,
             }
             else{
                 d3.selectAll(".highlighted").classed("highlighted", false)
+                d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
                 d3.selectAll("#Terror").classed("highlighted", true)
+                d3.selectAll(".terror-prose").classed("prose-highlighted", true)
 
                 eventDisplay("Oklahoma City Bombing")
                   d3.selectAll("g.annotation-group-cause").remove();
@@ -2317,6 +2321,8 @@ function ready(error,
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
 
               d3.selectAll(".highlighted").classed("highlighted", false)
+                d3.selectAll("#Sports").classed("highlighted", true)
+                d3.selectAll(".sports-prose").classed("prose-highlighted", true)
                
                 eventDisplay("Red Sox World Series Win")
                   d3.selectAll("g.annotation-group-cause").remove();
@@ -2327,7 +2333,7 @@ function ready(error,
                   d3.selectAll(".icons#icon-e")
                     .classed("current", true)
 
-                d3.selectAll("#Sports").classed("highlighted", true)
+              
             }
             else{
             }
@@ -2349,7 +2355,10 @@ function ready(error,
             else{
 
                 d3.selectAll(".highlighted").classed("highlighted", false)
+                d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
                 d3.selectAll("#Money").classed("highlighted", true)
+                d3.selectAll(".money-prose").classed("prose-highlighted", true)
+
 
                 eventDisplay("Detroit Bankruptcy")
                   d3.selectAll("g.annotation-group-cause").remove();
@@ -2372,7 +2381,9 @@ function ready(error,
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
 
                 d3.selectAll(".highlighted").classed("highlighted", false)
+                d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
                 d3.selectAll("#Terror").classed("highlighted", true)
+                d3.selectAll(".terror-prose").classed("prose-highlighted", true)
 
                 eventDisplay("Oklahoma City Bombing")
                   d3.selectAll("g.annotation-group-cause").remove();
@@ -2412,10 +2423,17 @@ function ready(error,
             }
             else{
 
+                  d3.selectAll(".highlighted").classed("highlighted", false)
+                  d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
+
                   countyUpdateAvg(26163)
                   d3.selectAll("#Season").classed("highlighted", true)
+                  d3.selectAll(".season-prose").classed("prose-highlighted", true)
                   d3.selectAll(".toggle.year").classed("active", false)
                   d3.selectAll(".toggle.average").classed("active", true)
+
+                  // Hide year dropdown
+                  d3.select("#dropdown-c").classed("hiddendd", true)
                
 
             }
@@ -2424,7 +2442,9 @@ function ready(error,
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
 
                 d3.selectAll(".highlighted").classed("highlighted", false)
+                d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
                 d3.selectAll("#Money").classed("highlighted", true)
+                d3.selectAll(".money-prose").classed("prose-highlighted", true)
 
                 eventDisplay("Detroit Bankruptcy")
                   d3.selectAll("g.annotation-group-cause").remove();
@@ -2437,6 +2457,8 @@ function ready(error,
 
                   d3.selectAll(".toggle.year").classed("active", true)
                   d3.selectAll(".toggle.average").classed("active", false)
+
+                  d3.select("#dropdown-c").classed("hiddendd", false)
                
             }
             else{
@@ -2458,7 +2480,14 @@ function ready(error,
             }
             else{
 
+                d3.selectAll(".highlighted").classed("highlighted", false)
+                d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
+
+                d3.selectAll(".season-prose-Florida").classed("prose-highlighted", true)
+
+
                   stateUpdateAvg("Florida")
+
                   d3.selectAll("#Florida").classed("highlighted", true)
 
                
@@ -2468,8 +2497,14 @@ function ready(error,
           .on("leave",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
 
-                  countyUpdateAvg(40109)
-                  d3.selectAll("#Florida").classed("highlighted", false)
+                  d3.selectAll(".highlighted").classed("highlighted", false)
+                  d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
+
+                  countyUpdateAvg(26163)
+                  d3.selectAll("#Season").classed("highlighted", true)
+                  d3.selectAll(".season-prose").classed("prose-highlighted", true)
+                  d3.selectAll(".toggle.year").classed("active", false)
+                  d3.selectAll(".toggle.average").classed("active", true)
                
             }
             else{
@@ -2491,8 +2526,11 @@ function ready(error,
             }
             else{
 
+                  d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
+
                   stateUpdateAvg("Maine")
                   d3.selectAll("#Maine").classed("highlighted", true)
+                  d3.selectAll(".season-prose-Maine").classed("prose-highlighted", true)
                   d3.selectAll("#Florida").classed("highlighted", false)
                
 
@@ -2501,9 +2539,16 @@ function ready(error,
           .on("leave",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
 
+                  
+                d3.selectAll(".highlighted").classed("highlighted", false)
+                d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
+
+                d3.selectAll(".season-prose-Florida").classed("prose-highlighted", true)
+
+
                   stateUpdateAvg("Florida")
+
                   d3.selectAll("#Florida").classed("highlighted", true)
-                  d3.selectAll("#Maine").classed("highlighted", false)
                
             }
             else{
