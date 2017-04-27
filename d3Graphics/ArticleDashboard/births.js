@@ -1035,6 +1035,8 @@ function ready(error,
               svg.selectAll(".annotation-group-cause").remove();
               svg.selectAll("circle").remove();
               d3.selectAll(".icons").classed("current", false)
+              d3.selectAll(".event-show").classed("event-show", false)
+              d3.selectAll(".voronoi").remove();
 
 
           d3.selectAll(".selected-event").classed("selected-event", false)
@@ -1394,7 +1396,8 @@ function ready(error,
               svg.selectAll(".annotation-group-cause").remove();
               svg.selectAll("circle").remove();
               d3.selectAll(".icons").classed("current", false)
-
+              d3.selectAll(".event-show").classed("event-show", false)
+              d3.selectAll(".voronoi").remove();
 
           d3.selectAll(".selected-event").classed("selected-event", false)
           d3.selectAll(".selected")
@@ -1580,6 +1583,12 @@ function ready(error,
               .classed("selected", true)
               .raise();
 
+              d3.selectAll(".text-labels").classed("event-show",function(d){
+                  if(d.key == +selectedYear){
+                    return true;
+                  }
+                  return false;
+                })
 
               //////////// ADDING LABEL TO END OF LINES ///////////
 
@@ -2539,7 +2548,7 @@ function ready(error,
           .on("leave",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
 
-                  
+
                 d3.selectAll(".highlighted").classed("highlighted", false)
                 d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
 
