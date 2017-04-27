@@ -10,7 +10,7 @@
     DS = {}
 
     // set the dimensions and margins of the graph
-    var margin = {top: 20, right: 80, bottom: 30, left: 50},
+    var margin = {top: 60, right: 80, bottom: 20, left: 50},
       width = 850 - margin.left - margin.right,
       height = 370 - margin.top - margin.bottom;
 
@@ -855,6 +855,22 @@ function ready(error,
                   return d.key === countyMap.get(county[0].key).stateName;
                 })
 
+            //////////// UPDATING CHART TITLE ///////////
+
+            var sample = d3.select("#sample")
+                .append("text")
+                .text("Monthly")
+
+            var sample = d3.select("#countyName")
+                .append("text")
+                .text(countyMap.get(county[0].key).County_Name + " County")
+
+            var state = d3.select("#stateName")
+                .append("text")
+                .text(countyMap.get(county[0].key).stateName)
+
+
+
             //////////// ADDING LABEL TO END OF LINES ///////////
               var labelsEnter = pickedCounty.enter()
                       .append("g")
@@ -1060,6 +1076,7 @@ function ready(error,
                   y.domain(d.value.extent)
                 });*/
 
+
             y.domain([d3.min(state[0].values, function(d) {
               return +d.low
             }), 
@@ -1101,6 +1118,18 @@ function ready(error,
                       return valueLineA(medPathD);
                     })
                   .attr("opacity", 0)
+
+
+            // Update Chart Title
+            var sample = d3.selectAll("#sample")
+                .text("Average")
+
+            var sample = d3.select("#countyName")
+                .text(stateMap.get(state[0].key).County_Name + " County")
+                .classed("noCounty", true)
+
+            var state = d3.select("#stateName")
+                .text(stateMap.get(state[0].key).stateName)
 
             // Update Y Axis
             d3.select(".y")
@@ -1323,7 +1352,23 @@ function ready(error,
                   d3.selectAll(".text-labels").classed("showing", false)
               })
 
+            // Update Chart Title
+            var sample = d3.selectAll("#sample")
+                .text("Monthly")
 
+            var selectCounty = ClistG.select("select").property("value")
+
+            var sample = d3.select("#countyName")
+                .text(stateMap.get(state[0].key).County_Name + " County")
+                .classed("noCounty", function(d){
+                  if (selectCounty == "1"){
+                    return true
+                  }
+                  return false
+                })
+                
+            var state = d3.select("#stateName")
+                .text(stateMap.get(state[0].key).stateName)
 
             // Update Y Axis
             d3.select(".y")
@@ -1420,10 +1465,28 @@ function ready(error,
 
           selectedCounty = countyMap.get(county[0].key).County;
 
-          console.log(selectedCounty)
 
           // Update county dropdown
           updateCountyDrop(countyCode);  
+
+
+          // Update Chart Title
+            var sample = d3.selectAll("#sample")
+                .text("Average")
+
+            var selectCounty = ClistG.select("select").property("value")
+
+            var sample = d3.select("#countyName")
+                .text(countyMap.get(county[0].key).County_Name + " County,")
+                .classed("noCounty", function(d){
+                  if (selectCounty == "1"){
+                    return true
+                  }
+                  return false
+                })
+                
+            var state = d3.select("#stateName")
+                .text(countyMap.get(county[0].key).stateName)
 
             // Update Y Axis
             d3.select(".y")
@@ -1675,6 +1738,24 @@ function ready(error,
                   d3.selectAll(".line").classed("hovered", false)
                   d3.selectAll(".text-labels").classed("showing", false)
               })
+
+
+            var sample = d3.selectAll("#sample")
+                .text("Monthly")
+
+            var selectCounty = ClistG.select("select").property("value")
+
+            var sample = d3.select("#countyName")
+                .text(countyMap.get(county[0].key).County_Name + " County,")
+                .classed("noCounty", function(d){
+                  if (selectCounty == "1"){
+                    return true
+                  }
+                  return false
+                })
+                
+            var state = d3.select("#stateName")
+                .text(countyMap.get(county[0].key).stateName)
             
 
             // Update Y Axis

@@ -27,11 +27,12 @@ body {
   width: 100%;
   display: flex;
   margin: 0 auto;
+  margin-left: 200px;
 }
 
 
 #graph {
-  height: 540px;
+  height: 550px;
   width: 850px;
   position: relative;
   flex-grow: 1;
@@ -42,6 +43,24 @@ body {
     margin: 0 auto;
     margin-top: 70px;
   }
+
+.graph-title {
+  position: absolute;
+  width: auto;
+  margin-left: 50px;
+  font-family: 'Atlas Grotesk Web';
+    font-weight: 100;
+    font-size: 1.6rem;
+    max-width: 40rem;
+    /* letter-spacing: -.02em; */
+    /* -webkit-font-smoothing: antialiased; */
+    color: rgba(0,0,0,.90);
+    text-transform: capitalize;
+}
+
+.noCounty {
+  display: none;
+}
 
 #graph svg{
   margin-top: 100px;
@@ -128,7 +147,7 @@ p.headline-small {
 
 #dropdowns {
   position: absolute;
-  top: 22px;
+  top: 62px;
   left: 20px;
   /*display: none*/
   display: -webkit-box;
@@ -145,7 +164,10 @@ p.headline-small {
   padding-right: 70px;
 }
 
-#dropdown-a {position: relative;width: auto;}
+#dropdown-a {
+  position: relative;
+  width: auto;
+  margin-right: 20px;}
 
 #dropdown-b{
   width: 200px;
@@ -156,9 +178,12 @@ p.headline-small {
   z-index: 100;
 }
 
+
+
 #dropdown-c {
-  display: inline-block;
+width: auto;
   text-align: center;
+  margin-right: 0px;
 }
 
 .dd-title {
