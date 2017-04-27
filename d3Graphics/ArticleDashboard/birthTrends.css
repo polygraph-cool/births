@@ -32,7 +32,7 @@ body {
 
 
 #graph {
-  height: 550px;
+  height: 570px;
   width: 850px;
   position: relative;
   flex-grow: 1;
@@ -137,6 +137,23 @@ p.headline-small {
   display: block;
   margin-bottom: 70px;
   margin-top: 50px;
+}
+
+#dataSource {
+  bottom: 0;
+  position: absolute;
+  margin-left: 50px;
+  font-family: 'Atlas Grotesk Web';
+  font-weight: 300;
+  font-size: .55em;
+  text-transform: uppercase;
+
+
+}
+
+.dataSource-attr,
+.dataSourceLink {
+  color: #7b7b7b;
 }
 
 
@@ -298,7 +315,7 @@ width: auto;
 #icons {
   height: 48px;
   position: absolute;
-  bottom: 0;
+  bottom: 30px;
   /* background-color: #7D93CA; */
   /*display: none;*/
   display: -webkit-box;
