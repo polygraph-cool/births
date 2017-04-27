@@ -2086,6 +2086,13 @@ function ready(error,
                   .classed("selected-event", true)
                   .raise()
 
+              d3.selectAll(".text-labels").classed("event-show",function(d){
+                  if(d.key == +selectedYear){
+                    return true;
+                  }
+                  return false;
+                })
+
               // pull variables needed for annotations
 
               var selectedCauseTitle = eventMap.get(selected).causeTitle
