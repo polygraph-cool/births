@@ -33,18 +33,21 @@
     var valueLine = d3.line()
         .x(function(d) { return x(parseTimeMonth(d.month)); })
         .y(function(d) { return y(+d.Births); })
+              .curve(d3.curveStep);
         ;
 
     // define the line
     var valueLineState = d3.line()
         .x(function(d) { return x(parseTimeMonth(d.month)); })
         .y(function(d) { return y(+d.stateBirths); })
+              .curve(d3.curveStep);
         ;
 
     // define the line
     var valueLineA = d3.line()
         .x(function(d) { return x(parseTimeMonth(d.month)); })
         .y(function(d) { return y(+d.median); })
+              .curve(d3.curveStep);
         ;
 
     // define the area
@@ -53,7 +56,7 @@
       .x(function(d) { return x(parseTimeMonth(d.month)); })
       .y0(function(d, i) { return y(+d.low); })
       .y1(function(d, i) { return y(+d.high); })
-      .curve(d3.curveCardinal);
+      .curve(d3.curveStep);
 
     // append the svg object to the body of the page
     // appends a 'group' element to 'svg'
@@ -123,7 +126,7 @@
                 .x(function(d) { return x(parseTimeMonth(d.month)); })
                 .y0(function(d, i) { return y(+d.low); })
                 .y1(function(d, i) { return y(+d.high); })
-                .curve(d3.curveCardinal);
+                .curve(d3.curveStep);
 
 
 
