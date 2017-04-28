@@ -762,8 +762,63 @@ function ready(error,
   }
 
 
+  //////////////////////////////////////////////////////////////////////
+    ////////////////////////// AVERAGE ANNOTATIONS ///////////////////////
+    //////////////////////////////////////////////////////////////////////
+
+      var IQRAnnotation = function(high){  
+      var type = d3.annotationCustomType(
+          d3.annotationCallout,
+          {"className":"custom",
+          "connector":{"end":"dot"},
+          "note":{"lineType":"vertical"}})
+      
+
+      var annotations = [
+        {
+          note: {
+            label: "50% of the data falls within this pink area",
+            title: "Inter-Quartile Range",
+          },
+          data: { month: "Feb", high: high},
+          //x: 20,
+          //y: -20,
+          dy: -(y(high) + 5),
+          dx: 0,
+        }]
+
+        console.log(x(parseTimeMonth("Dec")))
+
+        var makeAnnotations = d3.annotation()
+          //.editMode(true)
+          .textWrap(250)
+          .notePadding(15)
+          .type(type)
+          .accessors({
+            x: d => x(parseTimeMonth(d.month)),
+            y: d => y(d.high)
+          })
+          .accessorsInverse({
+            month: d => parseMonth(x.invert(d.x)),
+            Births: d => y.invert(d.y)
+          })
+          .annotations(annotations)
+
+          console.log("Annotations made!")
+
+        svg.append("g")
+          .attr("class", "annotation-group-average")
+          .call(makeAnnotations)
 
 
+
+        svg.selectAll(".annotation-group-average")
+          .attr("opacity", 0)
+          .transition()
+            .duration(2000)
+            .attr("opacity", 1)
+
+    }
 
 
 
@@ -899,7 +954,7 @@ function ready(error,
                 .classed("text-labels", true)
                 .attr("opacity", 0)
 
-                /*var MedianLabel = aCounty.enter()
+                var MedianLabel = aCounty.enter()
                   .append("g")
                   .attr("class", "areas")
 
@@ -909,7 +964,10 @@ function ready(error,
                 .attr("class", "medianLabel")
                 .attr("transform", function(d) { return "translate(" + (width + 8) + "," + y(d.values[11].median) + ")"; })
                 .text("Average")
-                .lower();*/
+
+                svg.selectAll("medianLabel-showing")
+                  .classed("showing", false)
+                //.lower();
 
 
             ////////////  ADDING VORONOI  ///////////
@@ -964,6 +1022,7 @@ function ready(error,
                 // remove remnants from event annotations
                 svg.selectAll(".annotation-group-result").remove();
                 svg.selectAll(".annotation-group-cause").remove();
+                svg.selectAll(".annotation-group-average").remove();
                 svg.selectAll("circle").remove();
                 d3.selectAll(".icons").classed("current", false)
 
@@ -1040,6 +1099,8 @@ function ready(error,
               // Remove any remnants from previous event
               svg.selectAll(".annotation-group-result").remove();
               svg.selectAll(".annotation-group-cause").remove();
+              svg.selectAll(".annotation-group-average").remove();
+
               svg.selectAll("circle").remove();
               d3.selectAll(".icons").classed("current", false)
               d3.selectAll(".event-show").classed("event-show", false)
@@ -1054,7 +1115,16 @@ function ready(error,
               .duration(300)
               .attr("opacity", 0)
 
-          var rect = svg.append("rect")
+          /*var rect = svg.append("rect")
+            .attr("x", 10)
+            .attr("y", 0)
+            .attr("width", 30)
+            .attr("height", 15)
+            .attr("fill", "#E3C0DB")
+            .attr("opacity", 0.3)
+            .attr("corner-radius", 5);
+
+          var legendPath = svg.append("path")
             .attr("x", 10)
             .attr("y", 0)
             .attr("width", 30)
@@ -1067,7 +1137,9 @@ function ready(error,
             .attr("x", 50)
             .attr("y", 10)
             .text("= spread of data (IQR)*")
-            .classed("legend", true)
+            .classed("legend", true)*/
+
+            // Adding the annotation to the area
 
 
 
@@ -1088,6 +1160,8 @@ function ready(error,
 
           // Update county dropdown to default to "All Counties"
           updateCountyDrop();
+
+
 
           // For updating domain to match year lines
 
@@ -1130,12 +1204,35 @@ function ready(error,
                   })
                 .attr("opacity", 0.8)
 
+            // IQR Labels
 
+            var IQRHigh = (state[0].values[1].high)
 
-            // Adding the annotation to the area
-            var IQRHigh = (state[0].values[11].high)
 
             IQRAnnotation(IQRHigh);
+
+          // Adding Median Label at end of line
+          var stateMed = nestAStates.filter(function(d){
+              return d.key === stateName;
+                });
+        
+        console.log(stateMed)
+                
+          // Adding special label for median line
+          var MedianText = svg.selectAll(".medianLabel")
+          .data(stateMed)
+            .transition()
+            .delay(400)
+            .duration(1200)
+            .attr("transform", function(d) { return "translate(" + (width + 8) + "," + y(d.values[11].median) + ")"; })
+
+            svg.selectAll(".medianLabel")
+              .classed("medianLabel-showing", true)
+      
+
+
+
+
 
             // Accessing path information from median line
             var medPathD = medPath._groups[0][0].__data__.values
@@ -1162,6 +1259,7 @@ function ready(error,
             var state = d3.select("#stateName")
                 .text(stateMap.get(state[0].key).stateName)
 
+
             // Update Y Axis
             d3.select(".y")
                     .transition()
@@ -1183,6 +1281,8 @@ function ready(error,
               // Remove any remnants from previous event
               svg.selectAll(".annotation-group-result").remove();
               svg.selectAll(".annotation-group-cause").remove();
+              svg.selectAll(".annotation-group-average").remove();
+              d3.selectAll(".medianLabel-showing").classed("medianLabel-showing", false)
               svg.selectAll("circle").remove();
               d3.selectAll(".icons").classed("current", false)
 
@@ -1424,6 +1524,8 @@ function ready(error,
               // Remove any remnants from previous event
               svg.selectAll(".annotation-group-result").remove();
               svg.selectAll(".annotation-group-cause").remove();
+              svg.selectAll(".annotation-group-average").remove();
+
               svg.selectAll("circle").remove();
               d3.selectAll(".icons").classed("current", false)
               d3.selectAll(".event-show").classed("event-show", false)
@@ -1502,6 +1604,30 @@ function ready(error,
           updateCountyDrop(countyCode);  
 
 
+          // Adding IQR Labels
+            var IQRHigh = (county[0].values[1].high)
+
+
+            IQRAnnotation(IQRHigh);
+
+          // Adding Median Label at end of line
+          var countyMed = nestACounties.filter(function(d){
+              return +d.key === +countyCode;
+                });
+        
+                
+          // Adding special label for median line
+          var MedianText = svg.selectAll(".medianLabel")
+          .data(countyMed)
+            .transition()
+            .delay(400)
+            .duration(1200)
+            .attr("transform", function(d) { return "translate(" + (width + 8) + "," + y(d.values[11].median) + ")"; })
+            
+            svg.selectAll(".medianLabel")
+              .classed("medianLabel-showing", true)
+
+
           // Update Chart Title
             var sample = d3.selectAll("#sample")
                 .text("Average")
@@ -1542,6 +1668,8 @@ function ready(error,
           // Remove any remnants from previous event
           svg.selectAll(".annotation-group-result").remove();
           svg.selectAll(".annotation-group-cause").remove();
+          svg.selectAll(".annotation-group-average").remove();
+          d3.selectAll(".medianLabel-showing").classed("medianLabel-showing", false)
           svg.selectAll("circle").remove();
           d3.selectAll(".icons").classed("current", false)
 
@@ -1650,9 +1778,7 @@ function ready(error,
 
 
             // Set domain for area chart to same as for line chart
-            var countyMedD = nested.filter(function(d){
-                  return +d.key === +countyCode;
-                });
+
 
             var medPath = svg.selectAll(".line2")
                 .data(countyMed)
@@ -1664,7 +1790,13 @@ function ready(error,
                   })
                 .attr("opacity", 0)
 
+            var countyMedD = nested.filter(function(d){
+                  return +d.key === +countyCode;
+                });
 
+                var countyMed = nestACounties.filter(function(d){
+              return +d.key === +countyCode;
+                });
         
                 
                 // Adding special label for median line

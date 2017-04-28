@@ -506,7 +506,7 @@ button.toggle.year {
 
 .line2 {
   fill: none;
-  stroke: #999999;
+  stroke: #CC6699;
   stroke-width: 3px;
   stroke-miterlimit: 10;
   stroke-linecap: round;
@@ -547,16 +547,19 @@ button.toggle.year {
   background-color: white;
 }
 
-
-
 .medianLabel {
   fill: #999999;
-  opacity: .8;
+  opacity: 0;
   font-family: 'Atlas Grotesk Web';
   font-weight: bold;
   font-size: .65em;
   text-transform: uppercase;
   padding-left: 5px;
+}
+
+
+.medianLabel-showing {
+  opacity: .8;
 }
 
 option[value="NaN"][disabled] {
@@ -632,6 +635,32 @@ option[value="NaN"][disabled] {
 
 .annotation-note-bg {
   fill: #FFFFFF;
+}
+
+
+.annotation-group-average .annotation path {
+  stroke: #DDDDDD;
+  stroke-width: 2px;
+  fill: none;
+
+}
+
+.annotation-group-average .annotation text {
+    font-family: 'Atlas Grotesk Web';
+  font-weight: 300;
+  font-size: .55em;
+  text-transform: uppercase;
+    fill: #ADADAD;
+
+}
+
+.annotation-group-average .annotation-note .annotation-note-title, text.title  {
+    font-family: 'Atlas Grotesk Web';
+  font-weight: 400;
+  font-size: .65em;
+  text-transform: uppercase;
+  fill: #ADADAD;
+
 }
 
 
