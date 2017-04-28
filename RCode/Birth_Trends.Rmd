@@ -260,7 +260,7 @@ condensed2 <- allBirthData %>%
          M = sprintf("%02d", Month)) %>% 
   mutate(Date = paste0(Yr, M),
          ## round to nearest 5 and eliminate last 0 for space
-         Births = (round(countyBirths, -1))/10) %>% 
+         Births = countyBirths) %>% 
   select(c(6, 10, 11)) 
 
 write.csv(condensed2, "../Raw_Data/CondensedBirth2.csv")
@@ -312,7 +312,7 @@ condensed3 <- condensed2 %>%
   select(-4)
 
   
-write.csv(condensed3, "../Raw_Data/CondensedBirth3.csv")
+write.csv(condensed3, "../Raw_Data/CondensedBirth4.csv")
 ```  
 
 ## Making Lookup table for county and state names
@@ -438,4 +438,15 @@ byCounty <- condensed3 %>%
             high = quantile((Births*10), probs = 0.75)) 
 
 write.csv(byCounty, "../d3Graphics/ArticleDashboard/countyAverages.csv")
+```
+
+```{r}
+Wayne <- allBirthData %>% 
+  filter(County == 26163,
+         Year >= 1995) %>% 
+  group_by(Year) %>% 
+  summarize(sum = sum(countyBirths))
+
+
+
 ```

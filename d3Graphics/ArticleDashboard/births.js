@@ -159,7 +159,7 @@
     // Queue multiple files
     d3.queue()
       .defer(d3.csv, "stateCountyNames.csv")
-      .defer(d3.csv, "CondensedBirth3.csv")
+      .defer(d3.csv, "CondensedBirth4.csv")
       .defer(d3.csv, "stateData.csv")
       .defer(d3.csv, "stateAverages.csv")
       .defer(d3.csv, "countyAverages.csv")
@@ -189,7 +189,7 @@ function ready(error,
             d.Date = parseTime(d.Date);
             d.month = parseMonth(d.Date);
             d.year = parseYear(d.Date);
-            d.Births = +d.Births * 10;
+            d.Births = +d.Births;
             d.County = d.County;
         });
 
@@ -795,7 +795,7 @@ function ready(error,
         var makeAnnotations = d3.annotation()
           //.editMode(true)
           .textWrap(250)
-          .notePadding(15)
+          .notePadding(10)
           .type(type)
           .accessors({
             x: d => x(parseTimeMonth(d.month)),
@@ -1730,7 +1730,7 @@ function ready(error,
                   .attr("d", function(d){
                     return valueLine(d.values)
                   })
-                  .attr("opacity", 0.8)
+                  .attr("opacity", 0.6)
 
             var selectedYear = yList.select("select").property("value")
 
