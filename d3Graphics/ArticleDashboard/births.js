@@ -727,6 +727,7 @@ function ready(error,
 
         console.log(annotationPath.node().getTotalLength())
 
+        console.log(y(births))
 
 
         var notePath = svg.selectAll(".annotation-group-result path.note-line")
@@ -759,6 +760,64 @@ function ready(error,
 
 
   }
+
+
+
+    //////////////////////////////////////////////////////////////////////
+    ////////////////////////// AVERAGE ANNOTATIONS ///////////////////////
+    //////////////////////////////////////////////////////////////////////
+
+      var IQRAnnotation = function(high){  
+      var type = d3.annotationBadge
+      
+
+      var annotations = [
+        {
+          note: {
+            label: "50% of the data falls within this pink area",
+            title: "Inter-Quartile Range",
+          },
+          data: { month: "Dec", high: high},
+          dy: -137,
+          dx: 0,
+          subject:{
+            text: "?",
+            x: "right",
+            radius: 12
+          }
+        }]
+
+        console.log(x(parseTimeMonth("Dec")))
+
+        var makeAnnotations = d3.annotation()
+          //.editMode(true)
+          .textWrap(250)
+          .notePadding(15)
+          .type(type)
+          .accessors({
+            x: d => x(parseTimeMonth(d.month)),
+            y: d => y(d.high)
+          })
+          .accessorsInverse({
+            month: d => parseMonth(x.invert(d.x)),
+            Births: d => y.invert(d.y)
+          })
+          .annotations(annotations)
+
+        svg.append("g")
+          .attr("class", "annotation-group-average")
+          .call(makeAnnotations)
+
+        svg.selectAll(".annotation-group-average")
+          .attr("opacity", 0)
+          .transition()
+            .duration(800)
+            .attr("opacity", 1)
+    }
+
+
+
+
 
       //////////////////////////////////////////////////////////////////////
       ///////////////////////////// INITIAL GRAPH //////////////////////////
@@ -1048,6 +1107,8 @@ function ready(error,
               .attr("opacity", 0)
 
 
+
+
           var state = nestAStates.filter(function(d){
               return d.key === stateName;
             });
@@ -1106,7 +1167,12 @@ function ready(error,
                   })
                 .attr("opacity", 0.8)
 
-                console.log("State Avg Update Ran")
+
+
+            // Adding the annotation to the area
+            var IQRHigh = (state[0].values[11].high)
+
+            IQRAnnotation(IQRHigh);
 
             // Accessing path information from median line
             var medPathD = medPath._groups[0][0].__data__.values

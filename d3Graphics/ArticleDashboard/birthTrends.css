@@ -395,7 +395,6 @@ button.toggle.year {
 #icon-g.current #icon-money {
   position: absolute;
   fill: none;
-  stroke: white;
   stroke-width: 1;
   stroke-miterlimit: 10;
   stroke-linecap: round;
@@ -625,12 +624,53 @@ option[value="NaN"][disabled] {
 }
 
 
-
-
 .annotation-note-bg {
   fill: #FFFFFF;
 }
 
+/*.annotation.badge path.subject-pointer{
+  fill: #CCCCCC;
+  stroke: none;
+}
+
+ .annotation.badge path.subject {
+  fill: #CCCCCC;
+  stroke-width: 1px;
+  stroke-linecap: round;
+} 
+
+.annotation.badge path.subject-ring {
+    fill: rgba(0, 0, 0, .2);
+  stroke: none;
+}
+
+.annotation-group-average path {
+  stroke: none;
+}*/
+
+.annotation-group-average path {
+  stroke: #DDDDDD;
+}
+
+
+.annotation.badge path.subject-pointer, .annotation.badge path.subject {
+  fill: #DDDDDD;
+  stroke-width: 2px;
+  stroke-linecap: round;
+} 
+
+.annotation.badge path.subject-ring {
+  fill: white;
+  stroke-width: 2px;
+}
+
+.annotation.badge .badge-text {
+  fill: #BBBBBB;
+  font-size: .9em;
+  font-weight: 300;
+  line-height: 1em;
+  text-align: center;
+}
 
 
 
