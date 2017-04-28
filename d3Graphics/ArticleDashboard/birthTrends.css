@@ -27,7 +27,7 @@ body {
   width: 100%;
   display: flex;
   margin: 0 auto;
-  margin-left: 200px;
+  margin-left: 50px;
 }
 
 
@@ -135,7 +135,7 @@ p.headline-small {
 #Wayne {
   margin: auto;
   display: block;
-  margin-bottom: 70px;
+  margin-bottom: 10px;
   margin-top: 50px;
 }
 
@@ -813,7 +813,7 @@ option[value="NaN"][disabled] {
     color: black;
     font-weight: 100;
     line-height: 2;
-    max-width: 36rem;
+    max-width: 640px;
     margin: 0 auto;
     margin-bottom: 1.5rem;
 }
@@ -831,6 +831,15 @@ option[value="NaN"][disabled] {
     font-size: .92rem;
     margin-bottom: 1rem;
     line-height: 1.7;
+}
+
+.figure-legend {
+    font-family: 'Atlas Grotesk Web';
+  font-weight: 300;
+  font-size: .55em;
+  text-transform: uppercase;
+    fill: #ADADAD;
+    text-align: center;
 }
 
 .highlighted{

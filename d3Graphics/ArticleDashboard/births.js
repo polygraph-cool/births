@@ -2385,7 +2385,7 @@ function ready(error,
       				triggerElement: "#container",
       				triggerHook:0,
       				offset: -100,
-      				duration:2500
+      				duration:2800
       			})
       			.addIndicators({name: "pin chart"}) // add indicators (requires plugin)
       			.setPin("#graph", {pushFollowers: true})
@@ -2413,7 +2413,7 @@ function ready(error,
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 100,
+            offset: 300,
             duration:500
           })
           .addIndicators({name: "first trigger"}) // add indicators (requires plugin)
@@ -2466,7 +2466,7 @@ function ready(error,
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 600,
+            offset: 800,
             duration:300
           })
           .addIndicators({name: "second trigger"}) // add indicators (requires plugin)
@@ -2520,7 +2520,7 @@ function ready(error,
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 900,
+            offset: 1100,
             duration:600
           })
           .addIndicators({name: "third trigger"}) // add indicators (requires plugin)
@@ -2589,7 +2589,7 @@ function ready(error,
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 1500,
+            offset: 1700,
             duration:400
           })
           .addIndicators({name: "fourth trigger"}) // add indicators (requires plugin)
@@ -2646,7 +2646,7 @@ function ready(error,
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 1900,
+            offset: 2100,
             duration:200
           })
           .addIndicators({name: "fifth trigger"}) // add indicators (requires plugin)
@@ -2692,7 +2692,7 @@ function ready(error,
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 2100,
+            offset: 2400,
             duration:200
           })
           .addIndicators({name: "sixth trigger"}) // add indicators (requires plugin)
