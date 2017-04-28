@@ -763,58 +763,6 @@ function ready(error,
 
 
 
-    //////////////////////////////////////////////////////////////////////
-    ////////////////////////// AVERAGE ANNOTATIONS ///////////////////////
-    //////////////////////////////////////////////////////////////////////
-
-      var IQRAnnotation = function(high){  
-      var type = d3.annotationBadge
-      
-
-      var annotations = [
-        {
-          note: {
-            label: "50% of the data falls within this pink area",
-            title: "Inter-Quartile Range",
-          },
-          data: { month: "Dec", high: high},
-          dy: -137,
-          dx: 0,
-          subject:{
-            text: "?",
-            x: "right",
-            radius: 12
-          }
-        }]
-
-        console.log(x(parseTimeMonth("Dec")))
-
-        var makeAnnotations = d3.annotation()
-          //.editMode(true)
-          .textWrap(250)
-          .notePadding(15)
-          .type(type)
-          .accessors({
-            x: d => x(parseTimeMonth(d.month)),
-            y: d => y(d.high)
-          })
-          .accessorsInverse({
-            month: d => parseMonth(x.invert(d.x)),
-            Births: d => y.invert(d.y)
-          })
-          .annotations(annotations)
-
-        svg.append("g")
-          .attr("class", "annotation-group-average")
-          .call(makeAnnotations)
-
-        svg.selectAll(".annotation-group-average")
-          .attr("opacity", 0)
-          .transition()
-            .duration(800)
-            .attr("opacity", 1)
-    }
-
 
 
 
@@ -1105,6 +1053,21 @@ function ready(error,
             .transition()
               .duration(300)
               .attr("opacity", 0)
+
+          var rect = svg.append("rect")
+            .attr("x", 10)
+            .attr("y", 0)
+            .attr("width", 30)
+            .attr("height", 15)
+            .attr("fill", "#E3C0DB")
+            .attr("opacity", 0.3)
+            .attr("corner-radius", 5);
+
+          var IQR = svg.append("text")
+            .attr("x", 50)
+            .attr("y", 10)
+            .text("= spread of data (IQR)*")
+            .classed("legend", true)
 
 
 
