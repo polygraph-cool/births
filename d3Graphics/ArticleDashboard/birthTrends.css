@@ -1,3 +1,158 @@
+/*//////////////////////////////////////////*/
+/*//////////////// FONTS ///////////////////*/
+/*//////////////////////////////////////////*/
+
+@font-face {
+  font-family: 'Canela Web';
+  src: url('../Fonts/Canela-Bold-Web.eot');
+  src: url('../Fonts/Canela-Bold-Web.eot?#iefix') format('embedded-opentype'),
+       url('../Fonts/Canela-Bold-Web.woff2') format('woff2'),
+       url('../Fonts/Canela-Bold-Web.woff') format('woff');
+  font-weight:  700;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+.Canela-Bold-Web {
+  font-family: 'Canela Web';
+  font-weight:  700;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+@font-face {
+  font-family: 'Canela Web';
+  src: url('../Fonts/Canela-Light-Web.eot');
+  src: url('../Fonts/Canela-Light-Web.eot?#iefix') format('embedded-opentype'),
+       url('../Fonts/Canela-Light-Web.woff2') format('woff2'),
+       url('../Fonts/Canela-Light-Web.woff') format('woff');
+  font-weight:  300;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+.Canela-Light-Web {
+  font-family: 'Canela Web';
+  font-weight:  300;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+
+
+@font-face {
+  font-family: 'Atlas Grotesk Web';
+  src: url('../Fonts/AtlasGrotesk-Medium-Web.eot');
+  src: url('../Fonts/AtlasGrotesk-Medium-Web.eot?#iefix') format('embedded-opentype'),
+       url('../Fonts/AtlasGrotesk-Medium-Web.woff2') format('woff2'),
+       url('../Fonts/AtlasGrotesk-Medium-Web.woff') format('woff');
+  font-weight:  500;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+.AtlasGrotesk-Medium-Web {
+  font-family: 'Atlas Grotesk Web';
+  font-weight:  500;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+
+@font-face {
+  font-family: 'Atlas Grotesk Web';
+  src: url('../Fonts/AtlasGrotesk-Regular-Web.eot');
+  src: url('../Fonts/AtlasGrotesk-Regular-Web.eot?#iefix') format('embedded-opentype'),
+       url('../Fonts/AtlasGrotesk-Regular-Web.woff2') format('woff2'),
+       url('../Fonts/AtlasGrotesk-Regular-Web.woff') format('woff');
+  font-weight:  400;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+.AtlasGrotesk-Regular-Web {
+  font-family: 'Atlas Grotesk Web';
+  font-weight:  400;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+
+@font-face {
+  font-family: 'Atlas Grotesk Web';
+  src: url('../Fonts/AtlasGrotesk-Light-Web.eot');
+  src: url('../Fonts/AtlasGrotesk-Light-Web.eot?#iefix') format('embedded-opentype'),
+       url('../Fonts/AtlasGrotesk-Light-Web.woff2') format('woff2'),
+       url('../Fonts/AtlasGrotesk-Light-Web.woff') format('woff');
+  font-weight:  300;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+.AtlasGrotesk-Light-Web {
+  font-family: 'Atlas Grotesk Web';
+  font-weight:  300;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+
+@font-face {
+  font-family: 'Publico Text Web';
+  src: url('../Fonts/PublicoText-Italic-Web.eot');
+  src: url('../Fonts/PublicoText-Italic-Web.eot?#iefix') format('embedded-opentype'),
+       url('../Fonts/PublicoText-Italic-Web.woff2') format('woff2'),
+       url('../Fonts/PublicoText-Italic-Web.woff') format('woff');
+  font-weight:  400;
+  font-style:   italic;
+  font-stretch: normal;
+}
+
+.PublicoText-Italic-Web {
+  font-family: 'Publico Text Web';
+  font-weight:  400;
+  font-style:   italic;
+  font-stretch: normal;
+}
+
+
+@font-face {
+  font-family: 'Publico Text Web';
+  src: url('../Fonts/PublicoText-Roman-Web.eot');
+  src: url('../Fonts/PublicoText-Roman-Web.eot?#iefix') format('embedded-opentype'),
+       url('../Fonts/PublicoText-Roman-Web.woff2') format('woff2'),
+       url('../Fonts/PublicoText-Roman-Web.woff') format('woff');
+  font-weight:  400;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+.PublicoText-Roman-Web {
+  font-family: 'Publico Text Web';
+  font-weight:  400;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+@font-face {
+  font-family: 'Publico Text Web';
+  src: url('../Fonts/PublicoText-Bold-Web.eot');
+  src: url('../Fonts/PublicoText-Bold-Web.eot?#iefix') format('embedded-opentype'),
+       url('../Fonts/PublicoText-Bold-Web.woff2') format('woff2'),
+       url('../Fonts/PublicoText-Bold-Web.woff') format('woff');
+  font-weight:  700;
+  font-style:   bold;
+  font-stretch: normal;
+}
+
+.PublicoText-Bold-Web {
+  font-family: 'Publico Text Web';
+  font-weight:  700;
+  font-style:   bold;
+  font-stretch: normal;
+}
+
+
 /* minimal css reset */
 html, body, div, h1, h2, h3, a, p, img, dl, dt, dd, ul, li {
 
@@ -49,13 +204,13 @@ body {
   width: auto;
   margin-left: 50px;
   font-family: 'Atlas Grotesk Web';
-    font-weight: 100;
-    font-size: 1.6rem;
-    max-width: 40rem;
-    /* letter-spacing: -.02em; */
-    /* -webkit-font-smoothing: antialiased; */
-    color: rgba(0,0,0,.90);
-    text-transform: capitalize;
+  font-weight: 500;
+  font-size: 1.4rem;
+  max-width: 40rem;
+  /* letter-spacing: -.02em; */
+  /* -webkit-font-smoothing: antialiased; */
+  color: rgba(0,0,0,.90);
+  text-transform: capitalize;
 }
 
 .noCounty {
@@ -70,6 +225,7 @@ body {
     margin: 0 auto;
     padding-top: 10px;
     width: 10rem;
+    fill: rgb(125, 147, 202);
 }
 
 .logo-alt{
@@ -91,18 +247,18 @@ body {
     margin: 0 auto;
 }
 
-p.headline-big {text-align: center;font-family: 'Canela Web';margin: 0px;font-size: 84px;font-weight: 700;margin-top: 130px;display: none;}
+p.headline-big {text-align: center;font-family: 'Canela Web';margin: 0px;font-size: 84px;font-weight: 400;margin-top: 130px;}
 
 p.headline-small {
     font-size: 16px;
     text-align: center;
     font-family: 'Canela Web';
     margin: 0px;
-    font-size: 61px;
-    font-weight: 600;
-    margin-top: 90px;
-    text-align: left;
-}  
+    font-size: 29px;
+    font-weight: 100;
+    text-align: center;
+    margin-top: 20px;
+}
 
 .section-title {
     font-family: 'Atlas Grotesk Web';
@@ -119,12 +275,12 @@ p.headline-small {
 }
 
 .byline {
-    font-size: .8rem;
+    font-size: 1rem;
     text-align: center;
     font-family: 'Atlas Grotesk Web';
     font-weight: 400;
     /* text-transform: uppercase; */
-    letter-spacing: .05rem;
+    /* letter-spacing: .05rem; */
     margin-bottom: 40px;
 }
 
@@ -164,7 +320,7 @@ p.headline-small {
 
 
 /*//////////////////////////////////////////*/
-/*////////////// DROP-DOWNS ////////////////*/ 
+/*////////////// DROP-DOWNS ////////////////*/
 /*//////////////////////////////////////////*/
 
 
@@ -348,7 +504,7 @@ button.toggle.year {
 #icon-a,
 #icon-b,
 #icon-c,
-#icon-d, 
+#icon-d,
 #icon-e,
 #icon-f,
 #icon-g {
@@ -491,7 +647,7 @@ button.toggle.year {
 
 
 /*//////////////////////////////////////////*/
-/*////////////// LINE CHART ////////////////*/ 
+/*////////////// LINE CHART ////////////////*/
 /*//////////////////////////////////////////*/
 
 
@@ -670,141 +826,6 @@ option[value="NaN"][disabled] {
 
 
 
-/*//////////////////////////////////////////*/
-/*//////////////// FONTS ///////////////////*/ 
-/*//////////////////////////////////////////*/
-
-@font-face {
-  font-family: 'Canela Web';
-  src: url('../Fonts/Canela-Bold-Web.eot');
-  src: url('../Fonts/Canela-Bold-Web.eot?#iefix') format('embedded-opentype'),
-       url('../Fonts/Canela-Bold-Web.woff2') format('woff2'),
-       url('../Fonts/Canela-Bold-Web.woff') format('woff');
-  font-weight:  700;
-  font-style:   normal;
-  font-stretch: normal;
-}
-
-.Canela-Bold-Web {
-  font-family: 'Canela Web';
-  font-weight:  700;
-  font-style:   normal;
-  font-stretch: normal;
-}
-
-@font-face {
-  font-family: 'Canela Web';
-  src: url('fonts/Canela-Light-Web.eot');
-  src: url('fonts/Canela-Light-Web.eot?#iefix') format('embedded-opentype'),
-       url('fonts/Canela-Light-Web.woff2') format('woff2'),
-       url('fonts/Canela-Light-Web.woff') format('woff');
-  font-weight:  300;
-  font-style:   normal;
-  font-stretch: normal;
-}
-
-.Canela-Light-Web {
-  font-family: 'Canela Web';
-  font-weight:  300;
-  font-style:   normal;
-  font-stretch: normal;
-}
-
-
-
-@font-face {
-  font-family: 'Atlas Grotesk Web';
-  src: url('../Fonts/AtlasGrotesk-Medium-Web.eot');
-  src: url('../Fonts/AtlasGrotesk-Medium-Web.eot?#iefix') format('embedded-opentype'),
-       url('../Fonts/AtlasGrotesk-Medium-Web.woff2') format('woff2'),
-       url('../Fonts/AtlasGrotesk-Medium-Web.woff') format('woff');
-  font-weight:  500;
-  font-style:   normal;
-  font-stretch: normal;
-}
-
-.AtlasGrotesk-Medium-Web {
-  font-family: 'Atlas Grotesk Web';
-  font-weight:  500;
-  font-style:   normal;
-  font-stretch: normal;
-}
-
-
-@font-face {
-  font-family: 'Atlas Grotesk Web';
-  src: url('../Fonts/AtlasGrotesk-Regular-Web.eot');
-  src: url('../Fonts/AtlasGrotesk-Regular-Web.eot?#iefix') format('embedded-opentype'),
-       url('../Fonts/AtlasGrotesk-Regular-Web.woff2') format('woff2'),
-       url('../Fonts/AtlasGrotesk-Regular-Web.woff') format('woff');
-  font-weight:  400;
-  font-style:   normal;
-  font-stretch: normal;
-}
-
-.AtlasGrotesk-Regular-Web {
-  font-family: 'Atlas Grotesk Web';
-  font-weight:  400;
-  font-style:   normal;
-  font-stretch: normal;
-}
-
-
-@font-face {
-  font-family: 'Atlas Grotesk Web';
-  src: url('../Fonts/AtlasGrotesk-Light-Web.eot');
-  src: url('../Fonts/AtlasGrotesk-Light-Web.eot?#iefix') format('embedded-opentype'),
-       url('../Fonts/AtlasGrotesk-Light-Web.woff2') format('woff2'),
-       url('../Fonts/AtlasGrotesk-Light-Web.woff') format('woff');
-  font-weight:  300;
-  font-style:   normal;
-  font-stretch: normal;
-}
-
-.AtlasGrotesk-Light-Web {
-  font-family: 'Atlas Grotesk Web';
-  font-weight:  300;
-  font-style:   normal;
-  font-stretch: normal;
-}
-
-
-@font-face {
-  font-family: 'Publico Text Web';
-  src: url('../Fonts/PublicoText-Italic-Web.eot');
-  src: url('../Fonts/PublicoText-Italic-Web.eot?#iefix') format('embedded-opentype'),
-       url('../Fonts/PublicoText-Italic-Web.woff2') format('woff2'),
-       url('../Fonts/PublicoText-Italic-Web.woff') format('woff');
-  font-weight:  400;
-  font-style:   italic;
-  font-stretch: normal;
-}
-
-.PublicoText-Italic-Web {
-  font-family: 'Publico Text Web';
-  font-weight:  400;
-  font-style:   italic;
-  font-stretch: normal;
-}
-
-
-@font-face {
-  font-family: 'Publico Text Web';
-  src: url('../Fonts/PublicoText-Roman-Web.eot');
-  src: url('../Fonts/PublicoText-Roman-Web.eot?#iefix') format('embedded-opentype'),
-       url('../Fonts/PublicoText-Roman-Web.woff2') format('woff2'),
-       url('../Fonts/PublicoText-Roman-Web.woff') format('woff');
-  font-weight:  400;
-  font-style:   normal;
-  font-stretch: normal;
-}
-
-.PublicoText-Roman-Web {
-  font-family: 'Publico Text Web';
-  font-weight:  400;
-  font-style:   normal;
-  font-stretch: normal;
-}
 
 
 
@@ -889,3 +910,29 @@ option[value="NaN"][disabled] {
 }
 
 
+
+
+.byline a {
+    text-decoration: none;
+    border-bottom: 1px solid #7d93ca;
+}
+
+
+.intro-prose a {
+    text-decoration: none;
+    border-bottom: 1px solid #7d93ca;
+}
+
+.prose {
+    font-size: 1.12rem;
+    color: black;
+    font-weight: 100;
+    line-height: 2;
+    max-width: 640px;
+    margin: 0 auto;
+    margin-bottom: 1.5rem;
+}
+
+.prose-section {
+    margin-bottom: 50px;
+}

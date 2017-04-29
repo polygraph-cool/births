@@ -481,7 +481,7 @@ function ready(error,
     //////////////////////////////////////////////////////////////////////
     /////////////////////////  COUNTY DROPDOWN  //////////////////////////
     //////////////////////////////////////////////////////////////////////
- 
+
 
           // define Clist (county list) as outer variable
           var ClistG = null;
@@ -501,7 +501,7 @@ function ready(error,
               // Filter for that state
               var selectedStateG = nestedStates.filter(function(d){
                   return d.key === selectedState;
-              }); 
+              });
 
               var selectedCounties = selectedStateG.map(function(d){
                 return d.value.Counties;
@@ -542,7 +542,7 @@ function ready(error,
                   .property("disabled", function(d){
                     return d == "NaN";
                   })
-                  
+
                   console.log(Clist.selectAll("option"))
                   console.log(selection)
                   console.log(Slist.selectAll("option"))
@@ -550,13 +550,13 @@ function ready(error,
               // Setting selected property equal to the selected county
                 Clist.selectAll("option")
                   .property("selected", function(d){
-                    return +d == +selectCounty; 
+                    return +d == +selectCounty;
                   })
 
                   var property = Clist.select("select").property("value")
 
-              ClistG = Clist; 
-              
+              ClistG = Clist;
+
           }
     //////////////////////////////////////////////////////////////////////
     /////////////////////////  DATA VIEW TOGGLE  /////////////////////////
@@ -595,7 +595,7 @@ function ready(error,
             d3.select("#dropdown-c").classed("hiddendd", true)
 
 
-  
+
     //////////////////////////////////////////////////////////////////////
     //////////////////////////////  AXES  ////////////////////////////////
     //////////////////////////////////////////////////////////////////////
@@ -626,18 +626,18 @@ function ready(error,
                   .attr("dy", "1em")
                   .style("text-anchor", "middle")
                   .text("Babies Born per Month")
-                  .attr("class", "y axis label");      
+                  .attr("class", "y axis label");
 
     //////////////////////////////////////////////////////////////////////
     ////////////////////////// EVENT ANNOTATIONS /////////////////////////
     //////////////////////////////////////////////////////////////////////
 
-    var eventAnnotationCause = function(title, label, x, y, dy, dx){  
+    var eventAnnotationCause = function(title, label, x, y, dy, dx){
       var type = d3.annotationCustomType(
-        d3.annotationCallout, 
+        d3.annotationCallout,
         {"className":"custom",
           "note":{"lineType":"vertical"}})
-      
+
 
       var annotations = [
         {
@@ -668,7 +668,7 @@ function ready(error,
             .attr("opacity", 1)
     }
 
-          
+
 
     var eventAnnotationResult = function(title, label, month, births, dx, dy){
 
@@ -736,7 +736,7 @@ function ready(error,
         var notePath = svg.selectAll(".annotation-group-result path.note-line")
         var totalLengthNote = notePath.node().getTotalLength()
 
-       
+
        if (dy > 0){
 
         notePath
@@ -769,13 +769,13 @@ function ready(error,
     ////////////////////////// AVERAGE ANNOTATIONS ///////////////////////
     //////////////////////////////////////////////////////////////////////
 
-      var IQRAnnotation = function(high){  
+      var IQRAnnotation = function(high){
       var type = d3.annotationCustomType(
           d3.annotationCallout,
           {"className":"custom",
           "connector":{"end":"dot"},
           "note":{"lineType":"vertical"}})
-      
+
 
       var annotations = [
         {
@@ -829,7 +829,7 @@ function ready(error,
       ///////////////////////////// INITIAL GRAPH //////////////////////////
       //////////////////////////////////////////////////////////////////////
 
-      
+
       // function creates all line and area elements
       // The rest of the figure, these elements will just be transitioned
 
@@ -949,7 +949,7 @@ function ready(error,
                       })
 
                 var LabelText = PathText.enter()
-                .append("text") 
+                .append("text")
                 .attr("transform", function(d) { return "translate(" + x(parseTimeMonth(d.values[11].month)) + "," + y(d.values[11].Births) + ")"; })
                 .attr("x", 3)
                 .attr("dy", "0.35em")
@@ -1069,7 +1069,7 @@ function ready(error,
                   d3.selectAll(".line").classed("hovered", false)
                   d3.selectAll(".text-labels").classed("showing", false)
               })
-            
+
 
 
           d3.select(".y")
@@ -1182,17 +1182,17 @@ function ready(error,
 
             y.domain([d3.min(state[0].values, function(d) {
               return +d.low
-            }), 
-            d3.max(state[0].values, function(d){ 
+            }),
+            d3.max(state[0].values, function(d){
               return +d.high
             })]);
 
             // Update paths
             svg.selectAll("path.area")
-                .data(state)  
-                .transition()  
+                .data(state)
+                .transition()
                 .delay(400)
-                .duration(1200) 
+                .duration(1200)
                 .attr("d", function(d){
                     return areaFill(d.values); })
                 .attr("opacity", 0.4)
@@ -1218,9 +1218,9 @@ function ready(error,
           var stateMed = nestAStates.filter(function(d){
               return d.key === stateName;
                 });
-        
+
         console.log(stateMed)
-                
+
           // Adding special label for median line
           var MedianText = svg.selectAll(".medianLabel")
           .data(stateMed)
@@ -1231,7 +1231,7 @@ function ready(error,
 
             svg.selectAll(".medianLabel")
               .classed("medianLabel-showing", true)
-      
+
 
 
 
@@ -1313,9 +1313,9 @@ function ready(error,
           updateCountyDrop();
 
             // Update paths
-            svg.selectAll("path.area")  
-                .transition()  
-                .duration(1000) 
+            svg.selectAll("path.area")
+                .transition()
+                .duration(1000)
                 .attr("opacity", 0)
 
             svg.selectAll("path.line2")
@@ -1500,7 +1500,7 @@ function ready(error,
                   }
                   return false
                 })
-                
+
             var state = d3.select("#stateName")
                 .text(stateMap.get(state[0].key).stateName)
 
@@ -1563,10 +1563,10 @@ function ready(error,
 
             // Update paths
             svg.selectAll("path.area")
-                .data(county)  
-                .transition()  
+                .data(county)
+                .transition()
                 .delay(400)
-                .duration(1200) 
+                .duration(1200)
                 .attr("d", function(d){
                     return areaFill(d.values); })
                 .attr("opacity", 0.4)
@@ -1605,7 +1605,7 @@ function ready(error,
 
 
           // Update county dropdown
-          updateCountyDrop(countyCode);  
+          updateCountyDrop(countyCode);
 
 
           // Adding IQR Labels
@@ -1618,8 +1618,8 @@ function ready(error,
           var countyMed = nestACounties.filter(function(d){
               return +d.key === +countyCode;
                 });
-        
-                
+
+
           // Adding special label for median line
           var MedianText = svg.selectAll(".medianLabel")
           .data(countyMed)
@@ -1627,7 +1627,7 @@ function ready(error,
             .delay(400)
             .duration(1200)
             .attr("transform", function(d) { return "translate(" + (width + 8) + "," + y(d.values[11].median) + ")"; })
-            
+
             svg.selectAll(".medianLabel")
               .classed("medianLabel-showing", true)
 
@@ -1646,7 +1646,7 @@ function ready(error,
                   }
                   return false
                 })
-                
+
             var state = d3.select("#stateName")
                 .text(countyMap.get(county[0].key).stateName)
 
@@ -1696,14 +1696,14 @@ function ready(error,
           selectedCounty = countyMap.get(county[0].key).County;
 
           // Update county dropdown
-          updateCountyDrop(countyCode);  
+          updateCountyDrop(countyCode);
 
           console.log("County Year Update Ran")
 
             // Update paths
-            svg.selectAll("path.area")  
-                .transition()  
-                .duration(1000) 
+            svg.selectAll("path.area")
+                .transition()
+                .duration(1000)
                 .attr("opacity", 0)
 
             svg.selectAll(".line2")
@@ -1802,8 +1802,8 @@ function ready(error,
                 var countyMed = nestACounties.filter(function(d){
               return +d.key === +countyCode;
                 });
-        
-                
+
+
                 // Adding special label for median line
                 var MedianText = svg.selectAll(".medianLabel")
                 .data(countyMed)
@@ -1927,10 +1927,10 @@ function ready(error,
                   }
                   return false
                 })
-                
+
             var state = d3.select("#stateName")
                 .text(countyMap.get(county[0].key).stateName)
-            
+
 
             // Update Y Axis
             d3.select(".y")
@@ -1977,7 +1977,7 @@ function ready(error,
 
           ClistG.on('change', function(){
 
-            ////////////  DETECTING SELECTED YEAR  ///////////  
+            ////////////  DETECTING SELECTED YEAR  ///////////
 
               // Detecting what year is present on the year dropdown menu
               selectedYear = yList.select("select").property("value")
@@ -2002,7 +2002,7 @@ function ready(error,
 
                   } else {
 
-                    ////////////  RUNNING UPDATE MULTI FUNCTION  ///////////  
+                    ////////////  RUNNING UPDATE MULTI FUNCTION  ///////////
                     stateUpdateYear();
 
                   }
@@ -2021,7 +2021,7 @@ function ready(error,
               }
 
             }
-                  
+
           });
 
 
@@ -2147,7 +2147,7 @@ function ready(error,
 
 
         ///////////////////////////  EVENT CHANGE  //////////////////////////
-                  
+
 
             var eventDisplay = function(eventName){
 
@@ -2186,7 +2186,7 @@ function ready(error,
 /*
               ClistG.selectAll("option")
                   .property("selected", function(d){
-                    return d.key === 
+                    return d.key ===
                   })*/
 
               // Updating the year list to match the year of event
@@ -2215,7 +2215,7 @@ function ready(error,
                   .classed("selected", true)
                   .attr("opacity", 1)
 
-              
+
 
 
               // Determine the months of the selected event's births
@@ -2254,8 +2254,8 @@ function ready(error,
                 .duration(800)
                 .attr("r", 8)
 
-            
-                
+
+
 
               //circle.exit().remove();
 
@@ -2290,7 +2290,7 @@ function ready(error,
               // generate cause annotation
 
               eventAnnotationCause(selectedCauseTitle, selectedCauseLabel, selectedX, selectedY, selecteddX, selecteddY)
-                  
+
               var selectedResultitle = eventMap.get(selected).resultTitle
 
               var selectedResultLabel = eventMap.get(selected).resultlabel
@@ -2389,7 +2389,7 @@ function ready(error,
       				// triggerElement: ".third-chart-wrapper",
       				triggerElement: "#container",
       				triggerHook:0,
-      				offset: -100,
+      				offset: -25,
       				duration:2500
       			})
       			.addIndicators({name: "pin chart"}) // add indicators (requires plugin)
@@ -2427,7 +2427,7 @@ function ready(error,
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
             }
             else{
-                
+
                 eventDisplay("Red Sox World Series Win")
                   d3.selectAll("g.annotation-group-cause").remove();
                   d3.selectAll(".annotation-note-label").remove();
@@ -2493,7 +2493,7 @@ function ready(error,
                     .classed("current", false)
                   d3.selectAll(".icons#icon-f")
                     .classed("current", true)
-               
+
 
             }
           })
@@ -2504,7 +2504,7 @@ function ready(error,
               d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
                 d3.selectAll("#Sports").classed("highlighted", true)
                 d3.selectAll(".sports-prose").classed("prose-highlighted", true)
-               
+
                 eventDisplay("Red Sox World Series Win")
                   d3.selectAll("g.annotation-group-cause").remove();
                   d3.selectAll(".annotation-note-label").remove();
@@ -2514,7 +2514,7 @@ function ready(error,
                   d3.selectAll(".icons#icon-e")
                     .classed("current", true)
 
-              
+
             }
             else{
             }
@@ -2554,7 +2554,7 @@ function ready(error,
                   d3.selectAll(".toggle.average").classed("active", false)
 
 
-               
+
 
             }
           })
@@ -2577,7 +2577,7 @@ function ready(error,
 
                   d3.selectAll(".toggle.year").classed("active", true)
                   d3.selectAll(".toggle.average").classed("active", false)
-               
+
             }
             else{
             }
@@ -2615,7 +2615,7 @@ function ready(error,
 
                   // Hide year dropdown
                   d3.select("#dropdown-c").classed("hiddendd", true)
-               
+
 
             }
           })
@@ -2640,7 +2640,7 @@ function ready(error,
                   d3.selectAll(".toggle.average").classed("active", false)
 
                   d3.select("#dropdown-c").classed("hiddendd", false)
-               
+
             }
             else{
             }
@@ -2671,7 +2671,7 @@ function ready(error,
 
                   d3.selectAll("#Florida").classed("highlighted", true)
 
-               
+
 
             }
           })
@@ -2686,7 +2686,7 @@ function ready(error,
                   d3.selectAll(".season-prose").classed("prose-highlighted", true)
                   d3.selectAll(".toggle.year").classed("active", false)
                   d3.selectAll(".toggle.average").classed("active", true)
-               
+
             }
             else{
             }
@@ -2713,7 +2713,7 @@ function ready(error,
                   d3.selectAll("#Maine").classed("highlighted", true)
                   d3.selectAll(".season-prose-Maine").classed("prose-highlighted", true)
                   d3.selectAll("#Florida").classed("highlighted", false)
-               
+
 
             }
           })
@@ -2730,7 +2730,7 @@ function ready(error,
                   stateUpdateAvg("Florida")
 
                   d3.selectAll("#Florida").classed("highlighted", true)
-               
+
             }
             else{
             }
