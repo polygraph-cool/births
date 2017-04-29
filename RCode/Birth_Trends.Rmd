@@ -312,7 +312,7 @@ condensed3 <- condensed2 %>%
   select(-4)
 
   
-write.csv(condensed3, "../Raw_Data/CondensedBirth4.csv")
+write.csv(condensed3, "../d3Graphics/ArticleDashboard/CondensedBirth4.csv")
 ```  
 
 ## Making Lookup table for county and state names
@@ -441,12 +441,55 @@ write.csv(byCounty, "../d3Graphics/ArticleDashboard/countyAverages.csv")
 ```
 
 ```{r}
+
 Wayne <- allBirthData %>% 
   filter(County == 26163,
          Year >= 1995) %>% 
   group_by(Year) %>% 
-  summarize(sum = sum(countyBirths))
+  summarize(sum = sum(countyBirths)) %>% 
+  mutate(region = )
 
 
+
+```
+
+Breaking out data by state to use for regions
+```{r}
+region1 <- c("Connecticut", "Maine", "Massachusetts", "New Hampshire", "Vermont", "Rhode Island")
+region2 <- c("New Jersey", "New York")
+region3 <- c("Delaware", "District of Columbia", "Maryland", "Pennsylvania", "Virginia", "West Virginia")
+region4 <- c("Alabama", "Florida", "Georgia", "Kentucky", "Mississippi", "North Carolina", "South Carolina", "Tennessee")
+region5 <- c("Illinois", "Indiana", "Michigan", "Minnesota", "Ohio", "Wisconsin")
+region6 <- c("Arkansas", "Louisiana", "New Mexico", "Oklahoma", "Texas")
+region7 <- c("Iowa", "Kansas", "Missouri", "Nebraska")
+region8 <- c("Colorado", "Montana", "North Dakota", "South Dakota", "Utah", "Wyoming")
+region9 <- c("Arizona", "California", "Hawaii", "Nevada")
+region10 <- c("Alaska", "Idaho", "Oregon", "Washington")
+
+stateMonth <- stateData3 %>% 
+  mutate(Yr = str_sub(Date, end = 2),
+         M = as.numeric(str_sub(Date, start = -2))) %>% 
+  mutate(region = ifelse(states %in% region1, 1, 
+                         ifelse(states %in% region2, 2,
+                                ifelse(states %in% region3, 3,
+                                       ifelse(states %in% region4, 4,
+                                              ifelse(states %in% region5, 5,
+                                                     ifelse(states %in% region6, 6,
+                                                            ifelse(states %in% region7, 7,
+                                                                   ifelse(states %in% region8, 8,
+                                                                          ifelse(states %in% region9, 9, ifelse(states %in% region10, 10, "other"))))))))))) %>% 
+  mutate(season = ifelse(M %in% c(12, 1, 2), "Winter", 
+                         ifelse(M %in% c(3, 4, 5), "Spring", 
+                                ifelse(M %in% c(6,7,8), "Summer",
+                                       ifelse(M %in% c(9, 10, 11), "Fall", "other"))))) %>% 
+  
+  group_by(region, season) %>% 
+  summarise(sum = sum(stateBirths)) %>% 
+  mutate(scalebirths = scale(sum))
+
+
+scale2 <- ggplot(stateMonth, aes(x = M, y=scalebirths)) + geom_bar(stat = "identity") + facet_wrap(~region)
+  
+ggsave("../../scale.svg", scale2, device = "svg", width = 20, height = 20 )
 
 ```

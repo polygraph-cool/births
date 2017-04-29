@@ -1358,6 +1358,7 @@ function ready(error,
               })
               // Set class to selected for matching line
               .classed("selected", true)
+              .attr("opacity", 1)
               .raise();
 
 
@@ -1743,6 +1744,7 @@ function ready(error,
               })
               // Set class to selected for matching line
               .classed("selected", true)
+              .attr("opacity", 1)
               .raise();
 
               d3.selectAll(".text-labels").classed("event-show",function(d){
@@ -2099,6 +2101,7 @@ function ready(error,
               })
               // Set class to selected for matching line
               .classed("selected", true)
+              .attr("opacity", 1)
 
         })
 
@@ -2130,6 +2133,7 @@ function ready(error,
               })
               // Set class to selected for matching line
               .classed("selected", true)
+              .attr("opacity", 1)
               .raise()
 
               d3.selectAll(".text-labels").classed("event-show",function(d){
@@ -2209,6 +2213,7 @@ function ready(error,
                   })
                   // Set class to selected for matching line
                   .classed("selected", true)
+                  .attr("opacity", 1)
 
               
 
@@ -2385,7 +2390,7 @@ function ready(error,
       				triggerElement: "#container",
       				triggerHook:0,
       				offset: -100,
-      				duration:2800
+      				duration:2500
       			})
       			.addIndicators({name: "pin chart"}) // add indicators (requires plugin)
       			.setPin("#graph", {pushFollowers: true})
@@ -2692,7 +2697,7 @@ function ready(error,
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 2400,
+            offset: 2200,
             duration:200
           })
           .addIndicators({name: "sixth trigger"}) // add indicators (requires plugin)

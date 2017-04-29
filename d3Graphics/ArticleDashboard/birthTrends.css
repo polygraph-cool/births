@@ -530,8 +530,6 @@ button.toggle.year {
   fill: none;
   stroke: #B2C1E3;
   stroke-width: 2px;
-
-
 }
 
 .showing {
@@ -548,7 +546,7 @@ button.toggle.year {
 }
 
 .medianLabel {
-  fill: #999999;
+  fill: #CC6699;
   opacity: 0;
   font-family: 'Atlas Grotesk Web';
   font-weight: bold;
@@ -559,7 +557,7 @@ button.toggle.year {
 
 
 .medianLabel-showing {
-  opacity: .8;
+  opacity: 1;
 }
 
 option[value="NaN"][disabled] {
@@ -661,6 +659,10 @@ option[value="NaN"][disabled] {
   text-transform: uppercase;
   fill: #ADADAD;
 
+}
+
+.annotation-group-average path.connector-dot {
+  fill: #DDDDDD;
 }
 
 
@@ -861,5 +863,29 @@ option[value="NaN"][disabled] {
     line-height: 1.5;
 }
 
+.conclusion-prose.note{
+    font-size: .8rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    float: left;
+    max-width: 440px;
+}
+
+#regions {
+  float: right;
+  margin: 0 auto;
+}
+
+#methodology-note{
+  height: 175px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+#slopegraph {
+  margin: 40px auto;
+  display: block;
+
+}
 
 
