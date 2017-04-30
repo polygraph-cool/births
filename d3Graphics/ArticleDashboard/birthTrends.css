@@ -295,6 +295,13 @@ p.headline-small {
   margin-top: 50px;
 }
 
+#SuffolkNY {
+  margin: auto;
+  display: block;
+  margin-bottom: 10px;
+  margin-top: 50px;
+}
+
 #dataSource {
   bottom: 0;
   position: absolute;
@@ -316,6 +323,7 @@ p.headline-small {
   font-weight: 300;
   font-size: .55em;
   text-transform: uppercase;
+  margin-bottom: 20px;
 }
 
 
@@ -864,6 +872,7 @@ option[value="NaN"][disabled] {
   text-transform: uppercase;
     fill: #ADADAD;
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .highlighted{

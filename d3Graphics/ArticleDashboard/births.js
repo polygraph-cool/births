@@ -314,7 +314,7 @@ function ready(error,
       {
         type: "sports",
         year: 2005,
-        months: ["Jul", "Aug"],
+        months: ["Jun", "Jul"],
         title: "Red Sox World Series Win",
         state: "Massachusetts",
         county: 25025,
@@ -332,7 +332,7 @@ function ready(error,
       {
         type: "storms",
         year: 2013,
-        months: ["Jul", "Aug"],
+        months: ["Jun", "Jul"],
         title: "Hurricane Sandy",
         state: "New York",
         county: 36103,
@@ -2390,7 +2390,7 @@ function ready(error,
       				triggerElement: "#container",
       				triggerHook:0,
       				offset: -25,
-      				duration:2500
+      				duration:3400
       			})
       			.addIndicators({name: "pin chart"}) // add indicators (requires plugin)
       			.setPin("#graph", {pushFollowers: true})
@@ -2418,7 +2418,7 @@ function ready(error,
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 300,
+            offset: 800,
             duration:500
           })
           .addIndicators({name: "first trigger"}) // add indicators (requires plugin)
@@ -2471,7 +2471,7 @@ function ready(error,
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 800,
+            offset: 1300,
             duration:300
           })
           .addIndicators({name: "second trigger"}) // add indicators (requires plugin)
@@ -2525,8 +2525,8 @@ function ready(error,
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 1100,
-            duration:600
+            offset: 1700,
+            duration:700
           })
           .addIndicators({name: "third trigger"}) // add indicators (requires plugin)
           .addTo(controller)
@@ -2594,8 +2594,8 @@ function ready(error,
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 1700,
-            duration:400
+            offset: 2400,
+            duration:500
           })
           .addIndicators({name: "fourth trigger"}) // add indicators (requires plugin)
           .addTo(controller)
@@ -2651,7 +2651,7 @@ function ready(error,
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 2100,
+            offset: 2900,
             duration:200
           })
           .addIndicators({name: "fifth trigger"}) // add indicators (requires plugin)
@@ -2697,7 +2697,7 @@ function ready(error,
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 2200,
+            offset: 3100,
             duration:200
           })
           .addIndicators({name: "sixth trigger"}) // add indicators (requires plugin)

@@ -446,8 +446,15 @@ Wayne <- allBirthData %>%
   filter(County == 26163,
          Year >= 1995) %>% 
   group_by(Year) %>% 
-  summarize(sum = sum(countyBirths)) %>% 
-  mutate(region = )
+  summarize(sum = sum(countyBirths)) 
+
+
+Nation <- stateAvgAll %>% 
+    mutate(Yr = str_sub(Date, end = 2),
+         M = as.numeric(str_sub(Date, start = -2))) %>% 
+  group_by(Yr) %>% 
+  summarise(sum = sum(stateBirths))
+  
 
 
 
@@ -488,8 +495,8 @@ stateMonth <- stateData3 %>%
   mutate(scalebirths = scale(sum))
 
 
-scale2 <- ggplot(stateMonth, aes(x = M, y=scalebirths)) + geom_bar(stat = "identity") + facet_wrap(~region)
+scale2 <- ggplot(stateMonth, aes(x = season, y=scalebirths, color = region, group = region)) + geom_point() + geom_line() + facet_wrap(~region) + scale_x_discrete(limits = c("Winter", "Spring", "Summer", "Fall"))
   
-ggsave("../../scale.svg", scale2, device = "svg", width = 20, height = 20 )
+ggsave("../../scale2.svg", scale2, device = "svg", width = 20, height = 20 )
 
 ```
