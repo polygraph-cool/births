@@ -2392,7 +2392,7 @@ function ready(error,
       				offset: -25,
       				duration:3400
       			})
-      			.addIndicators({name: "pin chart"}) // add indicators (requires plugin)
+      			//.addIndicators({name: "pin chart"}) // add indicators (requires plugin)
       			.setPin("#graph", {pushFollowers: true})
       			.addTo(controller)
       			.on("enter",function(e){
@@ -2421,7 +2421,7 @@ function ready(error,
             offset: 800,
             duration:500
           })
-          .addIndicators({name: "first trigger"}) // add indicators (requires plugin)
+          //.addIndicators({name: "first trigger"}) // add indicators (requires plugin)
           .addTo(controller)
           .on("enter",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
@@ -2474,7 +2474,7 @@ function ready(error,
             offset: 1300,
             duration:300
           })
-          .addIndicators({name: "second trigger"}) // add indicators (requires plugin)
+          //.addIndicators({name: "second trigger"}) // add indicators (requires plugin)
           .addTo(controller)
           .on("enter",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
@@ -2528,7 +2528,7 @@ function ready(error,
             offset: 1700,
             duration:700
           })
-          .addIndicators({name: "third trigger"}) // add indicators (requires plugin)
+          //.addIndicators({name: "third trigger"}) // add indicators (requires plugin)
           .addTo(controller)
           .on("enter",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
@@ -2597,7 +2597,7 @@ function ready(error,
             offset: 2400,
             duration:500
           })
-          .addIndicators({name: "fourth trigger"}) // add indicators (requires plugin)
+          //.addIndicators({name: "fourth trigger"}) // add indicators (requires plugin)
           .addTo(controller)
           .on("enter",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
@@ -2654,7 +2654,7 @@ function ready(error,
             offset: 2900,
             duration:200
           })
-          .addIndicators({name: "fifth trigger"}) // add indicators (requires plugin)
+          //.addIndicators({name: "fifth trigger"}) // add indicators (requires plugin)
           .addTo(controller)
           .on("enter",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
@@ -2700,7 +2700,7 @@ function ready(error,
             offset: 3100,
             duration:200
           })
-          .addIndicators({name: "sixth trigger"}) // add indicators (requires plugin)
+          //.addIndicators({name: "sixth trigger"}) // add indicators (requires plugin)
           .addTo(controller)
           .on("enter",function(e){
             if(e.target.controller().info("scrollDirection") == "REVERSE"){
