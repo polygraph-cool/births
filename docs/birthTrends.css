@@ -207,6 +207,7 @@ body {
 #conclusion{
     max-width: 640px;
     margin: 0 auto;
+    margin-bottom: 6rem;
   }
 
 .graph-title {
@@ -954,7 +955,27 @@ option[value="NaN"][disabled] {
 }
 
 
-a {
+.intro-section a {
+    text-decoration: none;
+    color: inherit;
+    background: linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#c078a9,#c472a4);
+    background-size: .05em 1px,.05em 1px,1px 1px;
+    background-repeat: no-repeat,no-repeat,repeat-x;
+    text-shadow: 0.03em 0 #fff, -0.03em 0 #fff, 0 0.03em #fff, 0 -0.03em #fff, 0.06em 0 #fff, -0.06em 0 #fff, 0.09em 0 #fff, -0.09em 0 #fff, 0.12em 0 #fff, -0.12em 0 #fff, 0.15em 0 #fff, -0.15em 0 #fff;
+    background-position: 0 95%,100% 95%,0 95%;
+}
+
+#container a {
+    text-decoration: none;
+    color: inherit;
+    background: linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#c078a9,#c472a4);
+    background-size: .05em 1px,.05em 1px,1px 1px;
+    background-repeat: no-repeat,no-repeat,repeat-x;
+    text-shadow: 0.03em 0 #fff, -0.03em 0 #fff, 0 0.03em #fff, 0 -0.03em #fff, 0.06em 0 #fff, -0.06em 0 #fff, 0.09em 0 #fff, -0.09em 0 #fff, 0.12em 0 #fff, -0.12em 0 #fff, 0.15em 0 #fff, -0.15em 0 #fff;
+    background-position: 0 95%,100% 95%,0 95%;
+}
+
+#conclusion a {
     text-decoration: none;
     color: inherit;
     background: linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#c078a9,#c472a4);
