@@ -1,0 +1,1008 @@
+/*//////////////////////////////////////////*/
+/*//////////////// FONTS ///////////////////*/
+/*//////////////////////////////////////////*/
+
+@font-face {
+  font-family: 'Canela Web';
+  src: url('../Fonts/Canela-Bold-Web.eot');
+  src: url('../Fonts/Canela-Bold-Web.eot?#iefix') format('embedded-opentype'),
+       url('../Fonts/Canela-Bold-Web.woff2') format('woff2'),
+       url('../Fonts/Canela-Bold-Web.woff') format('woff');
+  font-weight:  700;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+.Canela-Bold-Web {
+  font-family: 'Canela Web';
+  font-weight:  700;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+@font-face {
+  font-family: 'Canela Web';
+  src: url('../Fonts/Canela-Light-Web.eot');
+  src: url('../Fonts/Canela-Light-Web.eot?#iefix') format('embedded-opentype'),
+       url('../Fonts/Canela-Light-Web.woff2') format('woff2'),
+       url('../Fonts/Canela-Light-Web.woff') format('woff');
+  font-weight:  300;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+.Canela-Light-Web {
+  font-family: 'Canela Web';
+  font-weight:  300;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+
+
+@font-face {
+  font-family: 'Atlas Grotesk Web';
+  src: url('../Fonts/AtlasGrotesk-Medium-Web.eot');
+  src: url('../Fonts/AtlasGrotesk-Medium-Web.eot?#iefix') format('embedded-opentype'),
+       url('../Fonts/AtlasGrotesk-Medium-Web.woff2') format('woff2'),
+       url('../Fonts/AtlasGrotesk-Medium-Web.woff') format('woff');
+  font-weight:  500;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+.AtlasGrotesk-Medium-Web {
+  font-family: 'Atlas Grotesk Web';
+  font-weight:  500;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+
+@font-face {
+  font-family: 'Atlas Grotesk Web';
+  src: url('../Fonts/AtlasGrotesk-Regular-Web.eot');
+  src: url('../Fonts/AtlasGrotesk-Regular-Web.eot?#iefix') format('embedded-opentype'),
+       url('../Fonts/AtlasGrotesk-Regular-Web.woff2') format('woff2'),
+       url('../Fonts/AtlasGrotesk-Regular-Web.woff') format('woff');
+  font-weight:  400;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+.AtlasGrotesk-Regular-Web {
+  font-family: 'Atlas Grotesk Web';
+  font-weight:  400;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+
+@font-face {
+  font-family: 'Atlas Grotesk Web';
+  src: url('../Fonts/AtlasGrotesk-Light-Web.eot');
+  src: url('../Fonts/AtlasGrotesk-Light-Web.eot?#iefix') format('embedded-opentype'),
+       url('../Fonts/AtlasGrotesk-Light-Web.woff2') format('woff2'),
+       url('../Fonts/AtlasGrotesk-Light-Web.woff') format('woff');
+  font-weight:  300;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+.AtlasGrotesk-Light-Web {
+  font-family: 'Atlas Grotesk Web';
+  font-weight:  300;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+
+@font-face {
+  font-family: 'Publico Text Web';
+  src: url('../Fonts/PublicoText-Italic-Web.eot');
+  src: url('../Fonts/PublicoText-Italic-Web.eot?#iefix') format('embedded-opentype'),
+       url('../Fonts/PublicoText-Italic-Web.woff2') format('woff2'),
+       url('../Fonts/PublicoText-Italic-Web.woff') format('woff');
+  font-weight:  400;
+  font-style:   italic;
+  font-stretch: normal;
+}
+
+.PublicoText-Italic-Web {
+  font-family: 'Publico Text Web';
+  font-weight:  400;
+  font-style:   italic;
+  font-stretch: normal;
+}
+
+
+@font-face {
+  font-family: 'Publico Text Web';
+  src: url('../Fonts/PublicoText-Roman-Web.eot');
+  src: url('../Fonts/PublicoText-Roman-Web.eot?#iefix') format('embedded-opentype'),
+       url('../Fonts/PublicoText-Roman-Web.woff2') format('woff2'),
+       url('../Fonts/PublicoText-Roman-Web.woff') format('woff');
+  font-weight:  400;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+.PublicoText-Roman-Web {
+  font-family: 'Publico Text Web';
+  font-weight:  400;
+  font-style:   normal;
+  font-stretch: normal;
+}
+
+@font-face {
+  font-family: 'Publico Text Web';
+  src: url('../Fonts/PublicoText-Bold-Web.eot');
+  src: url('../Fonts/PublicoText-Bold-Web.eot?#iefix') format('embedded-opentype'),
+       url('../Fonts/PublicoText-Bold-Web.woff2') format('woff2'),
+       url('../Fonts/PublicoText-Bold-Web.woff') format('woff');
+  font-weight:  700;
+  font-style:   bold;
+  font-stretch: normal;
+}
+
+.PublicoText-Bold-Web {
+  font-family: 'Publico Text Web';
+  font-weight:  700;
+  font-style:   bold;
+  font-stretch: normal;
+}
+
+
+/* minimal css reset */
+html, body, div, h1, h2, h3, a, p, img, dl, dt, dd, ul, li {
+
+	padding: 0px;
+	margin: 0;
+	border: 0;
+	outline: 0;
+	color: black;
+
+}
+
+body {
+	background-size: 100% 100%;
+	background-color: white;
+	font-family: 'Publico Text Web';
+	font-size: 1rem;
+	font-weight: 400;
+}
+
+#right-column {
+  height: 1000px;
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
+  max-width: 300px;
+}
+
+#container {
+  width: 100%;
+  display: flex;
+  margin: 0 auto;
+  margin-top: 6rem;
+  max-width: 1200px;
+}
+
+
+#graph {
+  max-width: 850px;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  height: 100vh;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-start;
+}
+
+#conclusion{
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+.graph-title {
+  /* position: absolute; */
+  width: auto;
+  font-family: 'Atlas Grotesk Web';
+  font-weight: 900;
+  font-size: 1rem;
+  max-width: 40rem;
+  /* letter-spacing: -.02em; */
+  /* -webkit-font-smoothing: antialiased; */
+  color: rgba(0,0,0,.80);
+  text-transform: capitalize;
+}
+
+.noCounty {
+  display: none;
+}
+
+#graph svg{
+  -webkit-order: 1;
+  paint-order: 1;
+}
+
+.logo {
+    margin: 0 auto;
+    padding-top: 10px;
+    width: 10rem;
+    fill: #000;
+}
+
+.logo-alt{
+    margin: 0 auto;
+    padding-top: 10px;
+    width: 8rem;
+}
+
+.logo-alt svg {
+    width: 100%;
+}
+
+.logo svg {
+    width: 100%;
+}
+
+.headline-section{
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+p.headline-big {text-align: center;font-family: 'Canela Web';margin: 0px;font-size: 84px;font-weight: 400;margin-top: 4rem;}
+
+p.headline-small {
+    font-size: 16px;
+    text-align: center;
+    font-family: 'Canela Web';
+    margin: 0px;
+    font-size: 29px;
+    font-weight: 100;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.section-title {
+    font-family: 'Atlas Grotesk Web';
+    font-weight: 500;
+    font-size: 1.3rem;
+    max-width: 40rem;
+    margin: 0 auto;
+    /* letter-spacing: -.02em; */
+    /* -webkit-font-smoothing: antialiased; */
+    color: rgba(0,0,0,.90);
+    text-transform: capitalize;
+    margin-bottom: 1rem;
+    margin-top: 4rem;
+    padding: 0rem 1rem;
+}
+
+.byline {
+    font-size: .85rem;
+    text-align: center;
+    font-family: 'Atlas Grotesk Web';
+    font-weight: 400;
+    /* text-transform: uppercase; */
+    /* letter-spacing: .05rem; */
+    margin-bottom: 40px;
+}
+
+.byline-section {
+    margin-top: 3rem;
+}
+
+#Wayne {
+  margin: auto;
+  display: block;
+  margin-bottom: 10px;
+  margin-top: 50px;
+}
+
+#SuffolkNY {
+  margin: auto;
+  display: block;
+  margin-bottom: 10px;
+  margin-top: 50px;
+}
+
+#dataSource {
+  font-family: 'Atlas Grotesk Web';
+  font-weight: 300;
+  font-size: .55em;
+  text-transform: uppercase;
+  -webkit-order: 5;
+  order: 5;
+  text-align: center;
+  width: 100%;
+}
+
+.dataSource-attr,
+.dataSourceLink {
+  color: #7b7b7b;
+  margin-top: 15px;
+}
+
+.legend {
+  margin-left: 50px;
+  font-family: 'Atlas Grotesk Web';
+  font-weight: 300;
+  font-size: .55em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+
+/*//////////////////////////////////////////*/
+/*////////////// DROP-DOWNS ////////////////*/
+/*//////////////////////////////////////////*/
+
+
+#dropdowns {
+  margin: 0 auto;
+  /* top: 62px; */
+  /* left: 20px; */
+  /*display: none*/
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  /* border-top: 1px dotted #888888; */
+  border-bottom: 1px solid #dadada;
+  /* padding-top: 11px; */
+  /* padding-right: 70px; */
+  /* padding-top: 20px; */
+  width: 100%;
+  padding-bottom: 20px;
+  width: 90%;
+}
+
+#dropdown-a {
+  position: relative;
+  width: auto;
+  margin-right: 20px;}
+
+#dropdown-b{
+  width: 200px;
+}
+
+#toggleouter {
+  margin-right: 30px;
+  z-index: 100;
+}
+
+
+
+#dropdown-c {
+width: auto;
+  text-align: center;
+  margin-right: 0px;
+}
+
+.dd-title {
+  color: #000000;
+  top: 0px;
+  font-family: 'Atlas Grotesk Web';
+  font-weight: 400;
+  font-size: .65em;
+  letter-spacing: .25px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  text-align: left;
+  padding-left: 8px;
+}
+
+#toggleouter .dd-title {
+  text-align: center;
+  width: 150px;
+}
+
+.dd-title.events{
+  color: white;
+  vertical-align: middle;
+  line-height: 59px;
+  font-size: .65rem;
+  color: #000000;
+  font-weight: 500;
+  margin-right: 17px;
+  /* text-decoration: underline; */
+}
+
+
+.dd select{
+  /* outline: none; */
+  appearance: none;
+  /* -webkit-appearance: none; */
+  -moz-appearance: none;
+  /* padding: 0.5em 1em 0.5em 0; */
+  font-family: 'Atlas Grotesk Web';
+  font-size: .9rem;
+  font-weight: 100;
+  color: black;
+  background-color: rgba(177, 190, 223, 0.2);
+  border: none;
+  cursor: pointer;
+  cursor: hand;
+  height: 1.5rem;
+}
+
+#dropdown-c.hiddendd {
+  display: none;
+}
+
+button.toggle.average {
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+  font-family: 'Atlas Grotesk Web';
+  font-size: .75rem;
+  color: black;
+  background-color: white;
+  border: 1px solid rgba(127, 125, 156, 0.54);
+  width: 75px;
+  cursor: pointer;
+  cursor: hand;
+}
+
+button.toggle.year {
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  font-family: 'Atlas Grotesk Web';
+  font-size: .75rem;
+  color: black;
+  background-color: white;
+  border: 1px solid rgba(127, 125, 156, 0.54);
+  width: 75px;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.toggle.active{
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 5px inset;
+  border-color: rgba(14, 14, 14, 0.24);
+  font-weight: 600;
+  background-color: #EEE;
+  color: #587ddc;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.toggle.active:hover,
+.toggle.year:hover,
+.toggle.average:hover{
+  cursor: pointer;
+  cursor: hand;
+}
+
+.toggle:focus{
+  outline: 0;
+}
+
+#counties,
+#states,
+#year {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  position: relative;
+}
+
+.voronoi{
+  cursor: pointer;
+  cursor: hand;
+}
+
+.select__arrow.long{
+  position: absolute;
+  top: 50%;
+  height: 0;
+  pointer-events: none;
+  border-width: 8px 5px 0 5px;
+  border-style: solid;
+  border-color: #cecece transparent transparent transparent;
+  top: 8px;
+  left: -16px;
+  display: none;
+}
+
+#icons {
+  /* position: absolute; */
+  /* background-color: #7D93CA; */
+  /*display: none;*/
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  /* left: 0px; */
+  /* right: 0px; */
+  /* margin: 0 auto; */
+  -webkit-justify-text: center;
+  justify-content: center;
+  -webkit-order: 2;
+  order: 2;
+  width: 100%;
+  position: relative;
+  margin-top: 20px;
+}
+
+#icon-a,
+#icon-b,
+#icon-c,
+#icon-d,
+#icon-e,
+#icon-f,
+#icon-g {
+  height: 36px;
+  /*margin: 0 48px 4px 0px;*/
+  position: relative;
+  width: 48px;
+  padding-bottom: 13px;
+}
+
+
+#icon-a svg,
+#icon-b svg,
+#icon-c svg,
+#icon-d svg,
+#icon-e svg,
+#icon-f svg,
+#icon-g svg {
+  margin: -10px 0 0 -14px;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+
+#icon-storms,
+#icon-hurricane,
+#icon-snow,
+#icon-football,
+#icon-baseball,
+#icon-terrorism,
+#icon-money {
+  position: absolute;
+  fill: none;
+  stroke: #FFFFFF;
+  stroke-width: 1;
+  stroke-miterlimit: 10;
+  stroke-linecap: round;
+  pointer-events: all;
+  stroke: black;
+}
+
+#icon-a.current #icon-storms,
+#icon-b.current #icon-hurricane,
+#icon-c.current #icon-snow,
+#icon-d.current #icon-football,
+#icon-e.current #icon-baseball,
+#icon-f.current #icon-terrorism,
+#icon-g.current #icon-money {
+  position: absolute;
+  fill: none;
+  stroke-width: 1;
+  stroke-miterlimit: 10;
+  stroke-linecap: round;
+  stroke: black;
+}
+
+#icon-a:hover,
+#icon-b:hover,
+#icon-c:hover,
+#icon-d:hover,
+#icon-e:hover,
+#icon-f:hover,
+#icon-g:hover  {
+  border-bottom: 4px solid #484848;
+  cursor: pointer;
+  opacity: .6;
+}
+
+#icon-a.current,
+#icon-b.current,
+#icon-c.current,
+#icon-d.current,
+#icon-e.current,
+#icon-f.current,
+#icon-g.current{
+  border-bottom: 4px solid #7D93CA;
+  margin-bottom: 0;
+  opacity: .8;
+  /*background-color: #B2C1E3;
+  background: white;*/
+}
+
+#icons .current #icon-storms,
+#icons .current #icon-sports,
+#icons .current #icon-terrorism {
+  fill: none;
+  stroke: white;
+  stroke-width: 1;
+  stroke-miterlimit: 10;
+  stroke: black;
+}
+
+#icon-dropdown {
+  width: 40%;
+  height: 48px;
+  top-margin: 100px;
+  display: none;
+}
+
+#icon-dropdown2 {
+  width: 40%;
+  height: 48px;
+  display: none;
+}
+
+#icon-dropdown select{
+  position: absolute;
+  left: 0;
+  margin: 0 0 0 -18px;
+}
+
+#icon-dropdown2 select{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -18px 0 0 -18px;
+}
+
+.icons {
+    opacity: .3;
+}
+
+.dd2 select{
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  display: block;
+  padding: 0.5em 3em 0.5em 0;
+  margin: 0 0 0 20px;
+  font-family: 'Publico Text Web';
+  font-size: 1rem;
+  font-weight: 600;
+  color: #7D93CA;
+  background-color: white;
+  border: none;
+}
+
+
+
+
+/*//////////////////////////////////////////*/
+/*////////////// LINE CHART ////////////////*/
+/*//////////////////////////////////////////*/
+
+
+
+
+.line {
+  fill: none;
+  stroke: #D9D9D9;
+  stroke-width: 1px;
+  /*opacity: 0.7;*/
+}
+
+.line2 {
+  fill: none;
+  stroke: #CC6699;
+  stroke-width: 3px;
+  stroke-miterlimit: 10;
+  stroke-linecap: round;
+
+}
+
+.selected {
+  fill: none;
+  stroke: #7D93CA;
+  stroke-width: 4px;
+  opacity: 1;
+}
+
+.text-labels{
+  font-family: 'Atlas Grotesk Web';
+  font-weight: 400;
+  font-size: .65em;
+  color: #999999;
+}
+
+.hovered {
+  fill: none;
+  stroke: #B2C1E3;
+  stroke-width: 2px;
+  opacity: 1;
+  stroke: black;
+}
+
+.showing {
+  fill: #000000;
+  opacity: 1;
+  background-color: white;
+}
+
+.event-show {
+  fill: #5d6d94;
+  opacity: 1;
+  font-weight: bold;
+  background-color: white;
+}
+
+.medianLabel {
+  fill: #CC6699;
+  opacity: 0;
+  font-family: 'Atlas Grotesk Web';
+  font-weight: bold;
+  font-size: .65em;
+  text-transform: uppercase;
+  padding-left: 5px;
+}
+
+
+.medianLabel-showing {
+  opacity: 1;
+}
+
+option[value="NaN"][disabled] {
+  display: none;
+}
+
+.selected-event {
+  fill: none;
+  stroke: url(#linear-gradient);
+  stroke-width: 4px;
+}
+
+.axis {
+  font-family: 'Atlas Grotesk Web';
+  font-weight: 300;
+  font-size: .65em;
+  color: #999999;
+  text-transform: uppercase;
+}
+
+.axis.label{
+  font-size: .65em;
+  font-weight: 500;
+  fill: black;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.axis path,
+.axis line{
+  fill: none;
+  stroke-width: 1px;
+  stroke: #000000;
+  shape-rendering: crispEdges;
+}
+
+.axis text{
+  fill: #000000;
+  font-weight: 300;
+  font-size: 10px;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+: root {
+  --annotation-color: #EF445B;
+}
+
+.annotation path {
+  stroke: #EF445B;
+  stroke-width: 4px;
+  fill: none;
+}
+
+
+
+.annotation text {
+  fill: #000000;
+  font-family: 'Atlas Grotesk Web';
+  font-weight: 100;
+  font-size: 0.8em;
+}
+
+.annotation-note .annotation-note-title, text.title {
+  font-size: 1rem;
+  font-weight: 500;
+  fill: #EF445B;
+  font-family: 'Atlas Grotesk Web';
+  text-shadow: -2px 0 rgba(253, 252, 255,0.77), 0 2px rgba(253, 252, 255,0.77), 2px 0 rgba(253, 252, 255,0.77), 0 -2px rgba(253, 252, 255,0.77);
+  pointer-events: none;
+}
+
+
+.annotation-note-bg {
+  fill: #FFFFFF;
+}
+
+
+.annotation-group-average .annotation path {
+  stroke: #404040;
+  stroke-width: 1px;
+  fill: none;
+}
+
+.annotation-group-average .annotation text {
+    font-family: 'Atlas Grotesk Web';
+    font-weight: 400;
+    font-size: .6rem;
+    text-transform: uppercase;
+    fill: #060606;
+}
+
+.annotation-group-average .annotation-note .annotation-note-title, text.title  {
+    font-family: 'Atlas Grotesk Web';
+    font-weight: 500;
+    font-size: .65em;
+    text-transform: uppercase;
+    fill: #c472a4;
+}
+
+.annotation-group-average path.connector-dot {
+  fill: #f4e6f1;
+}
+
+
+
+
+
+
+
+
+
+
+.intro-prose,
+.conclusion-prose {
+    font-size: 1rem;
+    color: rgba(0,0,0,.8);
+    font-weight: 100;
+    line-height: 1.8;
+    max-width: 640px;
+    margin: 0 auto;
+    margin-bottom: 1.5rem;
+}
+
+.intro-section {
+    margin: 0 auto;
+    background: #fcfcfc;
+    margin-bottom: 50px;
+    padding-bottom: 30px;
+}
+
+
+
+.right-column-prose {
+    font-size: .92rem;
+    line-height: 1.7;
+    padding: 1rem;
+}
+
+.figure-legend {
+    font-family: 'Atlas Grotesk Web';
+  font-weight: 300;
+  font-size: .55em;
+  text-transform: uppercase;
+    fill: #ADADAD;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.highlighted{
+  transition: 500ms;
+  color: #5c6b92;
+  /* text-decoration: underline; */
+}
+
+.prose-highlighted {
+  background-color: rgba(206, 214, 237, 0.21);
+  /* border-radius: 10px; */
+  transition: background .2s;
+}
+
+.right-column-prose.note{
+    font-size: .8rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.conclusion-prose.note{
+    font-size: .8rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    float: left;
+    max-width: 440px;
+}
+
+#regions {
+  float: right;
+  margin: 0 auto;
+}
+
+#methodology-note{
+  height: 175px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+#slopegraph {
+  margin: 4rem auto;
+  display: block;
+}
+
+
+
+
+.byline a {
+    text-decoration: none;
+}
+
+
+a {
+    text-decoration: none;
+    color: inherit;
+    background: linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#c078a9,#c472a4);
+    background-size: .05em 1px,.05em 1px,1px 1px;
+    background-repeat: no-repeat,no-repeat,repeat-x;
+    text-shadow: 0.03em 0 #fff, -0.03em 0 #fff, 0 0.03em #fff, 0 -0.03em #fff, 0.06em 0 #fff, -0.06em 0 #fff, 0.09em 0 #fff, -0.09em 0 #fff, 0.12em 0 #fff, -0.12em 0 #fff, 0.15em 0 #fff, -0.15em 0 #fff;
+    background-position: 0 95%,100% 95%,0 95%;
+}
+
+.prose {
+    font-size: 1rem;
+    color: rgba(0,0,0,.8);
+    font-weight: 100;
+    line-height: 1.8;
+    max-width: 640px;
+    margin: 0 auto;
+    margin-bottom: 1.5rem;
+}
+
+.prose-section {
+    margin-bottom: 50px;
+}
+#countyName{
+  /* font-size: .9em; */
+  /* background: rgba(171, 171, 171, 0.1); */
+  /* border-radius: 2px; */
+  /* padding: .3rem .5rem; */
+}
+#stateName{
+  /* font-size: .9em; */
+  /* background: rgba(171, 171, 171, 0.1); */
+  /* border-radius: 2px; */
+  /* padding: .3rem .5rem; */
+  /* margin-left: 0rem; */
+}
+#title{
+  margin: 0 auto;
+  text-align: center;
+  margin-bottom: 20px;
+  height: 1.4rem;
+}
+.x text{
+  font-weight: 600;
+}
+.hover-path{
+  fill: none;
+  stroke: #313131;
+  stroke-width: 1.5px;
+  stroke-dasharray: 5,2;
+  visibility: hidden;
+}
