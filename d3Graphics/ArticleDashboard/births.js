@@ -1,3 +1,15 @@
+var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+var mobile = false;
+var fullWidth = false;
+
+if(viewportWidth < 900){
+  fullWidth = true;
+}
+if( /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+  mobile = true;
+}
+
 //initilize scrollmagic
     var controller = new ScrollMagic.Controller();
 
@@ -10,19 +22,18 @@
     DS = {}
 
     // set the dimensions and margins of the graph
-    var margin = {top: 60, right: 80, bottom: 20, left: 50},
-      width = 850 - margin.left - margin.right,
+    var margin = {top: 100, right: 120, bottom: 20, left: 100},
+      width = (viewportWidth-300) - margin.left - margin.right,
       height = 370 - margin.top - margin.bottom;
 
     // parse the date / time
     var parseTime = d3.timeParse("%y%m");
-    var parseYear = d3.timeFormat("%Y"),
-      parseMonth = d3.timeFormat("%b");
+    var parseYear = d3.timeFormat("%Y");
+    var parseMonth = d3.timeFormat("%b");
     var parseTimeMonth = d3.timeParse("%b");
-    var parseMonthOnly = d3.timeParse("%m")
-    var parseMonthNum = d3.timeFormat("%m")
-
-
+    var parseMonthOnly = d3.timeParse("%m");
+    var parseMonthNum = d3.timeFormat("%m");
+    var hoverPath;
 
     // set the ranges
     var x = d3.scaleTime().domain([parseTimeMonth("jan"),parseTimeMonth("dec")]).range([0, width]);
@@ -61,12 +72,15 @@
     // append the svg object to the body of the page
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
-    var svg = d3.select("#graph").append("svg")
+    var svg = d3.select("#graph")
+        .style("width", width + margin.left + margin.right + "px")
+        .append("svg")
+        .style("width", width + margin.left + margin.right + "px")
+        .style("height", height + margin.top + margin.bottom + "px")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform",
-              "translate(" + margin.left + "," + margin.top + ")")
+        .append("g")
+        .attr("transform","translate(" + margin.left + "," + margin.top + ")")
         .attr("class", "svg");
 
     // Gradient (for event styling later)
@@ -121,12 +135,12 @@
 
     ///////////////////// VARIABLES FOR TRANSITIONS //////////////////////
 
-            var areaFill = d3.area()
-                // Same x axis (could use .x0 and .x1 to set different ones)
-                .x(function(d) { return x(parseTimeMonth(d.month)); })
-                .y0(function(d, i) { return y(+d.low); })
-                .y1(function(d, i) { return y(+d.high); })
-                .curve(d3.curveStep);
+        var areaFill = d3.area()
+            // Same x axis (could use .x0 and .x1 to set different ones)
+            .x(function(d) { return x(parseTimeMonth(d.month)); })
+            .y0(function(d, i) { return y(+d.low); })
+            .y1(function(d, i) { return y(+d.high); })
+            .curve(d3.curveStep);
 
 
 
@@ -176,6 +190,44 @@ function ready(error,
     countyAverages) {
 
         if (error) throw error;
+
+
+        function voronoiMouseover(d){
+          // determine the year of the polygon being hovered
+          var yearSelected = d.data.year;
+
+          var dataForLine = d3.selectAll(".line").filter(function(d){
+              return d.key == +yearSelected
+            })
+            .datum().values
+            ;
+
+          // console.log(hoverPath);
+
+          hoverPath
+            .attr("d", function(d){
+              return valueLine(dataForLine)
+            })
+            .style("visibility","visible")
+            ;
+
+          console.log("mouseover function");
+
+          // select annual lines
+          // d3.selectAll(".line").classed("hovered",function(d){
+          //   if(d.key == +yearSelected){
+          //     return true;
+          //   }
+          //   return false;
+          // })
+          d3.selectAll(".text-labels").classed("showing",function(d){
+            if(d.key == +yearSelected){
+              return true;
+            }
+            return false;
+          })
+
+        }
 
         stateCounty.forEach(function(d){
           d.County_Name = d.County_Name
@@ -446,118 +498,116 @@ function ready(error,
     //////////////////////////  COUNTY NAMES  ////////////////////////////
     //////////////////////////////////////////////////////////////////////
 
-          var countyMap = d3.map(stateCounty, function(d){
-            return d.County;
-          })
+    var countyMap = d3.map(stateCounty, function(d){
+      return d.County;
+    })
 
-          var countyNameMap = d3.map(stateCounty, function(d){
-            return d.County_Name
-          })
+    var countyNameMap = d3.map(stateCounty, function(d){
+      return d.County_Name
+    })
 
-          var stateMap = d3.map(stateCounty, function(d){
-            return d.stateName;
-          })
+    var stateMap = d3.map(stateCounty, function(d){
+      return d.stateName;
+    })
 
-          var eventMap = d3.map(events, function(d){
-            return d.title;
-          })
+    var eventMap = d3.map(events, function(d){
+      return d.title;
+    })
 
     //////////////////////////////////////////////////////////////////////
     /////////////////////////  STATE DROPDOWN  //////////////////////////
     //////////////////////////////////////////////////////////////////////
 
-        // Create dropdown 1
-        var Slist = d3.select("#states")
-        Slist.append("select").selectAll("option")
-            .data(nestedStates)
-            .enter().append("option")
-            .attr("value", function(d){
-                return d.key;
-            })
-            .text(function(d){
-                return d.key;
-            })
+    // Create dropdown 1
+    var Slist = d3.select("#states")
+    Slist.append("select").selectAll("option")
+        .data(nestedStates)
+        .enter().append("option")
+        .attr("value", function(d){
+            return d.key;
+        })
+        .text(function(d){
+            return d.key;
+        })
 
     //////////////////////////////////////////////////////////////////////
     /////////////////////////  COUNTY DROPDOWN  //////////////////////////
     //////////////////////////////////////////////////////////////////////
 
 
-          // define Clist (county list) as outer variable
-          var ClistG = null;
+      // define Clist (county list) as outer variable
+      var ClistG = null;
 
-          var updateCountyDrop = function(selectCounty){
-              // Setting "All Counties" to default
-                  if (selectCounty === undefined) {
-                    console.log("selectCounty was undefined")
-                      selectCounty == "All";
-                  } else { console.log("selectCounty was defined")}
+      var updateCountyDrop = function(selectCounty){
+          // Setting "All Counties" to default
+              if (selectCounty === undefined) {
+                console.log("selectCounty was undefined")
+                  selectCounty == "All";
+              } else { console.log("selectCounty was defined")}
 
-              // Figure out which state is displayed
-              var selectedState = Slist.select("select").property("value")
+          // Figure out which state is displayed
+          var selectedState = Slist.select("select").property("value")
 
-              console.log(selectedState)
+          console.log(selectedState)
 
-              // Filter for that state
-              var selectedStateG = nestedStates.filter(function(d){
-                  return d.key === selectedState;
-              });
+          // Filter for that state
+          var selectedStateG = nestedStates.filter(function(d){
+              return d.key === selectedState;
+          });
 
-              var selectedCounties = selectedStateG.map(function(d){
-                return d.value.Counties;
+          var selectedCounties = selectedStateG.map(function(d){
+            return d.value.Counties;
+          })
+
+          var selectedCounties2 = selectedCounties[0].map(function(d){
+            return d.key;
+          })
+
+          // Add an "All" option
+          selectedCounties2.push("001")
+
+          selectedCounties2.sort()
+
+          var Clist = d3.select("#counties")
+
+          var selection = Clist.selectAll("select");
+            if (selection.empty()) {
+              selection = Clist.append("select");
+            }
+
+          selection = selection.selectAll("option")
+              .data(selectedCounties2, function(d){
+                return d;
               })
 
-              var selectedCounties2 = selectedCounties[0].map(function(d){
-                return d.key;
+          selection.exit().remove();
+
+          selection.enter().append("option")
+              .property("value", function(d){
+                if (d != "001"){return countyMap.get(d).County;} else { return 001}
+              })
+              .text(function(d){
+                if (d != "001"){return countyMap.get(d).County_Name;} else {return "All Counties"}
+              })
+              .property("disabled", function(d){
+                return d == "NaN";
               })
 
-              // Add an "All" option
-              selectedCounties2.push("001")
-
-              selectedCounties2.sort()
-
-              var Clist = d3.select("#counties")
-
-              var selection = Clist.selectAll("select");
-                if (selection.empty()) {
-                  selection = Clist.append("select");
-                }
-
-              selection = selection.selectAll("option")
-                  .data(selectedCounties2, function(d){
-                    return d;
-                  })
-
+              console.log(Clist.selectAll("option"))
               console.log(selection)
+              console.log(Slist.selectAll("option"))
 
-              selection.exit().remove();
+          // Setting selected property equal to the selected county
+            Clist.selectAll("option")
+              .property("selected", function(d){
+                return +d == +selectCounty;
+              })
 
-              selection.enter().append("option")
-                  .property("value", function(d){
-                    if (d != "001"){return countyMap.get(d).County;} else { return 001}
-                  })
-                  .text(function(d){
-                    if (d != "001"){return countyMap.get(d).County_Name;} else {return "All Counties"}
-                  })
-                  .property("disabled", function(d){
-                    return d == "NaN";
-                  })
+              var property = Clist.select("select").property("value")
 
-                  console.log(Clist.selectAll("option"))
-                  console.log(selection)
-                  console.log(Slist.selectAll("option"))
+          ClistG = Clist;
 
-              // Setting selected property equal to the selected county
-                Clist.selectAll("option")
-                  .property("selected", function(d){
-                    return +d == +selectCounty;
-                  })
-
-                  var property = Clist.select("select").property("value")
-
-              ClistG = Clist;
-
-          }
+      }
     //////////////////////////////////////////////////////////////////////
     /////////////////////////  DATA VIEW TOGGLE  /////////////////////////
     //////////////////////////////////////////////////////////////////////
@@ -578,21 +628,21 @@ function ready(error,
     //////////////////////////  YEAR DROPDOWN  ///////////////////////////
     //////////////////////////////////////////////////////////////////////
 
-        // Create dropdown (year)
-        var yList = d3.select("#year")
-        yList.append("select").selectAll("option")
-            .data(nested2)
-            .enter().append("option")
-            .attr("value", function(d){
-              return d.key;
-            })
-            .text(function(d){
-              return d.key;
-            })
-            .property("selected", function(d){ return d.key === "2015"; })
+    // Create dropdown (year)
+    var yList = d3.select("#year")
+    yList.append("select").selectAll("option")
+        .data(nested2)
+        .enter().append("option")
+        .attr("value", function(d){
+          return d.key;
+        })
+        .text(function(d){
+          return d.key;
+        })
+        .property("selected", function(d){ return d.key === "2015"; })
 
-            // By default, this list is hidden, and appears when "Annual" Data view is clicked
-            d3.select("#dropdown-c").classed("hiddendd", true)
+        // By default, this list is hidden, and appears when "Annual" Data view is clicked
+        d3.select("#dropdown-c").classed("hiddendd", true)
 
 
 
@@ -619,13 +669,15 @@ function ready(error,
                     .tickPadding(6)
                     .tickSize(0, 0));
 
+            yaxis.select(".domain").style("display","none")
+
             svg.append("text")
                   .attr("transform", "rotate(-90)")
-                  .attr("y", 0 - margin.left)
+                  .attr("y", 0 - 60)
                   .attr("x", 0 - (height / 2))
                   .attr("dy", "1em")
                   .style("text-anchor", "middle")
-                  .text("Babies Born per Month")
+                  .text("Babies per Month")
                   .attr("class", "y axis label");
 
     //////////////////////////////////////////////////////////////////////
@@ -874,7 +926,6 @@ function ready(error,
                       .attr("class", function(d,i) { return "line " + d.key; })
 
 
-
           //////////////   AREA GRAPH    ///////////////
 
             // Filter data to only include selected county
@@ -972,7 +1023,11 @@ function ready(error,
                   .classed("showing", false)
                 //.lower();
 
-
+                hoverPath = svg.append("g")
+                  .attr("class","hover-g")
+                  .append("path")
+                  .attr("class","hover-path")
+                  ;
             ////////////  ADDING VORONOI  ///////////
 
 
@@ -1003,22 +1058,44 @@ function ready(error,
               .style("fill", "none")
               .style("pointer-events", "all")
               .on("mouseover", function(d) {
-                // determine the year of the polygon being hovered
-                var yearSelected = d.data.year;
-
-                // select annual lines
-                d3.selectAll(".line").classed("hovered",function(d){
-                  if(d.key == +yearSelected){
-                    return true;
-                  }
-                  return false;
-                })
-                d3.selectAll(".text-labels").classed("showing",function(d){
-                  if(d.key == +yearSelected){
-                    return true;
-                  }
-                  return false;
-                })
+                voronoiMouseover(d);
+                // // determine the year of the polygon being hovered
+                // var yearSelected = d.data.year;
+                //
+                // // hoverPath
+                //
+                // console.log(d);
+                //
+                //
+                // // var PathsEnter = Paths.enter()
+                // //             .append("path")
+                // //             .attr("d", function(d){
+                // //                 d.line = this;
+                // //                 return valueLine(d.values)
+                // //             })
+                // //             .attr("opacity", 0.6)
+                // //             // Setting individual classes for each line (for voronoi)
+                // //             .attr("class", function(d,i) { return "line " + d.key; })
+                //
+                // // select annual lines
+                // // d3.selectAll(".line").classed("hovered",function(d){
+                // //     if(d.key == +yearSelected){
+                // //       return true;
+                // //     }
+                // //     return false;
+                // //   })
+                // //   .filter(function(d) {
+                // //     return +d.key === +yearSelected
+                // //   })
+                // //   .lower()
+                // //   ;
+                //
+                // d3.selectAll(".text-labels").classed("showing",function(d){
+                //   if(d.key == +yearSelected){
+                //     return true;
+                //   }
+                //   return false;
+                // })
               })
               .on("click", function(d){
 
@@ -1055,7 +1132,6 @@ function ready(error,
                   })
 
                 var year = yList.select("select").property("value")
-                console.log(year)
 
                 d3.selectAll(".text-labels").classed("event-show",function(d){
                   if(d.key == +year){
@@ -1066,6 +1142,9 @@ function ready(error,
 
               })
               .on("mouseout", function(d){
+                  hoverPath
+                    .style("visibility",null)
+                    ;
                   d3.selectAll(".line").classed("hovered", false)
                   d3.selectAll(".text-labels").classed("showing", false)
               })
@@ -1218,8 +1297,6 @@ function ready(error,
           var stateMed = nestAStates.filter(function(d){
               return d.key === stateName;
                 });
-
-        console.log(stateMed)
 
           // Adding special label for median line
           var MedianText = svg.selectAll(".medianLabel")
@@ -1420,22 +1497,7 @@ function ready(error,
               .style("fill", "none")
               .style("pointer-events", "all")
               .on("mouseover", function(d) {
-                // determine the year of the polygon being hovered
-                var yearSelected = d.data.year;
-
-                // select annual lines
-                d3.selectAll(".line").classed("hovered",function(d){
-                  if(d.key == +yearSelected){
-                    return true;
-                  }
-                  return false;
-                })
-                d3.selectAll(".text-labels").classed("showing",function(d){
-                  if(d.key == +yearSelected){
-                    return true;
-                  }
-                  return false;
-                })
+                voronoiMouseover(d);
               })
               .on("click", function(d){
 
@@ -1482,6 +1544,9 @@ function ready(error,
 
               })
               .on("mouseout", function(d){
+                hoverPath
+                  .style("visibility",null)
+                  ;
                   d3.selectAll(".line").classed("hovered", false)
                   d3.selectAll(".text-labels").classed("showing", false)
               })
@@ -1846,22 +1911,23 @@ function ready(error,
               .style("fill", "none")
               .style("pointer-events", "all")
               .on("mouseover", function(d) {
-                // determine the year of the polygon being hovered
-                var yearSelected = d.data.year;
-
-                // select annual lines
-                d3.selectAll(".line").classed("hovered",function(d){
-                  if(d.key == +yearSelected){
-                    return true;
-                  }
-                  return false;
-                })
-                d3.selectAll(".text-labels").classed("showing",function(d){
-                  if(d.key == +yearSelected){
-                    return true;
-                  }
-                  return false;
-                })
+                voronoiMouseover(d);
+                // // determine the year of the polygon being hovered
+                // var yearSelected = d.data.year;
+                //
+                // // select annual lines
+                // d3.selectAll(".line").classed("hovered",function(d){
+                //   if(d.key == +yearSelected){
+                //     return true;
+                //   }
+                //   return false;
+                // })
+                // d3.selectAll(".text-labels").classed("showing",function(d){
+                //   if(d.key == +yearSelected){
+                //     return true;
+                //   }
+                //   return false;
+                // })
               })
               .on("click", function(d){
 
@@ -1909,6 +1975,9 @@ function ready(error,
 
               })
               .on("mouseout", function(d){
+                hoverPath
+                  .style("visibility",null)
+                  ;
                   d3.selectAll(".line").classed("hovered", false)
                   d3.selectAll(".text-labels").classed("showing", false)
               })
@@ -2390,29 +2459,27 @@ function ready(error,
       				triggerElement: "#container",
       				triggerHook:0,
       				offset: -25,
-      				duration:3400
+      				duration:3000
       			})
       			//.addIndicators({name: "pin chart"}) // add indicators (requires plugin)
       			.setPin("#graph", {pushFollowers: true})
       			.addTo(controller)
-      			.on("enter",function(e){
-      				if(e.target.controller().info("scrollDirection") == "REVERSE"){
-      				};
-      			})
-      			.on("leave",function(e){
-      				if(e.target.controller().info("scrollDirection") == "FORWARD"){
-      				};
-      			})
-      			.on("progress", function (e) {
-      				var progress = e.progress.toFixed(1);
-      				if(e.target.controller().info("scrollDirection") == "REVERSE"){
-      				}
-      				else{
-      				}
-      			})
+      			// .on("enter",function(e){
+      			// 	if(e.target.controller().info("scrollDirection") == "REVERSE"){
+      			// 	};
+      			// })
+      			// .on("leave",function(e){
+      			// 	if(e.target.controller().info("scrollDirection") == "FORWARD"){
+      			// 	};
+      			// })
+      			// .on("progress", function (e) {
+      			// 	var progress = e.progress.toFixed(1);
+      			// 	if(e.target.controller().info("scrollDirection") == "REVERSE"){
+      			// 	}
+      			// 	else{
+      			// 	}
+      			// })
       			;
-
-
 
         var firstTrigger = new ScrollMagic.Scene({
             // triggerElement: ".third-chart-wrapper",
@@ -2521,7 +2588,7 @@ function ready(error,
           })
           ;
 
-    var thirdTrigger = new ScrollMagic.Scene({
+        var thirdTrigger = new ScrollMagic.Scene({
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
@@ -2584,13 +2651,7 @@ function ready(error,
           })
           ;
 
-
-
-
-
-
-
-          var fourthTrigger = new ScrollMagic.Scene({
+        var fourthTrigger = new ScrollMagic.Scene({
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
@@ -2647,7 +2708,7 @@ function ready(error,
           })
           ;
 
-          var fifthTrigger = new ScrollMagic.Scene({
+        var fifthTrigger = new ScrollMagic.Scene({
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
