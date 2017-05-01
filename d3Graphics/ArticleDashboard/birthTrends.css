@@ -184,6 +184,7 @@ body {
   display: flex;
   margin: 0 auto;
   margin-top: 6rem;
+  max-width: 1200px;
 }
 
 

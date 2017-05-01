@@ -25,6 +25,10 @@ if( /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.u
     var margin = {top: 100, right: 120, bottom: 20, left: 100},
       width = (viewportWidth-300) - margin.left - margin.right,
       height = 370 - margin.top - margin.bottom;
+      if(viewportWidth>1200){
+        width = 1200-300- margin.left - margin.right
+      }
+      console.log(width);
 
     // parse the date / time
     var parseTime = d3.timeParse("%y%m");
