@@ -4,10 +4,10 @@
 
 @font-face {
   font-family: 'Canela Web';
-  src: url('../Fonts/Canela-Bold-Web.eot');
-  src: url('../Fonts/Canela-Bold-Web.eot?#iefix') format('embedded-opentype'),
-       url('../Fonts/Canela-Bold-Web.woff2') format('woff2'),
-       url('../Fonts/Canela-Bold-Web.woff') format('woff');
+  src: url('Fonts/Canela-Bold-Web.eot');
+  src: url('Fonts/Canela-Bold-Web.eot?#iefix') format('embedded-opentype'),
+       url('Fonts/Canela-Bold-Web.woff2') format('woff2'),
+       url('Fonts/Canela-Bold-Web.woff') format('woff');
   font-weight:  700;
   font-style:   normal;
   font-stretch: normal;
@@ -22,10 +22,10 @@
 
 @font-face {
   font-family: 'Canela Web';
-  src: url('../Fonts/Canela-Light-Web.eot');
-  src: url('../Fonts/Canela-Light-Web.eot?#iefix') format('embedded-opentype'),
-       url('../Fonts/Canela-Light-Web.woff2') format('woff2'),
-       url('../Fonts/Canela-Light-Web.woff') format('woff');
+  src: url('Fonts/Canela-Light-Web.eot');
+  src: url('Fonts/Canela-Light-Web.eot?#iefix') format('embedded-opentype'),
+       url('Fonts/Canela-Light-Web.woff2') format('woff2'),
+       url('Fonts/Canela-Light-Web.woff') format('woff');
   font-weight:  300;
   font-style:   normal;
   font-stretch: normal;
@@ -42,10 +42,10 @@
 
 @font-face {
   font-family: 'Atlas Grotesk Web';
-  src: url('../Fonts/AtlasGrotesk-Medium-Web.eot');
-  src: url('../Fonts/AtlasGrotesk-Medium-Web.eot?#iefix') format('embedded-opentype'),
-       url('../Fonts/AtlasGrotesk-Medium-Web.woff2') format('woff2'),
-       url('../Fonts/AtlasGrotesk-Medium-Web.woff') format('woff');
+  src: url('Fonts/AtlasGrotesk-Medium-Web.eot');
+  src: url('Fonts/AtlasGrotesk-Medium-Web.eot?#iefix') format('embedded-opentype'),
+       url('Fonts/AtlasGrotesk-Medium-Web.woff2') format('woff2'),
+       url('Fonts/AtlasGrotesk-Medium-Web.woff') format('woff');
   font-weight:  500;
   font-style:   normal;
   font-stretch: normal;
@@ -61,10 +61,10 @@
 
 @font-face {
   font-family: 'Atlas Grotesk Web';
-  src: url('../Fonts/AtlasGrotesk-Regular-Web.eot');
-  src: url('../Fonts/AtlasGrotesk-Regular-Web.eot?#iefix') format('embedded-opentype'),
-       url('../Fonts/AtlasGrotesk-Regular-Web.woff2') format('woff2'),
-       url('../Fonts/AtlasGrotesk-Regular-Web.woff') format('woff');
+  src: url('Fonts/AtlasGrotesk-Regular-Web.eot');
+  src: url('Fonts/AtlasGrotesk-Regular-Web.eot?#iefix') format('embedded-opentype'),
+       url('Fonts/AtlasGrotesk-Regular-Web.woff2') format('woff2'),
+       url('Fonts/AtlasGrotesk-Regular-Web.woff') format('woff');
   font-weight:  400;
   font-style:   normal;
   font-stretch: normal;
@@ -80,10 +80,10 @@
 
 @font-face {
   font-family: 'Atlas Grotesk Web';
-  src: url('../Fonts/AtlasGrotesk-Light-Web.eot');
-  src: url('../Fonts/AtlasGrotesk-Light-Web.eot?#iefix') format('embedded-opentype'),
-       url('../Fonts/AtlasGrotesk-Light-Web.woff2') format('woff2'),
-       url('../Fonts/AtlasGrotesk-Light-Web.woff') format('woff');
+  src: url('Fonts/AtlasGrotesk-Light-Web.eot');
+  src: url('Fonts/AtlasGrotesk-Light-Web.eot?#iefix') format('embedded-opentype'),
+       url('Fonts/AtlasGrotesk-Light-Web.woff2') format('woff2'),
+       url('Fonts/AtlasGrotesk-Light-Web.woff') format('woff');
   font-weight:  300;
   font-style:   normal;
   font-stretch: normal;
@@ -99,10 +99,10 @@
 
 @font-face {
   font-family: 'Publico Text Web';
-  src: url('../Fonts/PublicoText-Italic-Web.eot');
-  src: url('../Fonts/PublicoText-Italic-Web.eot?#iefix') format('embedded-opentype'),
-       url('../Fonts/PublicoText-Italic-Web.woff2') format('woff2'),
-       url('../Fonts/PublicoText-Italic-Web.woff') format('woff');
+  src: url('Fonts/PublicoText-Italic-Web.eot');
+  src: url('Fonts/PublicoText-Italic-Web.eot?#iefix') format('embedded-opentype'),
+       url('Fonts/PublicoText-Italic-Web.woff2') format('woff2'),
+       url('Fonts/PublicoText-Italic-Web.woff') format('woff');
   font-weight:  400;
   font-style:   italic;
   font-stretch: normal;
@@ -118,10 +118,10 @@
 
 @font-face {
   font-family: 'Publico Text Web';
-  src: url('../Fonts/PublicoText-Roman-Web.eot');
-  src: url('../Fonts/PublicoText-Roman-Web.eot?#iefix') format('embedded-opentype'),
-       url('../Fonts/PublicoText-Roman-Web.woff2') format('woff2'),
-       url('../Fonts/PublicoText-Roman-Web.woff') format('woff');
+  src: url('Fonts/PublicoText-Roman-Web.eot');
+  src: url('Fonts/PublicoText-Roman-Web.eot?#iefix') format('embedded-opentype'),
+       url('Fonts/PublicoText-Roman-Web.woff2') format('woff2'),
+       url('Fonts/PublicoText-Roman-Web.woff') format('woff');
   font-weight:  400;
   font-style:   normal;
   font-stretch: normal;
@@ -136,10 +136,10 @@
 
 @font-face {
   font-family: 'Publico Text Web';
-  src: url('../Fonts/PublicoText-Bold-Web.eot');
-  src: url('../Fonts/PublicoText-Bold-Web.eot?#iefix') format('embedded-opentype'),
-       url('../Fonts/PublicoText-Bold-Web.woff2') format('woff2'),
-       url('../Fonts/PublicoText-Bold-Web.woff') format('woff');
+  src: url('Fonts/PublicoText-Bold-Web.eot');
+  src: url('Fonts/PublicoText-Bold-Web.eot?#iefix') format('embedded-opentype'),
+       url('Fonts/PublicoText-Bold-Web.woff2') format('woff2'),
+       url('Fonts/PublicoText-Bold-Web.woff') format('woff');
   font-weight:  700;
   font-style:   bold;
   font-stretch: normal;
