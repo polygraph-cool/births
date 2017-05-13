@@ -196,7 +196,7 @@ function ready(error,
         if (error) throw error;
 
 
-        function voronoiMouseover(d){
+        function voronoiMouseover(d, location){
           // determine the year of the polygon being hovered
           var yearSelected = d.data.year;
 
@@ -206,14 +206,22 @@ function ready(error,
             .datum().values
             ;
 
-          // console.log(hoverPath);
+          if(location == "county"){
+            hoverPath
+              .attr("d", function(d){
+                return valueLine(dataForLine)
+              })
+              .style("visibility","visible")
+              ;
+          } else if (location == "state"){
+            hoverPath
+              .attr("d", function(d){
+                return valueLineState(dataForLine)
+              })
+              .style("visibility","visible")
+              ;
+          }
 
-          hoverPath
-            .attr("d", function(d){
-              return valueLine(dataForLine)
-            })
-            .style("visibility","visible")
-            ;
 
           console.log("mouseover function");
 
@@ -552,8 +560,6 @@ function ready(error,
           // Figure out which state is displayed
           var selectedState = Slist.select("select").property("value")
 
-          console.log(selectedState)
-
           // Filter for that state
           var selectedStateG = nestedStates.filter(function(d){
               return d.key === selectedState;
@@ -597,9 +603,6 @@ function ready(error,
                 return d == "NaN";
               })
 
-              console.log(Clist.selectAll("option"))
-              console.log(selection)
-              console.log(Slist.selectAll("option"))
 
           // Setting selected property equal to the selected county
             Clist.selectAll("option")
@@ -784,10 +787,6 @@ function ready(error,
             .ease(d3.easeLinear)
             .attr("stroke-dashoffset", 0);
 
-        console.log(annotationPath.node().getTotalLength())
-
-        console.log(y(births))
-
 
         var notePath = svg.selectAll(".annotation-group-result path.note-line")
         var totalLengthNote = notePath.node().getTotalLength()
@@ -846,7 +845,6 @@ function ready(error,
           dx: 0,
         }]
 
-        console.log(x(parseTimeMonth("Dec")))
 
         var makeAnnotations = d3.annotation()
           //.editMode(true)
@@ -863,7 +861,6 @@ function ready(error,
           })
           .annotations(annotations)
 
-          console.log("Annotations made!")
 
         svg.append("g")
           .attr("class", "annotation-group-average")
@@ -1062,7 +1059,7 @@ function ready(error,
               .style("fill", "none")
               .style("pointer-events", "all")
               .on("mouseover", function(d) {
-                voronoiMouseover(d);
+                voronoiMouseover(d, "county");
                 // // determine the year of the polygon being hovered
                 // var yearSelected = d.data.year;
                 //
@@ -1501,7 +1498,7 @@ function ready(error,
               .style("fill", "none")
               .style("pointer-events", "all")
               .on("mouseover", function(d) {
-                voronoiMouseover(d);
+                voronoiMouseover(d, "state");
               })
               .on("click", function(d){
 
@@ -1537,7 +1534,7 @@ function ready(error,
                   })
 
                 var year = yList.select("select").property("value")
-                console.log(year)
+      
 
                 d3.selectAll(".text-labels").classed("event-show",function(d){
                   if(d.key == +year){
@@ -1663,8 +1660,6 @@ function ready(error,
                     })
                   .attr("opacity", 0)
 
-                  console.log("County Avg Update Ran")
-
           var stateDrop = Slist.selectAll("option")
             .property("selected", function(d){
             return d.key === countyMap.get(county[0].key).stateName;
@@ -1767,7 +1762,6 @@ function ready(error,
           // Update county dropdown
           updateCountyDrop(countyCode);
 
-          console.log("County Year Update Ran")
 
             // Update paths
             svg.selectAll("path.area")
@@ -1915,7 +1909,7 @@ function ready(error,
               .style("fill", "none")
               .style("pointer-events", "all")
               .on("mouseover", function(d) {
-                voronoiMouseover(d);
+                voronoiMouseover(d, "county");
                 // // determine the year of the polygon being hovered
                 // var yearSelected = d.data.year;
                 //
@@ -1968,7 +1962,6 @@ function ready(error,
                   })
 
                 var year = yList.select("select").property("value")
-                console.log(year)
 
                 d3.selectAll(".text-labels").classed("event-show",function(d){
                   if(d.key == +year){
@@ -2139,20 +2132,17 @@ function ready(error,
               var selectedState = Slist.select("select").property("value")
 
               var selectedCounty = ClistG.select("select").property("value")
-              console.log(selectedCounty)
 
 
             if(selectedCounty == "1"){
 
                 // if "All Counties" is selected then generate state average line
                   stateUpdateYear(selectedState);
-                  console.log("state update ran!")
 
               } else {
 
                 // if any other county selected then generate county average line
                   countyUpdateYear(selectedCounty)
-                  console.log("county update ran!")
 
               }
 

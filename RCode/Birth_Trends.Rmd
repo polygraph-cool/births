@@ -500,3 +500,44 @@ scale2 <- ggplot(stateMonth, aes(x = season, y=scalebirths, color = region, grou
 ggsave("../../scale2.svg", scale2, device = "svg", width = 20, height = 20 )
 
 ```
+
+```{r}
+SuffolkNY <- allBirthData %>% 
+  filter(County == 36103, Year >= 1995, Month == 6|7) %>% 
+  group_by(Year) %>% 
+  summarise(sum = sum(countyBirths))
+
+SuffolkNY <- ggplot(SuffolkNY, aes(x = Year, y=sum)) + geom_line()
+
+ggsave("../../SuffolkNY.svg", SuffolkNY, device = "svg", width = 20, height = 20 )
+
+
+Cleveland <- allBirthData %>% 
+  filter(County == 39035, Year >= 1995, Month == 4|5) %>% 
+  group_by(Year) %>% 
+  summarise(sum = sum(countyBirths))
+
+ggplot(Cleveland, aes(x = Year, y=sum))+geom_line()
+
+
+
+SuffolkMA <- allBirthData %>% 
+  filter(County == 25025, Year >= 1995, Month == 6|7) %>% 
+  group_by(Year) %>% 
+  summarise(sum = sum(countyBirths))
+
+ ggplot(SuffolkMA, aes(x = Year, y=sum)) + geom_line()
+
+ggsave("../../SuffolkNY.svg", SuffolkNY, device = "svg", width = 20, height = 20 )
+
+```
+
+```{r}
+Oklahoma <- allBirthData %>% 
+  filter(County == 40109, Year >= 1995) %>% 
+  group_by(Year) %>% 
+  summarise(sum = sum(countyBirths))
+
+ggplot(Oklahoma, aes(x=Year, y=sum))+ geom_line()
+
+```
