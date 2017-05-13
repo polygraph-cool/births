@@ -2449,11 +2449,11 @@ function ready(error,
     //////////////////////////////////////////////////////////////////////
 
         var pinBubbleChart = new ScrollMagic.Scene({
-      				// triggerElement: ".third-chart-wrapper",
+      				//triggerElement: ".third-chart-wrapper",
       				triggerElement: "#container",
       				triggerHook:0,
       				offset: -25,
-      				duration:3000
+      				duration:3400
       			})
       			//.addIndicators({name: "pin chart"}) // add indicators (requires plugin)
       			.setPin("#graph", {pushFollowers: true})
@@ -2749,10 +2749,10 @@ function ready(error,
           ;
 
         var sixthTrigger = new ScrollMagic.Scene({
-            // triggerElement: ".third-chart-wrapper",
+            //triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 3100,
+            offset: 3200,
             duration:200
           })
           //.addIndicators({name: "sixth trigger"}) // add indicators (requires plugin)
