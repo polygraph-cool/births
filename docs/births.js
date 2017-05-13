@@ -2479,7 +2479,7 @@ function ready(error,
             // triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 800,
+            offset: 700,
             duration:500
           })
           //.addIndicators({name: "first trigger"}) // add indicators (requires plugin)
@@ -2529,10 +2529,10 @@ function ready(error,
           ;
 
           var secondTrigger = new ScrollMagic.Scene({
-            // triggerElement: ".third-chart-wrapper",
+            //triggerElement: ".third-chart-wrapper",
             triggerElement: "#right-column",
             triggerHook:0,
-            offset: 1300,
+            offset: 1200,
             duration:300
           })
           //.addIndicators({name: "second trigger"}) // add indicators (requires plugin)
