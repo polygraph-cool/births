@@ -2117,6 +2117,7 @@ function ready(error,
 
             d3.select("#dropdown-c").classed("hiddendd", true)
 
+
           d3.selectAll(".toggle.average").classed("active", true)
           d3.selectAll(".toggle.year").classed("active", false)
 
@@ -2145,7 +2146,6 @@ function ready(error,
                   countyUpdateYear(selectedCounty)
 
               }
-
 
 
           d3.select("#dropdown-c").classed("hiddendd", false)
