@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset = "utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Birth Trends</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no'>
+  <title>The Timing of Baby Making</title>
   <meta name="description" content="Birth Trends">
   <meta name="author" content="Amber Thomas">
   <link rel="stylesheet" href="birthTrends.css">
@@ -28,6 +28,17 @@
   <meta name="twitter:title" content="">
   <meta name="twitter:description" content="">
   <meta name="twitter:image:src" content="">
+
+  <script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-90567923-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+
 </head>
 
 <body>
@@ -256,7 +267,7 @@
 
   <div id="right-column">
     <!-- <p class="right-column-prose">First things first, let's talk about Hurricane Sandy. During the storm, a reported 8 million homes and businesses lost power. According to the legend, that would make Sandy the perfect time for baby-making. But was it?</p> -->
-    <p class="right-column-prose">Each line on this chart represents one year of births in Suffolk County (Long Island), NY, an area hit particularly hard by the storm. The line for 2013 (the year following Hurricane Sandy) is blue. Those red dots fall approximately 9 months after Hurricane Sandy swept the area. If Hurricane Sandy had caused a mini baby-boom, we'd expect to see an increase in births around June or July 2013.
+    <p class="right-column-prose">Each line on this chart represents one year of births in Suffolk County (Long Island), NY, an area hit particularly hard by the storm. The line for 2013 (the year following Hurricane Sandy) is blue. The purple dots fall approximately 9 months after Hurricane Sandy swept the area. If Hurricane Sandy had caused a mini baby-boom, we'd expect to see an increase in births around June or July 2013.
     <p class="right-column-prose">While there does appear to be a small increase in births from June to July, that seems to be a consistent annual trend in Suffolk County. In fact, if we look only at June and July births, we'll see that 2013 falls in the middle of a period of low births in the area, with no apparent baby-boom in sight. </p>
     <img src="img/SuffolkNYPlot.png" width="200" id="SuffolkNY">
     <p class="figure-legend">June and July births in Suffolk County, NY</p>
@@ -271,7 +282,7 @@
    <p class="right-column-prose money-prose">There doesn't seem to be a dramatic decrease in births immediately following the formal bankruptcy in Detroit. However, annual births in the city have declined about 30% since 1995, so the effect of economic turmoil in the area may be more long-term.</p>
    <img src="img/WaynePlot.png" width="200px" id="Wayne">
    <p class="figure-legend">Annual births in Wayne County, MI</p>
-   <p class="right-column-prose note">For comparison, the population in Wayne County decreased about 15% in that same time, and the national birth count increased about 1%.</p>
+   <p class="right-column-prose note wayne-note">For comparison, the population in Wayne County decreased about 15% in that same time, and the national birth count increased about 1%.</p>
    <p class="section-title" id="Season">Seasonal Babies?</p>
    <p class="right-column-prose season-prose">Apart from specific events, <a href="https://www.ncbi.nlm.nih.gov/pubmed/2042520">researchers</a> suspect that the timing of births may be seasonal. To look for seasonal trends, we'll combine each of our 21 lines into one representing the average number of births per month. The shaded area surrounding the line represents the variation* in that average across 21 years. </p>
    <p class="right-column-prose note">* <strong>Methodology Note:</strong> The solid line represents the median number of births per month and the upper and lower edges of the shaded area represent the upper and lower quartiles of the data. Think of this as a series of box plots connected together.</p>
@@ -300,11 +311,13 @@
   </div>
 
 
-
-<script src="//d3js.org/d3.v4.js"></script>
+<script src="d3.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/plugins/debug.addIndicators.min.js"></script>
-<script src="//rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/plugins/debug.addIndicators.min.js"></script> -->
+<!-- <script src="//rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script> -->
+<!-- <script src="ScrollMagic.min.js"></script> -->
+<!-- <script src="debug.addIndicators.min.js"></script> -->
+<script src="d3-annotation.min.js"></script>
 <script src="births.js"></script>
 <script src="https://pudding.cool/assets/scripts/pudding-footer.js" async></script>
 </body>

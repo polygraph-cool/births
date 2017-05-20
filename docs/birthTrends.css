@@ -173,10 +173,10 @@ body {
 }
 
 #right-column {
-  height: 1000px;
   -webkit-flex-grow: 1;
   flex-grow: 1;
-  max-width: 300px;
+  max-width: 350px;
+  margin-right: 1rem;
 }
 
 #container {
@@ -214,15 +214,14 @@ body {
     max-width: 640px;
     margin: 0 auto;
     margin-bottom: 6rem;
+    margin-top: 90px;
   }
 
 .graph-title {
   /* position: absolute; */
   width: auto;
-  font-family: 'Atlas Grotesk Web';
-  font-weight: 900;
-  font-size: 1.3rem;
-  max-width: 40rem;
+  font-size: 1.8rem;
+  /* max-width: 40rem; */
   /* letter-spacing: -.02em; */
   /* -webkit-font-smoothing: antialiased; */
   color: rgb(0, 0, 0);
@@ -260,43 +259,46 @@ body {
 }
 
 .headline-section{
-    max-width: 640px;
+    max-width: 50rem;
     margin: 0 auto;
 }
 
-.headline-big {text-align: center;font-family: 'Canela Web';margin: 0px;font-size: 84px;font-weight: 400;margin-top: 4rem;}
+.headline-big {text-align: center;font-family: 'Canela Web';margin: 0px;font-size: 4rem;font-weight: 400;margin-top: 4rem;color: #2a2a2a;}
 
 .headline-small {
     font-size: 16px;
     text-align: center;
-    font-family: 'Canela Web';
+    font-family: 'Atlas Grotesk Web';
     margin: 0px;
-    font-size: 29px;
+    font-size: .8rem;
     font-weight: 100;
     text-align: center;
     margin-top: 20px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: .1em;
 }
 
 .section-title {
     font-family: 'Atlas Grotesk Web';
     font-weight: 500;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     max-width: 40rem;
     margin: 0 auto;
     /* letter-spacing: -.02em; */
     /* -webkit-font-smoothing: antialiased; */
     color: rgba(0,0,0,.90);
     text-transform: capitalize;
-    margin-bottom: 1rem;
     margin-top: 4rem;
-    padding: 0rem 1rem;
+    padding: 1rem 1.5rem;
+    padding-bottom: .2rem;
 }
 
 .byline {
-    font-size: .85rem;
+    font-size: .8rem;
     text-align: center;
     font-family: 'Atlas Grotesk Web';
-    font-weight: 400;
+    font-weight: normal;
     /* text-transform: uppercase; */
     /* letter-spacing: .05rem; */
     margin-bottom: 40px;
@@ -361,8 +363,8 @@ body {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
-  -webkit-justify-content: space-between;
-  justify-content: space-between;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-start;
   border-bottom: 1px solid #dadada;
   padding-bottom: 20px;
   width: 90%;
@@ -371,12 +373,16 @@ body {
 #dropdown-a {
   position: relative;
   width: auto;
+  margin-right: 21px;
   }
 
-#dropdown-b{}
+#dropdown-b{
+    margin-right: 31px;
+}
 
 #toggleouter {
   z-index: 100;
+  margin-right: 14px;
 }
 
 
@@ -388,16 +394,15 @@ width: auto;
 }
 
 .dd-title {
-  color: #8c8c8c;
+  color: #000000;
   top: 0px;
   font-family: 'Atlas Grotesk Web';
-  font-weight: 400;
+  font-weight: 500;
   font-size: .65em;
   letter-spacing: .25px;
   text-transform: uppercase;
-  margin-bottom: 4px;
+  margin-bottom: 7px;
   text-align: left;
-  padding-left: 8px;
 }
 
 #toggleouter .dd-title {
@@ -424,14 +429,15 @@ width: auto;
   -moz-appearance: none;
   /* padding: 0.5em 1em 0.5em 0; */
   font-family: 'Atlas Grotesk Web';
-  font-size: .9rem;
-  font-weight: 100;
+  font-size: .8rem;
+  font-weight: 500;
   color: black;
-  background-color: rgba(177, 190, 223, 0.2);
+  background-color: white;
   border: none;
   cursor: pointer;
   cursor: hand;
   height: 1.5rem;
+  border: 1px solid #b3b2c3;
 }
 
 #dropdown-c.hiddendd {
@@ -457,7 +463,7 @@ button.toggle.year {
   font-family: 'Atlas Grotesk Web';
   font-size: .75rem;
   color: black;
-  background-color: white;
+  background-color: #f3f3f3;
   border: 1px solid rgba(127, 125, 156, 0.54);
   width: 75px;
   cursor: pointer;
@@ -810,6 +816,7 @@ option[value="NaN"][disabled] {
   stroke: #EF445B;
   stroke-width: 4px;
   fill: none;
+  stroke: #c371a3;
 }
 
 
@@ -828,6 +835,7 @@ option[value="NaN"][disabled] {
   font-family: 'Atlas Grotesk Web';
   text-shadow: -2px 0 rgba(253, 252, 255,0.77), 0 2px rgba(253, 252, 255,0.77), 2px 0 rgba(253, 252, 255,0.77), 0 -2px rgba(253, 252, 255,0.77);
   pointer-events: none;
+  fill: #c371a3;
 }
 
 
@@ -875,27 +883,30 @@ option[value="NaN"][disabled] {
 .intro-prose,
 .conclusion-prose {
     font-size: 1rem;
-    color: rgba(0,0,0,.9);
+    color: rgb(0, 0, 0);
     font-weight: 100;
-    line-height: 1.8;
-    max-width: 640px;
+    line-height: 1.7;
+    max-width: 40rem;
     margin: 0 auto;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.3em;
 }
 
 .intro-section {
     margin: 0 auto;
-    background: #fcfcfc;
     margin-bottom: 50px;
     padding-bottom: 30px;
+    background-color: rgb(221, 221, 221);
 }
 
 
 
 .right-column-prose {
-    font-size: .92rem;
-    line-height: 1.7;
-    padding: 1rem;
+    font-size: .88rem;
+    line-height: 1.5;
+    padding: 1rem 1.5rem;
+    font-family: 'Atlas Grotesk Web';
+    color: #272727;
+    font-weight: normal;
 }
 
 .figure-legend {
@@ -910,15 +921,17 @@ option[value="NaN"][disabled] {
 }
 
 .highlighted{
-  transition: 500ms;
-  color: #5c6b92;
+  transition: 250ms;
+  color: #000000;
   /* text-decoration: underline; */
+  background: #f3f3f3;
 }
 
 .prose-highlighted {
-  background-color: rgba(206, 214, 237, 0.21);
+  background-color: #f3f3f3;
   /* border-radius: 10px; */
   transition: background .2s;
+  color: black;
 }
 
 .right-column-prose.note{
@@ -947,7 +960,6 @@ option[value="NaN"][disabled] {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
-  height: 175px;
   padding-top: 20px;
   padding-bottom: 20px;
 }
@@ -962,16 +974,17 @@ option[value="NaN"][disabled] {
 
 .byline a {
     text-decoration: none;
+    font-weight: 500;
 }
 
 
 .intro-section a {
     text-decoration: none;
     color: inherit;
-    background: linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#c078a9,#c472a4);
+    background: linear-gradient(#fff,#fff),linear-gradient(#fff,#fff),linear-gradient(#c371a3,#c371a3);
     background-size: .05em 1px,.05em 1px,1px 1px;
     background-repeat: no-repeat,no-repeat,repeat-x;
-    text-shadow: 0.03em 0 #fff, -0.03em 0 #fff, 0 0.03em #fff, 0 -0.03em #fff, 0.06em 0 #fff, -0.06em 0 #fff, 0.09em 0 #fff, -0.09em 0 #fff, 0.12em 0 #fff, -0.12em 0 #fff, 0.15em 0 #fff, -0.15em 0 #fff;
+    text-shadow: 0.03em 0 #ddd, -0.03em 0 #ddd, 0 0.03em #ddd, 0 -0.03em #ddd, 0.06em 0 #ddd, -0.06em 0 #ddd, 0.09em 0 #ddd, -0.09em 0 #ddd, 0.12em 0 #ddd, -0.12em 0 #ddd, 0.15em 0 #ddd, -0.15em 0 #ddd;
     background-position: 0 95%,100% 95%,0 95%;
 }
 
@@ -997,7 +1010,7 @@ option[value="NaN"][disabled] {
 
 .prose {
     font-size: 1rem;
-    color: rgba(0, 0, 0, 0.9);
+    color: #000;
     font-weight: 100;
     line-height: 1.8;
     max-width: 640px;
@@ -1023,9 +1036,11 @@ option[value="NaN"][disabled] {
 }
 #title{
   margin: 0 auto;
-  text-align: center;
-  margin-bottom: 2rem;
+  text-align: left;
+  margin-bottom: 1.5rem;
   line-height: 1.5;
+  width: 90%;
+  font-family: 'Canela Web';
 }
 .x text{
   font-weight: 600;
@@ -1058,7 +1073,7 @@ option[value="NaN"][disabled] {
 
 @media only screen and (max-width: 640px) {
   .intro-prose{
-    max-width: 95%;
+    max-width: 92%;
   }
   .prose{
     max-width: 95%;
@@ -1070,6 +1085,7 @@ option[value="NaN"][disabled] {
   }
   #graph{
     width:100%;
+    height: auto;
   }
   #right-column{
     width:100%;
@@ -1077,10 +1093,86 @@ option[value="NaN"][disabled] {
     position: relative;
     max-width: 90%;
     margin: 0 auto;
+    pointer-events: none;
+    padding-bottom: 4rem;
   }
 }
 
 @media only screen and (max-width: 450px) {
+  /*body{
+    width: 100%;
+  }*/
+  #SuffolkNY{
+    display: none;
+  }
+  .figure-legend{
+    display: none;
+  }
+  .section-title{
+    background: #f3f3f3;
+    border-left: 2px solid rgba(107, 107, 107, 0.89);
+  }
+  .right-column-prose{background: #f3f3f3;border-left: 2px solid rgba(107, 107, 107, 0.89);margin-bottom: 100vh;}
+  #conclusion{
+    margin-top: 0rem;
+  }
+  #slopegraph{
+    width: 90%;
+  }
+  #methodology-note{
+    width: 90%;
+    margin: 0 auto;
+    -webkit-flex-wrap: wrap;
+  }
+  #methodology-note .conclusion-prose{
+    width:100%;
+    margin-bottom: 2rem;
+  }
+  #dropdown-c{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  }
+  #toggleouter{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+  }
+  #dropdown-c .dd-title{
+    width: auto;
+    margin-bottom: 0px;
+    line-height: 21px;
+    margin-right: 8px;
+  }
+  #toggleouter .dd-title{
+    width: auto;
+    margin-bottom: 0px;
+    line-height: 21px;
+    margin-right: 8px;
+  }
+  .dd-title{
+  }
+  #methodology-note img{
+    margin-bottom: 1rem;
+  }
+  .conclusion-prose{
+    width: 90%;
+  }
+  #icons{
+    /* display:none; */
+    width: 90%;
+    margin: 0 auto;
+  }
+  #dropdown-a{
+    margin-bottom: 1rem;
+  }
+  #dropdowns{
+  }
+  .graph-title{
+    font-size: 1.5rem;
+  }
   .right-column{
     width:95%;
     max-width: 95%;
@@ -1089,11 +1181,51 @@ option[value="NaN"][disabled] {
     width:95%;
   }
   .headline-big{
-    font-size: 4rem;
+    font-size: 2.5rem;
   }
   .headline-small{
-    font-size: 1.4rem;
+    font-size: .8rem;
     font-family: 'Atlas Grotesk Web';
     line-height: 1.6;
+    font-weight: 400;
+    max-width: 18rem;
+    margin: 0 auto;
+    margin-top: 1rem;
+  }
+  #Wayne{
+    display:none;
+  }
+  .wayne-note{
+    display:none;
+  }
+}
+@media only screen and (max-width: 330px) {
+  .dd-title{
+    font-size: .5rem;
+    margin-bottom: 3px;
+  }
+  .intro-prose{
+    font-size: .9rem;
+  }
+  .right-column-prose{
+    font-size: .8rem;
+  }
+  .prose{
+    font-size: .9rem;
+  }
+  button.toggle.average{
+    width:auto;
+  }
+  button.toggle.year{
+    width:auto;
+  }
+  .graph-title{
+    font-size: 1.2rem;
+  }
+  #title{
+    margin-bottom: .8rem;
+  }
+  .x text{
+    font-size: .5rem;
   }
 }
