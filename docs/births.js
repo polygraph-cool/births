@@ -203,7 +203,7 @@ function ready(error,
         if (error) throw error;
 
 
-        function voronoiMouseover(d){
+        function voronoiMouseover(d, location){
           // determine the year of the polygon being hovered
           var yearSelected = d.data.year;
 
@@ -213,14 +213,22 @@ function ready(error,
             .datum().values
             ;
 
-          // console.log(hoverPath);
+          if(location == "county"){
+            hoverPath
+              .attr("d", function(d){
+                return valueLine(dataForLine)
+              })
+              .style("visibility","visible")
+              ;
+          } else if (location == "state"){
+            hoverPath
+              .attr("d", function(d){
+                return valueLineState(dataForLine)
+              })
+              .style("visibility","visible")
+              ;
+          }
 
-          hoverPath
-            .attr("d", function(d){
-              return valueLine(dataForLine)
-            })
-            .style("visibility","visible")
-            ;
 
           console.log("mouseover function");
 
@@ -384,7 +392,7 @@ function ready(error,
         causeTitle: "Red Sox World Series Win",
         causelabel: "In October 2004, the Boston Red Sox won the World Series for the first time since 1918. Did fans' celebrations result in an increase in babies 9 months later?",
         causeX: 50,
-        causeY: -20,
+        causeY: height - 320,
         causedX: 0,
         causedY: 0,
         resultTitle: "Red Sox Babies?",
@@ -402,7 +410,7 @@ function ready(error,
         causeTitle: "Hurricane",
         causelabel: "When Hurricane Sandy hit the northeast US, around 8 million homes reportedly lost power. Did this cause a mini baby-boom 9 months later?",
         causeX: 50,
-        causeY: -20,
+        causeY: height - 320,
         causedX: 0,
         causedY: 0,
         resultTitle: "Hurricane Babies?",
@@ -420,7 +428,7 @@ function ready(error,
         causeTitle: "Hurricane",
         causelabel: "When Hurricane Katrina hit New Orleans, ...",
         causeX: 50,
-        causeY: -20,
+        causeY: height - 320,
         causedX: 0,
         causedY: 0,
         resultTitle: "Hurricane Babies?",
@@ -438,13 +446,13 @@ function ready(error,
         causeTitle: "Seahawks Superbowl Win",
         causelabel: "In 2013, the Seattle Seahawks won the Superbowl for the first time ever. Did celebrations cause more babies?",
         causeX: 20,
-        causeY: -20,
+        causeY: height - 320,//-60,
         causedX: 0,
         causedY: 0,
         resultTitle: "Superbowl Babies?",
         resultlabel: "Probably not. The number of babies in Seattle 9 months later was just about average for the mid-fall.",
         resultdX: -.005,
-        resultdY: 150,
+        resultdY: 130,
       },
       {
         type: "storms",
@@ -456,7 +464,7 @@ function ready(error,
         causeTitle: "Blizzard of 1996",
         causelabel: "In 1996, Philadelphia was buried in nearly 30 inches of snow in less than 24 hours. Did they welcome an increase in children 9 months later?",
         causeX: 20,
-        causeY: -20,
+        causeY: height - 320,
         causedX: 0,
         causedY: 0,
         resultTitle: "Blizzard Babies?",
@@ -475,13 +483,13 @@ function ready(error,
         causeTitle: "Oklahoma City Bombing",
         causelabel: "In 1995, Oklahoma City was home to a domestic terror attack. Did residents respond to the violence with a population increase?",
         causeX: 20,
-        causeY: -20,
+        causeY: height - 320,
         causedX: 0,
         causedY: 0,
         resultTitle: "Extra Babies?",
         resultlabel: "It doesn't look like it. While the early months tend to have low birth counts in this area, 9 months after the attack saw the lowest.",
         resultdX: 0,
-        resultdY: -90,
+        resultdY: -70,
       },
       {
         type: "other",
@@ -493,7 +501,7 @@ function ready(error,
         causeTitle: "Detroit Bankruptcy",
         causelabel: "In July 2013, the city of Detroit filed for bankruptcy. Did this impact the number of babies born in the city 9 months later?",
         causeX: 20,
-        causeY: -20,
+        causeY: height - 320,
         causedX: 0,
         causedY: 0,
         resultTitle: "Bankruptcy Babies?",
@@ -559,8 +567,6 @@ function ready(error,
           // Figure out which state is displayed
           var selectedState = Slist.select("select").property("value")
 
-          console.log(selectedState)
-
           // Filter for that state
           var selectedStateG = nestedStates.filter(function(d){
               return d.key === selectedState;
@@ -604,9 +610,6 @@ function ready(error,
                 return d == "NaN";
               })
 
-              console.log(Clist.selectAll("option"))
-              console.log(selection)
-              console.log(Slist.selectAll("option"))
 
           // Setting selected property equal to the selected county
             Clist.selectAll("option")
@@ -791,10 +794,6 @@ function ready(error,
             .ease(d3.easeLinear)
             .attr("stroke-dashoffset", 0);
 
-        console.log(annotationPath.node().getTotalLength())
-
-        console.log(y(births))
-
 
         var notePath = svg.selectAll(".annotation-group-result path.note-line")
         var totalLengthNote = notePath.node().getTotalLength()
@@ -853,7 +852,6 @@ function ready(error,
           dx: 0,
         }]
 
-        console.log(x(parseTimeMonth("Dec")))
 
         var makeAnnotations = d3.annotation()
           //.editMode(true)
@@ -870,7 +868,6 @@ function ready(error,
           })
           .annotations(annotations)
 
-          console.log("Annotations made!")
 
         svg.append("g")
           .attr("class", "annotation-group-average")
@@ -1069,7 +1066,7 @@ function ready(error,
               .style("fill", "none")
               .style("pointer-events", "all")
               .on("mouseover", function(d) {
-                voronoiMouseover(d);
+                voronoiMouseover(d, "county");
                 // // determine the year of the polygon being hovered
                 // var yearSelected = d.data.year;
                 //
@@ -1508,7 +1505,7 @@ function ready(error,
               .style("fill", "none")
               .style("pointer-events", "all")
               .on("mouseover", function(d) {
-                voronoiMouseover(d);
+                voronoiMouseover(d, "state");
               })
               .on("click", function(d){
 
@@ -1544,7 +1541,7 @@ function ready(error,
                   })
 
                 var year = yList.select("select").property("value")
-                console.log(year)
+
 
                 d3.selectAll(".text-labels").classed("event-show",function(d){
                   if(d.key == +year){
@@ -1670,8 +1667,6 @@ function ready(error,
                     })
                   .attr("opacity", 0)
 
-                  console.log("County Avg Update Ran")
-
           var stateDrop = Slist.selectAll("option")
             .property("selected", function(d){
             return d.key === countyMap.get(county[0].key).stateName;
@@ -1774,7 +1769,6 @@ function ready(error,
           // Update county dropdown
           updateCountyDrop(countyCode);
 
-          console.log("County Year Update Ran")
 
             // Update paths
             svg.selectAll("path.area")
@@ -1922,7 +1916,7 @@ function ready(error,
               .style("fill", "none")
               .style("pointer-events", "all")
               .on("mouseover", function(d) {
-                voronoiMouseover(d);
+                voronoiMouseover(d, "county");
                 // // determine the year of the polygon being hovered
                 // var yearSelected = d.data.year;
                 //
@@ -1975,7 +1969,6 @@ function ready(error,
                   })
 
                 var year = yList.select("select").property("value")
-                console.log(year)
 
                 d3.selectAll(".text-labels").classed("event-show",function(d){
                   if(d.key == +year){
@@ -2131,6 +2124,7 @@ function ready(error,
 
             d3.select("#dropdown-c").classed("hiddendd", true)
 
+
           d3.selectAll(".toggle.average").classed("active", true)
           d3.selectAll(".toggle.year").classed("active", false)
 
@@ -2146,23 +2140,19 @@ function ready(error,
               var selectedState = Slist.select("select").property("value")
 
               var selectedCounty = ClistG.select("select").property("value")
-              console.log(selectedCounty)
 
 
             if(selectedCounty == "1"){
 
                 // if "All Counties" is selected then generate state average line
                   stateUpdateYear(selectedState);
-                  console.log("state update ran!")
 
               } else {
 
                 // if any other county selected then generate county average line
                   countyUpdateYear(selectedCounty)
-                  console.log("county update ran!")
 
               }
-
 
 
           d3.select("#dropdown-c").classed("hiddendd", false)
@@ -2465,6 +2455,31 @@ function ready(error,
     //////////////////////////  SCROLLYTELLING  //////////////////////////
     //////////////////////////////////////////////////////////////////////
 
+        var pinBubbleChart = new ScrollMagic.Scene({
+      				//triggerElement: ".third-chart-wrapper",
+      				triggerElement: "#container",
+      				triggerHook:0,
+      				offset: -25,
+      				duration:3400
+      			})
+      			//.addIndicators({name: "pin chart"}) // add indicators (requires plugin)
+      			.setPin("#graph", {pushFollowers: true})
+      			.addTo(controller)
+      			;
+
+        var firstTrigger = new ScrollMagic.Scene({
+            // triggerElement: ".third-chart-wrapper",
+            triggerElement: "#right-column",
+            triggerHook:0,
+            offset: 700,
+            duration:500
+          })
+          //.addIndicators({name: "first trigger"}) // add indicators (requires plugin)
+          .addTo(controller)
+          .on("enter",function(e){
+            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+            }
+            else{
 
 
         var pushFollowersValue = true;
@@ -2515,11 +2530,33 @@ function ready(error,
             })
             .on("leave",function(e){
               if(e.target.controller().info("scrollDirection") == "REVERSE"){
-
                     d3.selectAll(".highlighted").classed("highlighted", false)
                     d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
                     d3.selectAll(".selected-event").classed("selected-event", false)
                     d3.selectAll(".selected").classed("selected", false)
+            }
+            else{
+            }
+          })
+          ;
+
+          var secondTrigger = new ScrollMagic.Scene({
+            //triggerElement: ".third-chart-wrapper",
+            triggerElement: "#right-column",
+            triggerHook:0,
+            offset: 1200,
+            duration:300
+          })
+          //.addIndicators({name: "second trigger"}) // add indicators (requires plugin)
+          .addTo(controller)
+          .on("enter",function(e){
+            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+            }
+            else{
+                d3.selectAll(".highlighted").classed("highlighted", false)
+                d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
+                d3.selectAll("#Terror").classed("highlighted", true)
+                d3.selectAll(".terror-prose").classed("prose-highlighted", true)
 
                     //initialGraph(36103)
                     eventDisplay("Hurricane Sandy")
@@ -2730,14 +2767,27 @@ function ready(error,
                   d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
 
                   d3.selectAll(".season-prose-Florida").classed("prose-highlighted", true)
+            }
+            else{
+            }
+          })
+          ;
 
-
+        var sixthTrigger = new ScrollMagic.Scene({
+            //triggerElement: ".third-chart-wrapper",
+            triggerElement: "#right-column",
+            triggerHook:0,
+            offset: 3200,
+            duration:200
+          })
+          //.addIndicators({name: "sixth trigger"}) // add indicators (requires plugin)
+          .addTo(controller)
+          .on("enter",function(e){
+            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+            }
+            else{
                     stateUpdateAvg("Florida")
-
                     d3.selectAll("#Florida").classed("highlighted", true)
-
-
-
               }
             })
             .on("leave",function(e){
@@ -2802,6 +2852,6 @@ function ready(error,
             })
             ;
         }
-        
+
 
     };

@@ -698,7 +698,7 @@ button.toggle.year {
 .line2 {
   fill: none;
   stroke: #CC6699;
-  stroke-width: 3px;
+  stroke-width: 4px;
   stroke-miterlimit: 10;
   stroke-linecap: round;
 
@@ -709,6 +709,10 @@ button.toggle.year {
   stroke: #7D93CA;
   stroke-width: 4px;
   opacity: 1;
+}
+
+.invisible {
+  visibility: hidden;
 }
 
 .text-labels{
