@@ -22,13 +22,20 @@ if( /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.u
     DS = {}
 
     // set the dimensions and margins of the graph
-    var margin = {top: 100, right: 120, bottom: 20, left: 100},
-      width = (viewportWidth-300) - margin.left - margin.right,
-      height = 370 - margin.top - margin.bottom;
+    var margin = {top: 100, right: 120, bottom: 20, left: 100};
+      if(fullWidth){
+        margin.left = 50;
+        margin.right = 50;
+        margin.top = 50;
+      }
+      var width = (viewportWidth-300) - margin.left - margin.right;
+      if(fullWidth){
+        width = viewportWidth - margin.left - margin.right;
+      }
+      var height = 370 - margin.top - margin.bottom;
       if(viewportWidth>1200){
         width = 1200-300- margin.left - margin.right
       }
-      console.log(width);
 
     // parse the date / time
     var parseTime = d3.timeParse("%y%m");
@@ -2458,348 +2465,343 @@ function ready(error,
     //////////////////////////  SCROLLYTELLING  //////////////////////////
     //////////////////////////////////////////////////////////////////////
 
-        var pinBubbleChart = new ScrollMagic.Scene({
-      				// triggerElement: ".third-chart-wrapper",
-      				triggerElement: "#container",
-      				triggerHook:0,
-      				offset: -25,
-      				duration:3000
-      			})
-      			//.addIndicators({name: "pin chart"}) // add indicators (requires plugin)
-      			.setPin("#graph", {pushFollowers: true})
-      			.addTo(controller)
-      			// .on("enter",function(e){
-      			// 	if(e.target.controller().info("scrollDirection") == "REVERSE"){
-      			// 	};
-      			// })
-      			// .on("leave",function(e){
-      			// 	if(e.target.controller().info("scrollDirection") == "FORWARD"){
-      			// 	};
-      			// })
-      			// .on("progress", function (e) {
-      			// 	var progress = e.progress.toFixed(1);
-      			// 	if(e.target.controller().info("scrollDirection") == "REVERSE"){
-      			// 	}
-      			// 	else{
-      			// 	}
-      			// })
-      			;
 
-        var firstTrigger = new ScrollMagic.Scene({
-            // triggerElement: ".third-chart-wrapper",
-            triggerElement: "#right-column",
-            triggerHook:0,
-            offset: 800,
-            duration:500
-          })
-          //.addIndicators({name: "first trigger"}) // add indicators (requires plugin)
-          .addTo(controller)
-          .on("enter",function(e){
-            if(e.target.controller().info("scrollDirection") == "REVERSE"){
-            }
-            else{
 
-                eventDisplay("Red Sox World Series Win")
-                  d3.selectAll("g.annotation-group-cause").remove();
-                  d3.selectAll(".annotation-note-label").remove();
-                  d3.selectAll(".annotation-note-bg").remove();
-                  d3.selectAll(".icons")
-                    .classed("current", false)
-                  d3.selectAll(".icons#icon-e")
-                    .classed("current", true)
+        var pushFollowersValue = true;
+        if(fullWidth){
+          pushFollowersValue = false;
+        }
 
-                d3.selectAll("#Sports").classed("highlighted", true)
-                d3.selectAll(".sports-prose").classed("prose-highlighted", true)
+        if(!mobile){
+          var pinBubbleChart = new ScrollMagic.Scene({
+        				// triggerElement: ".third-chart-wrapper",
+        				triggerElement: "#container",
+        				triggerHook:0,
+        				offset: -25,
+        				duration:3000
+        			})
+        			//.addIndicators({name: "pin chart"}) // add indicators (requires plugin)
+        			.setPin("#graph", {pushFollowers: pushFollowersValue})
+        			.addTo(controller)
+        			;
 
-            }
-          })
-          .on("leave",function(e){
-            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+          var firstTrigger = new ScrollMagic.Scene({
+              // triggerElement: ".third-chart-wrapper",
+              triggerElement: "#right-column",
+              triggerHook:0,
+              offset: 800,
+              duration:500
+            })
+            //.addIndicators({name: "first trigger"}) // add indicators (requires plugin)
+            .addTo(controller)
+            .on("enter",function(e){
+              if(e.target.controller().info("scrollDirection") == "REVERSE"){
+              }
+              else{
+
+                  eventDisplay("Red Sox World Series Win")
+                    d3.selectAll("g.annotation-group-cause").remove();
+                    d3.selectAll(".annotation-note-label").remove();
+                    d3.selectAll(".annotation-note-bg").remove();
+                    d3.selectAll(".icons")
+                      .classed("current", false)
+                    d3.selectAll(".icons#icon-e")
+                      .classed("current", true)
+
+                  d3.selectAll("#Sports").classed("highlighted", true)
+                  d3.selectAll(".sports-prose").classed("prose-highlighted", true)
+
+              }
+            })
+            .on("leave",function(e){
+              if(e.target.controller().info("scrollDirection") == "REVERSE"){
+
+                    d3.selectAll(".highlighted").classed("highlighted", false)
+                    d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
+                    d3.selectAll(".selected-event").classed("selected-event", false)
+                    d3.selectAll(".selected").classed("selected", false)
+
+                    //initialGraph(36103)
+                    eventDisplay("Hurricane Sandy")
+
+                    d3.selectAll("g.annotation-group-cause").remove();
+                    d3.selectAll(".annotation-note-label").remove();
+                    d3.selectAll(".annotation-note-bg").remove();
+                    d3.selectAll(".icons")
+                      .classed("current", false)
+                    d3.selectAll(".icons#icon-a")
+                      .classed("current", true)
+
+              }
+              else{
+              }
+            })
+            ;
+
+            var secondTrigger = new ScrollMagic.Scene({
+              // triggerElement: ".third-chart-wrapper",
+              triggerElement: "#right-column",
+              triggerHook:0,
+              offset: 1300,
+              duration:300
+            })
+            //.addIndicators({name: "second trigger"}) // add indicators (requires plugin)
+            .addTo(controller)
+            .on("enter",function(e){
+              if(e.target.controller().info("scrollDirection") == "REVERSE"){
+              }
+              else{
+                  d3.selectAll(".highlighted").classed("highlighted", false)
+                  d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
+                  d3.selectAll("#Terror").classed("highlighted", true)
+                  d3.selectAll(".terror-prose").classed("prose-highlighted", true)
+
+                  eventDisplay("Oklahoma City Bombing")
+                    d3.selectAll("g.annotation-group-cause").remove();
+                    d3.selectAll(".annotation-note-label").remove();
+                    d3.selectAll(".annotation-note-bg").remove();
+                    d3.selectAll(".icons")
+                      .classed("current", false)
+                    d3.selectAll(".icons#icon-f")
+                      .classed("current", true)
+
+
+              }
+            })
+            .on("leave",function(e){
+              if(e.target.controller().info("scrollDirection") == "REVERSE"){
+
+                d3.selectAll(".highlighted").classed("highlighted", false)
+                d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
+                  d3.selectAll("#Sports").classed("highlighted", true)
+                  d3.selectAll(".sports-prose").classed("prose-highlighted", true)
+
+                  eventDisplay("Red Sox World Series Win")
+                    d3.selectAll("g.annotation-group-cause").remove();
+                    d3.selectAll(".annotation-note-label").remove();
+                    d3.selectAll(".annotation-note-bg").remove();
+                    d3.selectAll(".icons")
+                      .classed("current", false)
+                    d3.selectAll(".icons#icon-e")
+                      .classed("current", true)
+
+
+              }
+              else{
+              }
+            })
+            ;
+
+          var thirdTrigger = new ScrollMagic.Scene({
+              // triggerElement: ".third-chart-wrapper",
+              triggerElement: "#right-column",
+              triggerHook:0,
+              offset: 1700,
+              duration:700
+            })
+            //.addIndicators({name: "third trigger"}) // add indicators (requires plugin)
+            .addTo(controller)
+            .on("enter",function(e){
+              if(e.target.controller().info("scrollDirection") == "REVERSE"){
+              }
+              else{
 
                   d3.selectAll(".highlighted").classed("highlighted", false)
                   d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
-                  d3.selectAll(".selected-event").classed("selected-event", false)
-                  d3.selectAll(".selected").classed("selected", false)
-
-                  //initialGraph(36103)
-                  eventDisplay("Hurricane Sandy")
-
-                  d3.selectAll("g.annotation-group-cause").remove();
-                  d3.selectAll(".annotation-note-label").remove();
-                  d3.selectAll(".annotation-note-bg").remove();
-                  d3.selectAll(".icons")
-                    .classed("current", false)
-                  d3.selectAll(".icons#icon-a")
-                    .classed("current", true)
-
-            }
-            else{
-            }
-          })
-          ;
-
-          var secondTrigger = new ScrollMagic.Scene({
-            // triggerElement: ".third-chart-wrapper",
-            triggerElement: "#right-column",
-            triggerHook:0,
-            offset: 1300,
-            duration:300
-          })
-          //.addIndicators({name: "second trigger"}) // add indicators (requires plugin)
-          .addTo(controller)
-          .on("enter",function(e){
-            if(e.target.controller().info("scrollDirection") == "REVERSE"){
-            }
-            else{
-                d3.selectAll(".highlighted").classed("highlighted", false)
-                d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
-                d3.selectAll("#Terror").classed("highlighted", true)
-                d3.selectAll(".terror-prose").classed("prose-highlighted", true)
-
-                eventDisplay("Oklahoma City Bombing")
-                  d3.selectAll("g.annotation-group-cause").remove();
-                  d3.selectAll(".annotation-note-label").remove();
-                  d3.selectAll(".annotation-note-bg").remove();
-                  d3.selectAll(".icons")
-                    .classed("current", false)
-                  d3.selectAll(".icons#icon-f")
-                    .classed("current", true)
+                  d3.selectAll("#Money").classed("highlighted", true)
+                  d3.selectAll(".money-prose").classed("prose-highlighted", true)
 
 
-            }
-          })
-          .on("leave",function(e){
-            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+                  eventDisplay("Detroit Bankruptcy")
+                    d3.selectAll("g.annotation-group-cause").remove();
+                    d3.selectAll(".annotation-note-label").remove();
+                    d3.selectAll(".annotation-note-bg").remove();
+                    d3.selectAll(".icons")
+                      .classed("current", false)
+                    d3.selectAll(".icons#icon-f")
+                      .classed("current", true)
 
-              d3.selectAll(".highlighted").classed("highlighted", false)
-              d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
-                d3.selectAll("#Sports").classed("highlighted", true)
-                d3.selectAll(".sports-prose").classed("prose-highlighted", true)
-
-                eventDisplay("Red Sox World Series Win")
-                  d3.selectAll("g.annotation-group-cause").remove();
-                  d3.selectAll(".annotation-note-label").remove();
-                  d3.selectAll(".annotation-note-bg").remove();
-                  d3.selectAll(".icons")
-                    .classed("current", false)
-                  d3.selectAll(".icons#icon-e")
-                    .classed("current", true)
-
-
-            }
-            else{
-            }
-          })
-          ;
-
-        var thirdTrigger = new ScrollMagic.Scene({
-            // triggerElement: ".third-chart-wrapper",
-            triggerElement: "#right-column",
-            triggerHook:0,
-            offset: 1700,
-            duration:700
-          })
-          //.addIndicators({name: "third trigger"}) // add indicators (requires plugin)
-          .addTo(controller)
-          .on("enter",function(e){
-            if(e.target.controller().info("scrollDirection") == "REVERSE"){
-            }
-            else{
-
-                d3.selectAll(".highlighted").classed("highlighted", false)
-                d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
-                d3.selectAll("#Money").classed("highlighted", true)
-                d3.selectAll(".money-prose").classed("prose-highlighted", true)
-
-
-                eventDisplay("Detroit Bankruptcy")
-                  d3.selectAll("g.annotation-group-cause").remove();
-                  d3.selectAll(".annotation-note-label").remove();
-                  d3.selectAll(".annotation-note-bg").remove();
-                  d3.selectAll(".icons")
-                    .classed("current", false)
-                  d3.selectAll(".icons#icon-f")
-                    .classed("current", true)
-
-                  d3.selectAll(".toggle.year").classed("active", true)
-                  d3.selectAll(".toggle.average").classed("active", false)
+                    d3.selectAll(".toggle.year").classed("active", true)
+                    d3.selectAll(".toggle.average").classed("active", false)
 
 
 
 
-            }
-          })
-          .on("leave",function(e){
-            if(e.target.controller().info("scrollDirection") == "REVERSE"){
-
-                d3.selectAll(".highlighted").classed("highlighted", false)
-                d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
-                d3.selectAll("#Terror").classed("highlighted", true)
-                d3.selectAll(".terror-prose").classed("prose-highlighted", true)
-
-                eventDisplay("Oklahoma City Bombing")
-                  d3.selectAll("g.annotation-group-cause").remove();
-                  d3.selectAll(".annotation-note-label").remove();
-                  d3.selectAll(".annotation-note-bg").remove();
-                  d3.selectAll(".icons")
-                    .classed("current", false)
-                  d3.selectAll(".icons#icon-f")
-                    .classed("current", true)
-
-                  d3.selectAll(".toggle.year").classed("active", true)
-                  d3.selectAll(".toggle.average").classed("active", false)
-
-            }
-            else{
-            }
-          })
-          ;
-
-        var fourthTrigger = new ScrollMagic.Scene({
-            // triggerElement: ".third-chart-wrapper",
-            triggerElement: "#right-column",
-            triggerHook:0,
-            offset: 2400,
-            duration:500
-          })
-          //.addIndicators({name: "fourth trigger"}) // add indicators (requires plugin)
-          .addTo(controller)
-          .on("enter",function(e){
-            if(e.target.controller().info("scrollDirection") == "REVERSE"){
-            }
-            else{
+              }
+            })
+            .on("leave",function(e){
+              if(e.target.controller().info("scrollDirection") == "REVERSE"){
 
                   d3.selectAll(".highlighted").classed("highlighted", false)
                   d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
+                  d3.selectAll("#Terror").classed("highlighted", true)
+                  d3.selectAll(".terror-prose").classed("prose-highlighted", true)
 
-                  countyUpdateAvg(26163)
-                  d3.selectAll("#Season").classed("highlighted", true)
-                  d3.selectAll(".season-prose").classed("prose-highlighted", true)
-                  d3.selectAll(".toggle.year").classed("active", false)
-                  d3.selectAll(".toggle.average").classed("active", true)
+                  eventDisplay("Oklahoma City Bombing")
+                    d3.selectAll("g.annotation-group-cause").remove();
+                    d3.selectAll(".annotation-note-label").remove();
+                    d3.selectAll(".annotation-note-bg").remove();
+                    d3.selectAll(".icons")
+                      .classed("current", false)
+                    d3.selectAll(".icons#icon-f")
+                      .classed("current", true)
 
-                  // Hide year dropdown
-                  d3.select("#dropdown-c").classed("hiddendd", true)
+                    d3.selectAll(".toggle.year").classed("active", true)
+                    d3.selectAll(".toggle.average").classed("active", false)
 
+              }
+              else{
+              }
+            })
+            ;
 
-            }
-          })
-          .on("leave",function(e){
-            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+          var fourthTrigger = new ScrollMagic.Scene({
+              // triggerElement: ".third-chart-wrapper",
+              triggerElement: "#right-column",
+              triggerHook:0,
+              offset: 2400,
+              duration:500
+            })
+            //.addIndicators({name: "fourth trigger"}) // add indicators (requires plugin)
+            .addTo(controller)
+            .on("enter",function(e){
+              if(e.target.controller().info("scrollDirection") == "REVERSE"){
+              }
+              else{
 
-                d3.selectAll(".highlighted").classed("highlighted", false)
-                d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
-                d3.selectAll("#Money").classed("highlighted", true)
-                d3.selectAll(".money-prose").classed("prose-highlighted", true)
+                    d3.selectAll(".highlighted").classed("highlighted", false)
+                    d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
 
-                eventDisplay("Detroit Bankruptcy")
-                  d3.selectAll("g.annotation-group-cause").remove();
-                  d3.selectAll(".annotation-note-label").remove();
-                  d3.selectAll(".annotation-note-bg").remove();
-                  d3.selectAll(".icons")
-                    .classed("current", false)
-                  d3.selectAll(".icons#icon-f")
-                    .classed("current", true)
+                    countyUpdateAvg(26163)
+                    d3.selectAll("#Season").classed("highlighted", true)
+                    d3.selectAll(".season-prose").classed("prose-highlighted", true)
+                    d3.selectAll(".toggle.year").classed("active", false)
+                    d3.selectAll(".toggle.average").classed("active", true)
 
-                  d3.selectAll(".toggle.year").classed("active", true)
-                  d3.selectAll(".toggle.average").classed("active", false)
-
-                  d3.select("#dropdown-c").classed("hiddendd", false)
-
-            }
-            else{
-            }
-          })
-          ;
-
-        var fifthTrigger = new ScrollMagic.Scene({
-            // triggerElement: ".third-chart-wrapper",
-            triggerElement: "#right-column",
-            triggerHook:0,
-            offset: 2900,
-            duration:200
-          })
-          //.addIndicators({name: "fifth trigger"}) // add indicators (requires plugin)
-          .addTo(controller)
-          .on("enter",function(e){
-            if(e.target.controller().info("scrollDirection") == "REVERSE"){
-            }
-            else{
-
-                d3.selectAll(".highlighted").classed("highlighted", false)
-                d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
-
-                d3.selectAll(".season-prose-Florida").classed("prose-highlighted", true)
+                    // Hide year dropdown
+                    d3.select("#dropdown-c").classed("hiddendd", true)
 
 
-                  stateUpdateAvg("Florida")
+              }
+            })
+            .on("leave",function(e){
+              if(e.target.controller().info("scrollDirection") == "REVERSE"){
 
-                  d3.selectAll("#Florida").classed("highlighted", true)
+                  d3.selectAll(".highlighted").classed("highlighted", false)
+                  d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
+                  d3.selectAll("#Money").classed("highlighted", true)
+                  d3.selectAll(".money-prose").classed("prose-highlighted", true)
 
+                  eventDisplay("Detroit Bankruptcy")
+                    d3.selectAll("g.annotation-group-cause").remove();
+                    d3.selectAll(".annotation-note-label").remove();
+                    d3.selectAll(".annotation-note-bg").remove();
+                    d3.selectAll(".icons")
+                      .classed("current", false)
+                    d3.selectAll(".icons#icon-f")
+                      .classed("current", true)
 
+                    d3.selectAll(".toggle.year").classed("active", true)
+                    d3.selectAll(".toggle.average").classed("active", false)
 
-            }
-          })
-          .on("leave",function(e){
-            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+                    d3.select("#dropdown-c").classed("hiddendd", false)
+
+              }
+              else{
+              }
+            })
+            ;
+
+          var fifthTrigger = new ScrollMagic.Scene({
+              // triggerElement: ".third-chart-wrapper",
+              triggerElement: "#right-column",
+              triggerHook:0,
+              offset: 2900,
+              duration:200
+            })
+            //.addIndicators({name: "fifth trigger"}) // add indicators (requires plugin)
+            .addTo(controller)
+            .on("enter",function(e){
+              if(e.target.controller().info("scrollDirection") == "REVERSE"){
+              }
+              else{
 
                   d3.selectAll(".highlighted").classed("highlighted", false)
                   d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
 
-                  countyUpdateAvg(26163)
-                  d3.selectAll("#Season").classed("highlighted", true)
-                  d3.selectAll(".season-prose").classed("prose-highlighted", true)
-                  d3.selectAll(".toggle.year").classed("active", false)
-                  d3.selectAll(".toggle.average").classed("active", true)
+                  d3.selectAll(".season-prose-Florida").classed("prose-highlighted", true)
 
-            }
-            else{
-            }
-          })
-          ;
 
-        var sixthTrigger = new ScrollMagic.Scene({
-            // triggerElement: ".third-chart-wrapper",
-            triggerElement: "#right-column",
-            triggerHook:0,
-            offset: 3100,
-            duration:200
-          })
-          //.addIndicators({name: "sixth trigger"}) // add indicators (requires plugin)
-          .addTo(controller)
-          .on("enter",function(e){
-            if(e.target.controller().info("scrollDirection") == "REVERSE"){
-            }
-            else{
+                    stateUpdateAvg("Florida")
 
+                    d3.selectAll("#Florida").classed("highlighted", true)
+
+
+
+              }
+            })
+            .on("leave",function(e){
+              if(e.target.controller().info("scrollDirection") == "REVERSE"){
+
+                    d3.selectAll(".highlighted").classed("highlighted", false)
+                    d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
+
+                    countyUpdateAvg(26163)
+                    d3.selectAll("#Season").classed("highlighted", true)
+                    d3.selectAll(".season-prose").classed("prose-highlighted", true)
+                    d3.selectAll(".toggle.year").classed("active", false)
+                    d3.selectAll(".toggle.average").classed("active", true)
+
+              }
+              else{
+              }
+            })
+            ;
+
+          var sixthTrigger = new ScrollMagic.Scene({
+              // triggerElement: ".third-chart-wrapper",
+              triggerElement: "#right-column",
+              triggerHook:0,
+              offset: 3100,
+              duration:200
+            })
+            //.addIndicators({name: "sixth trigger"}) // add indicators (requires plugin)
+            .addTo(controller)
+            .on("enter",function(e){
+              if(e.target.controller().info("scrollDirection") == "REVERSE"){
+              }
+              else{
+
+                    d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
+
+                    stateUpdateAvg("Maine")
+                    d3.selectAll("#Maine").classed("highlighted", true)
+                    d3.selectAll(".season-prose-Maine").classed("prose-highlighted", true)
+                    d3.selectAll("#Florida").classed("highlighted", false)
+
+
+              }
+            })
+            .on("leave",function(e){
+              if(e.target.controller().info("scrollDirection") == "REVERSE"){
+
+
+                  d3.selectAll(".highlighted").classed("highlighted", false)
                   d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
 
-                  stateUpdateAvg("Maine")
-                  d3.selectAll("#Maine").classed("highlighted", true)
-                  d3.selectAll(".season-prose-Maine").classed("prose-highlighted", true)
-                  d3.selectAll("#Florida").classed("highlighted", false)
+                  d3.selectAll(".season-prose-Florida").classed("prose-highlighted", true)
 
 
-            }
-          })
-          .on("leave",function(e){
-            if(e.target.controller().info("scrollDirection") == "REVERSE"){
+                    stateUpdateAvg("Florida")
 
+                    d3.selectAll("#Florida").classed("highlighted", true)
 
-                d3.selectAll(".highlighted").classed("highlighted", false)
-                d3.selectAll(".prose-highlighted").classed("prose-highlighted", false)
-
-                d3.selectAll(".season-prose-Florida").classed("prose-highlighted", true)
-
-
-                  stateUpdateAvg("Florida")
-
-                  d3.selectAll("#Florida").classed("highlighted", true)
-
-            }
-            else{
-            }
-          })
-          ;
+              }
+              else{
+              }
+            })
+            ;
+        }
+        
 
     };
