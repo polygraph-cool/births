@@ -1056,6 +1056,13 @@ option[value="NaN"][disabled] {
 .area{
   fill-opacity: .9;
 }
+
+.annotation-note{
+  pointer-events: none;
+}
+#container .prose-highlighted a{
+  text-shadow: 0.03em 0 #f3f3f3, -0.03em 0 #f3f3f3, 0 0.03em #f3f3f3, 0 -0.03em #f3f3f3, 0.06em 0 #f3f3f3, -0.06em 0 #f3f3f3, 0.09em 0 #f3f3f3, -0.09em 0 #f3f3f3, 0.12em 0 #f3f3f3, -0.12em 0 #f3f3f3, 0.15em 0 #f3f3f3, -0.15em 0 #f3f3f3;
+}
 @media only screen and (max-width: 900px) {
   #dropdowns{
     -webkit-flex-wrap: wrap;

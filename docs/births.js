@@ -2454,7 +2454,7 @@ function ready(error,
       				triggerElement: "#container",
       				triggerHook:0,
       				offset: -25,
-      				duration:Math.max(1, d3.select("#container").node().offsetHeight - viewportHeight)
+      				duration:Math.max(1, d3.select("#container").node().offsetHeight - viewportHeight + 400)
       			})
       			// .addIndicators({name: "pin chart"}) // add indicators (requires plugin)
       			.setPin("#graph", {pushFollowers: pushFollowersValue})
