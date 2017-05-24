@@ -425,9 +425,6 @@ width: auto;
 
 .dd select{
   /* outline: none; */
-  appearance: none;
-  /* -webkit-appearance: none; */
-  -moz-appearance: none;
   /* padding: 0.5em 1em 0.5em 0; */
   font-family: 'Atlas Grotesk Web';
   font-size: .8rem;
@@ -446,8 +443,8 @@ width: auto;
 }
 
 button.toggle.average {
-  border-bottom-left-radius: 5px;
-  border-top-left-radius: 5px;
+  /* border-bottom-left-radius: 5px; */
+  /* border-top-left-radius: 5px; */
   font-family: 'Atlas Grotesk Web';
   font-size: .75rem;
   color: black;
@@ -456,27 +453,30 @@ button.toggle.average {
   width: 75px;
   cursor: pointer;
   cursor: hand;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
 button.toggle.year {
-  border-bottom-right-radius: 5px;
-  border-top-right-radius: 5px;
+  /* border-bottom-right-radius: 5px; */
+  /* border-top-right-radius: 5px; */
   font-family: 'Atlas Grotesk Web';
   font-size: .75rem;
   color: black;
-  background-color: #f3f3f3;
+  background-color: white;
   border: 1px solid rgba(127, 125, 156, 0.54);
   width: 75px;
   cursor: pointer;
   cursor: hand;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
 }
 
-.toggle.active{
+button.toggle.active{
   box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 5px inset;
   border-color: rgba(14, 14, 14, 0.24);
-  font-weight: 600;
-  background-color: #EEE;
-  color: #587ddc;
+  font-weight: 500;
+  background-color: rgba(243, 243, 243, 0.69);
   cursor: pointer;
   cursor: hand;
 }
@@ -679,7 +679,7 @@ button.toggle.year {
   margin: 0 0 0 20px;
   font-family: 'Publico Text Web';
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #7D93CA;
   background-color: white;
   border: none;
@@ -746,7 +746,7 @@ button.toggle.year {
 .event-show {
   fill: #5d6d94;
   opacity: 1;
-  font-weight: bold;
+  font-weight: 500;
   background-color: white;
 }
 
@@ -754,7 +754,7 @@ button.toggle.year {
   fill: #CC6699;
   opacity: 0;
   font-family: 'Atlas Grotesk Web';
-  font-weight: bold;
+  font-weight: 500;
   font-size: .65em;
   text-transform: uppercase;
   padding-left: 5px;
@@ -771,7 +771,6 @@ option[value="NaN"][disabled] {
 
 .selected-event {
   fill: none;
-  stroke: url(#linear-gradient);
   stroke-width: 4px;
 }
 
@@ -927,6 +926,12 @@ option[value="NaN"][disabled] {
   /* text-decoration: underline; */
   background: #f3f3f3;
 }
+b{
+  font-weight: 500;
+}
+strong{
+  font-weight: 500;
+}
 
 .prose-highlighted {
   background-color: #f3f3f3;
@@ -1044,7 +1049,7 @@ option[value="NaN"][disabled] {
   font-family: 'Canela Web';
 }
 .x text{
-  font-weight: 600;
+  font-weight: 500;
 }
 .hover-path{
   fill: none;
@@ -1287,4 +1292,6 @@ option[value="NaN"][disabled] {
   .x text{
     font-size: .5rem;
   }
+}
+
 }

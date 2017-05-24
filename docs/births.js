@@ -12,6 +12,65 @@ if(viewportWidth < 330){
   smallWidth = true;
 }
 
+var stateNameArray = [
+  ["Maine","ME",1,"Northeast",23],
+  ["Vermont","VT",2,"Northeast",50],
+  ["New Hampshire","NH",3,"Northeast",33],
+  ["Rhode Island","RI",4,"Northeast",44],
+  ["Massachusetts","MA",5,"Northeast",25],
+  ["Connecticut","CT",6,"Northeast",9],
+  ["Delaware","DE",7,"Northeast",10],
+  ["New Jersey","NJ",8,"Northeast",34],
+  ["New York","NY",9,"Northeast",36],
+  ["Pennsylvania","PA",10,"Northeast",42],
+  ["District of Columbia","DC",11,"Northeast",11],
+  ["Maryland","MD",12,"Northeast",24],
+  ["Virginia","VA",13,"South",51],
+  ["North Carolina","NC",14,"South",37],
+  ["South Carolina","SC",15,"South",45],
+  ["Georgia","GA",16,"South",13],
+  ["Alabama","AL",17,"South",1],
+  ["Mississippi","MS",18,"South",28],
+  ["Louisiana","LA",19,"South",22],
+  ["Arkansas","AR",20,"South",5],
+  ["Tennessee","TN",21,"South",47],
+  ["Kentucky","KY",22,"South",21],
+  ["West Virginia","WV",23,"South",54],
+  ["Oklahoma","OK",24,"Midwest",40],
+  ["Colorado","CO",25,"West",8],
+  ["Utah","UT",26,"West",49],
+  ["Idaho","ID",27,"West",16],
+  ["Wyoming","WY",28,"West",56],
+  ["Montana","MT",29,"West",30],
+  ["North Dakota","ND",30,"Midwest",38],
+  ["South Dakota","SD",31,"Midwest",46],
+  ["Nebraska","NE",32,"Midwest",31],
+  ["Kansas","KS",33,"Midwest",20],
+  ["Iowa","IA",34,"Midwest",19],
+  ["Minnesota","MN",35,"Midwest",27],
+  ["Wisconsin","WI",36,"Midwest",55],
+  ["Indiana","IN",37,"Midwest",18],
+  ["Missouri","MO",38,"Midwest",29],
+  ["Ohio","OH",39,"Midwest",39],
+  ["Michigan","MI",40,"Midwest",26],
+  ["Illinois","IL",41,"Midwest",17],
+  ["Florida","FL",42,"South",12],
+  ["California","CA",43,"West",6],
+  ["Nevada","NV",44,"West",32],
+  ["Texas","TX",45,"South",48],
+  ["Arizona","AZ",46,"West",4],
+  ["New Mexico","NM",47,"West",35],
+  ["Alaska","AK",48,"West",2],
+  ["Washington","WA",49,"West",53],
+  ["Oregon","OR",50,"West",41],
+  ["Hawaii","HI",51,"West",15],
+  ]
+  ;
+
+var stateNameMap = d3.map(stateNameArray,function(d){
+  return d[4];
+});
+
 if( /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
   mobile = true;
 }
@@ -205,8 +264,8 @@ if( /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.u
     // Queue multiple files
     d3.queue()
       .defer(d3.csv, "stateCountyNames.csv")
-      .defer(d3.csv, "CondensedBirth4.csv")
-      .defer(d3.csv, "stateData.csv")
+      .defer(d3.csv, "condensed_births.csv")
+      .defer(d3.csv, "state_data.csv")
       .defer(d3.csv, "stateAverages.csv")
       .defer(d3.csv, "countyAverages.csv")
       .await(ready);
@@ -289,7 +348,7 @@ function ready(error,
           d.month = parseMonth(d.Date);
           d.year = parseYear(d.Date);
           d.stateBirths = +d.stateBirths;
-          d.states = d.states;
+          d.states = stateNameMap.get(d.state_id)[0];
           d.dayAvg = +d.dayAvg;
         })
 
@@ -578,9 +637,8 @@ function ready(error,
       var updateCountyDrop = function(selectCounty){
           // Setting "All Counties" to default
               if (selectCounty === undefined) {
-                console.log("selectCounty was undefined")
                   selectCounty == "All";
-              } else { console.log("selectCounty was defined")}
+              } else { }
 
           // Figure out which state is displayed
           var selectedState = Slist.select("select").property("value")
@@ -644,6 +702,11 @@ function ready(error,
     /////////////////////////  DATA VIEW TOGGLE  /////////////////////////
     //////////////////////////////////////////////////////////////////////
 
+    var dataviewYear = d3.select("#toggle.toggle")
+      dataviewYear.append("button")
+      .text("Annual")
+      .attr("class", "toggle year")
+
     var dataviewAvg = d3.select("#toggle.toggle")
       dataviewAvg.append("button")
       .text(function(d){
@@ -653,11 +716,6 @@ function ready(error,
         return "Average"
       })
       .attr("class", "toggle average")
-
-    var dataviewYear = d3.select("#toggle.toggle")
-      dataviewYear.append("button")
-      .text("Annual")
-      .attr("class", "toggle year")
 
 
 
@@ -2229,12 +2287,10 @@ function ready(error,
               // Determine the county of the selected event
               var selectedEvent = eventMap.get(eventName).county
 
-              console.log(selectedEvent)
 
               // Determine the year of the selected event's births
               var selectedYear = eventMap.get(selected).year
 
-              console.log(selectedYear)
               // Update lines for county/year/event
               countyUpdateYear(selectedEvent)
 
@@ -2460,7 +2516,6 @@ function ready(error,
       var duration = Math.max(1, d3.select("#container").node().offsetHeight - viewportHeight/2);
       if(mobile && fullWidth){
         var thing = d3.select("#container").node().offsetHeight-d3.select("#graph").node().offsetHeight - 25;
-        console.log(thing);
         duration = Math.max(1, thing)
       }
 
