@@ -105,7 +105,7 @@ if( /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.u
           margin.left = 50;
           margin.right = 50;
           margin.top = 50;
-          heightInitial = viewportHeight - 150;
+          heightInitial = viewportHeight - 175;
           width = (viewportWidth-250) - margin.left - margin.right;
         }
         else{
