@@ -1079,6 +1079,71 @@ option[value="NaN"][disabled] {
   }
 }
 
+@media only screen and (max-width: 700px) {
+  #title{
+    font-size: .6rem;
+    margin-bottom: .5rem;
+  }
+  .graph-title{
+    font-size: 1rem;
+  }
+  #icons{
+    display: none;
+  }
+  #dropdown-c{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  }
+  #toggleouter{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    margin-top: .5rem;
+  }
+  #dropdown-c{
+    margin-top: .5rem;
+  }
+  #dropdown-c .dd-title{
+    width: auto;
+    margin-bottom: 0px;
+    line-height: 21px;
+    margin-right: 8px;
+  }
+  #toggleouter .dd-title{
+    width: auto;
+    margin-bottom: 0px;
+    line-height: 21px;
+    margin-right: 8px;
+  }
+  .dd-title{
+    font-size: .6rem
+  }
+  .headline-small{
+    font-size: .7rem
+  }
+  .headline-big{
+    font-size: 3rem
+  }
+  #dropdowns{
+    padding-bottom: .5rem
+  }
+  .dd select{
+    font-size: .7rem
+  }
+  #right-column{
+    margin-right: 0px;
+  }
+  .right-column-prose{
+    font-size:.7rem;
+  }
+  .tick text{
+    font-size: .5rem;
+  }
+}
+
 @media only screen and (max-width: 640px) {
   .intro-prose{
     max-width: 92%;
@@ -1110,6 +1175,18 @@ option[value="NaN"][disabled] {
   /*body{
     width: 100%;
   }*/
+  .tick text{
+    font-size: .6rem;
+  }
+  .right-column-prose{
+    font-size: .88rem;
+  }
+  #toggleouter{
+    margin-top: 0px;
+  }
+  #dropdown-c{
+    margin-top: 0px;
+  }
   #SuffolkNY{
     display: none;
   }
@@ -1120,7 +1197,7 @@ option[value="NaN"][disabled] {
     background: #f3f3f3;
     border-left: 2px solid rgba(107, 107, 107, 0.89);
   }
-  .right-column-prose{background: #f3f3f3;border-left: 2px solid rgba(107, 107, 107, 0.89);margin-bottom: 100vh;}
+  .right-column-prose{background: #f3f3f3;border-left: 2px solid rgba(107, 107, 107, 0.89);}
   #conclusion{
     margin-top: 0rem;
   }
@@ -1135,32 +1212,6 @@ option[value="NaN"][disabled] {
   #methodology-note .conclusion-prose{
     width:100%;
     margin-bottom: 2rem;
-  }
-  #dropdown-c{
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  }
-  #toggleouter{
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-  }
-  #dropdown-c .dd-title{
-    width: auto;
-    margin-bottom: 0px;
-    line-height: 21px;
-    margin-right: 8px;
-  }
-  #toggleouter .dd-title{
-    width: auto;
-    margin-bottom: 0px;
-    line-height: 21px;
-    margin-right: 8px;
-  }
-  .dd-title{
   }
   #methodology-note img{
     margin-bottom: 1rem;

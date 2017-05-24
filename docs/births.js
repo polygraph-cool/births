@@ -5,7 +5,7 @@ var fullWidth = false;
 var smallWidth = false;
 var red = "#EF445B";
 red = "#c371a3";
-if(viewportWidth < 900){
+if(viewportWidth < 640){
   fullWidth = true;
 }
 if(viewportWidth < 330){
@@ -26,7 +26,9 @@ if( /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.u
 
     // App holder for keeping global scope clean
     DS = {}
-
+    if(mobile && fullWidth){
+      d3.selectAll(".right-column-prose").style("margin-bottom",viewportWidth+"px")
+    }
     // set the dimensions and margins of the graph
     var margin = {top: 50, right: 120, bottom: 20, left: 100};
       if(fullWidth){
@@ -40,7 +42,16 @@ if( /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.u
       }
       var heightInitial = 370;
       if(mobile){
-        heightInitial = viewportHeight - 300;
+        if(viewportHeight < 400){
+          margin.left = 50;
+          margin.right = 50;
+          margin.top = 50;
+          heightInitial = viewportHeight - 150;
+          width = (viewportWidth-250) - margin.left - margin.right;
+        }
+        else{
+          heightInitial = (viewportHeight-200) - margin.left - margin.right;
+        }
       }
       var height = heightInitial - margin.top - margin.bottom;
       if(viewportWidth>1200){
@@ -2446,7 +2457,12 @@ function ready(error,
         pushFollowersValue = false;
       }
 
-
+      var duration = Math.max(1, d3.select("#container").node().offsetHeight - viewportHeight/2);
+      if(mobile && fullWidth){
+        var thing = d3.select("#container").node().offsetHeight-d3.select("#graph").node().offsetHeight - 25;
+        console.log(thing);
+        duration = Math.max(1, thing)
+      }
 
       // if(!mobile){
         var pinBubbleChart = new ScrollMagic.Scene({
@@ -2454,7 +2470,7 @@ function ready(error,
       				triggerElement: "#container",
       				triggerHook:0,
       				offset: -25,
-      				duration:Math.max(1, d3.select("#container").node().offsetHeight - viewportHeight + 400)
+      				duration:duration
       			})
       			// .addIndicators({name: "pin chart"}) // add indicators (requires plugin)
       			.setPin("#graph", {pushFollowers: pushFollowersValue})
