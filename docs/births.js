@@ -1253,17 +1253,16 @@ function ready(error,
 
       var stateUpdateAvg = function(stateName){
 
-              // Remove any remnants from previous event
-              svg.selectAll(".annotation-group-result").remove();
-              svg.selectAll(".annotation-group-cause").remove();
-              svg.selectAll(".annotation-group-average").remove();
+          // Remove any remnants from previous event
+          svg.selectAll(".annotation-group-result").remove();
+          svg.selectAll(".annotation-group-cause").remove();
+          svg.selectAll(".annotation-group-average").remove();
 
-              svg.selectAll("circle").remove();
-              d3.selectAll(".icons").classed("current", false)
-              d3.selectAll(".event-show").classed("event-show", false)
-              d3.selectAll(".text-labels").classed("showing", false)
-              d3.selectAll(".voronoi").remove();
-
+          svg.selectAll("circle").remove();
+          d3.selectAll(".icons").classed("current", false)
+          d3.selectAll(".event-show").classed("event-show", false)
+          d3.selectAll(".text-labels").classed("showing", false)
+          d3.selectAll(".voronoi").remove();
 
           d3.selectAll(".selected-event").classed("selected-event", false)
           d3.selectAll(".selected")
@@ -1272,34 +1271,7 @@ function ready(error,
               .duration(300)
               .attr("opacity", 0)
 
-          /*var rect = svg.append("rect")
-            .attr("x", 10)
-            .attr("y", 0)
-            .attr("width", 30)
-            .attr("height", 15)
-            .attr("fill", "#E3C0DB")
-            .attr("opacity", 0.3)
-            .attr("corner-radius", 5);
-
-          var legendPath = svg.append("path")
-            .attr("x", 10)
-            .attr("y", 0)
-            .attr("width", 30)
-            .attr("height", 15)
-            .attr("fill", "#E3C0DB")
-            .attr("opacity", 0.3)
-            .attr("corner-radius", 5);
-
-          var IQR = svg.append("text")
-            .attr("x", 50)
-            .attr("y", 10)
-            .text("= spread of data (IQR)*")
-            .classed("legend", true)*/
-
-            // Adding the annotation to the area
-
-
-
+          console.log(stateName);
 
           var state = nestAStates.filter(function(d){
               return d.key === stateName;
@@ -1309,8 +1281,8 @@ function ready(error,
          // Useful for scrollytelling
           var stateDrop = Slist.selectAll("option")
             .property("selected", function(d){
-            return d.key === state[0].key;
-          })
+              return d.key === state[0].key;
+            })
 
           // Print which county has been selected (for updating county dropdown)
          // selectedCounty = stateMap.get(state[0].key).County;
@@ -2110,19 +2082,18 @@ function ready(error,
               // Detecting what year is present on the year dropdown menu
               selectedYear = yList.select("select").property("value")
 
-
               var selected = d3.select(this)
                   .select("select")
                   .property("value")
 
 
+              var selectedState = Slist.select("select").property("value")
 
               // Determine which county was selected from dropdown
 
                 if(d3.select(this).select("select").property("value") == 1){
 
                   // If "All Counties" is selected, draw state-level chart
-
 
                   if (d3.selectAll(".toggle.average").classed("active") == true) {
 
