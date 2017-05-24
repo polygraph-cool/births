@@ -616,7 +616,8 @@ function ready(error,
 
     // Create dropdown 1
     var Slist = d3.select("#states")
-    Slist.append("select").selectAll("option")
+    var Sselect = Slist.append("select")
+    Sselect.selectAll("option")
         .data(nestedStates)
         .enter().append("option")
         .attr("value", function(d){
@@ -626,6 +627,9 @@ function ready(error,
             return d.key;
         })
 
+      Sselect.on('click', function() {
+        window.scrollTo(0, window.pageYOffset)
+      })
     //////////////////////////////////////////////////////////////////////
     /////////////////////////  COUNTY DROPDOWN  //////////////////////////
     //////////////////////////////////////////////////////////////////////
@@ -666,6 +670,9 @@ function ready(error,
           var selection = Clist.selectAll("select");
             if (selection.empty()) {
               selection = Clist.append("select");
+              selection.on('click', function() {
+                window.scrollTo(0, window.pageYOffset)
+              })
             }
 
           selection = selection.selectAll("option")
@@ -725,7 +732,9 @@ function ready(error,
 
     // Create dropdown (year)
     var yList = d3.select("#year")
-    yList.append("select").selectAll("option")
+    var Yselect = yList.append("select")
+
+    Yselect.selectAll("option")
         .data(nested2)
         .enter().append("option")
         .attr("value", function(d){
@@ -739,7 +748,9 @@ function ready(error,
         // By default, this list is hidden, and appears when "Annual" Data view is clicked
         d3.select("#dropdown-c").classed("hiddendd", true)
 
-
+    Yselect.on('click', function() {
+        window.scrollTo(0, window.pageYOffset)
+      })
 
     //////////////////////////////////////////////////////////////////////
     //////////////////////////////  AXES  ////////////////////////////////
