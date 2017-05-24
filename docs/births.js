@@ -86,7 +86,7 @@ if( /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.u
     // App holder for keeping global scope clean
     DS = {}
     if(mobile && fullWidth){
-      d3.selectAll(".right-column-prose").style("margin-bottom",viewportWidth+"px")
+      d3.selectAll(".right-column-prose").style("margin-bottom",viewportHeight * 0.9+"px")
     }
     // set the dimensions and margins of the graph
     var margin = {top: 50, right: 120, bottom: 20, left: 100};
